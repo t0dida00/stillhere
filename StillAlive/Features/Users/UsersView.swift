@@ -22,6 +22,7 @@ struct UsersView: View {
             List {
                 if let user = users.first {
                     meSection(user)
+                    emergencySection(user)
                 }
 
                 Section {
@@ -77,6 +78,15 @@ struct UsersView: View {
             .sheet(isPresented: $addingPartner, onDismiss: { linkedCode = "" }) {
                 AddPartnerView(ownCode: users.first?.id ?? "", existingCodes: Set(partnerships.map(\.partnerID)), initialCode: linkedCode)
             }
+            // On the List, not inside a section: a sheet attached to a section closes when the list redraws.
+            .sheet(isPresented: $editingContacts) {
+                if let user = users.first {
+                    EmergencyContactsEditor(contacts: user.emergencyContacts) { saved in
+                        user.emergencyContacts = saved
+                        try? context.save()
+                    }
+                }
+            }
             .sheet(isPresented: $showingQR) {
                 if let user = users.first {
                     InviteQRView(name: user.displayName, code: user.id)
@@ -108,18 +118,20 @@ struct UsersView: View {
                       message: Text("Add me on StillAlive? with code \(user.id)")) {
                 Label("Share invite", systemImage: "square.and.arrow.up")
             }
-
-            emergencyContactRows(user)
         } header: {
             Text("Me")
         } footer: {
-            Text("Partners use your code to request to see your check-ins. Emergency contacts (up to \(EmergencyContact.maxCount)) help them reach you if you miss check-ins.")
+            Text("Partners use this code to request to see your check-ins.")
         }
-        .sheet(isPresented: $editingContacts) {
-            EmergencyContactsEditor(contacts: user.emergencyContacts) { saved in
-                user.emergencyContacts = saved
-                try? context.save()
-            }
+    }
+
+    private func emergencySection(_ user: LocalUser) -> some View {
+        Section {
+            emergencyContactRows(user)
+        } header: {
+            Text("Emergency contacts")
+        } footer: {
+            Text("Up to \(EmergencyContact.maxCount) ways for partners to reach you if you miss check-ins.")
         }
     }
 

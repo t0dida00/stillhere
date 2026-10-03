@@ -1102,12 +1102,12 @@
         }
       }
     },
-    "Partners use your code to request to see your check-ins. Emergency contacts (up to %lld) help them reach you if you miss check-ins.": {
+    "Partners use this code to request to see your check-ins.": {
       "localizations": {
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Người thân dùng mã của bạn để xin xem các lần điểm danh. Liên hệ khẩn cấp (tối đa %lld) giúp họ liên lạc với bạn khi bạn bỏ lỡ điểm danh."
+            "value": "Người thân dùng mã này để xin xem các lần điểm danh của bạn."
           }
         }
       }
@@ -1667,6 +1667,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tối đa %lld lần mỗi ngày. Thay đổi có hiệu lực ngay hôm nay, trừ những giờ sớm hơn lần điểm danh bạn đã hoàn tất hôm nay; các giờ đó bắt đầu từ ngày mai."
+          }
+        }
+      }
+    },
+    "Up to %lld ways for partners to reach you if you miss check-ins.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tối đa %lld cách để người thân liên lạc với bạn khi bạn bỏ lỡ điểm danh."
           }
         }
       }
