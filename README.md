@@ -44,4 +44,6 @@ Tabs: **Map – Check-In – Users – Settings**.
 - **Users**: your avatar (photo or initial) and name are editable on Users → Me. Partners have avatars, nicknames (only you see them) and a per-partner "Share my location" toggle.
 - **Partners on my calendar**: with *Show partners* on, each date shows partners below it as small avatars inside their own ring; more than 2 collapse to one avatar plus a count. Tapping a day lists my check-ins, then each partner's.
 - **Map**: a 3D globe with me and every partner who shares their location as avatar pins. Tap a person to fly to them; 3D, globe and map-type (Standard / Satellite) buttons sit in one row at the top.
+- **Shortcuts and Siri**: the *Open Check-in* action opens the app on Check-In, and the puzzle appears if a check-in is due. Use it in a Time of Day automation (Settings → Auto-open with Shortcuts) or say "Check in with StillAlive?".
+- **QR invites**: Users → Me → Show QR code encodes `stillalive://invite/<code>`. Scan it in Add partner, or with the Camera app, which opens Add partner with the code filled in.
 - **Missed-check-in alerts** (planned, Phase 3): partners are alerted when 2 check-ins in a row are missed. See [docs/SPEC.md](docs/SPEC.md) §9.

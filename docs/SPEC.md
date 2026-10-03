@@ -112,7 +112,7 @@ Tab bar (bottom): **Map | Check-In | Users | Settings**. The app opens on Check-
    - Tapping a day shows slot details (state, time, place name and coordinates); on my calendar it also lists partners.
    - Last location card below the calendar (mine, or the selected partner's; "doesn't want to share their location" when they don't).
 4. **Users**
-   - Me: avatar (photo or initial), editable name, invite code + share (QR still to do).
+   - Me: avatar (photo or initial), editable name, invite code, QR code and share link (`stillalive://invite/<code>`).
    - Requests: incoming invitations with Accept/Decline; Sent invites waiting for an answer.
    - Partners: avatar, nickname (only I see it), status, per-partner "Share my location" toggle with an explanation popup.
 5. **Settings**
@@ -204,7 +204,7 @@ StillAlive/
 
 ### Phase 2 — Partners (local mock)
 - [x] Users tab: invite code, add partner by code, list, accept/decline.
-- [ ] Users tab: QR code and scanner.
+- [x] Users tab: QR code and scanner.
 - [x] Partner calendars using mock data behind `SyncService` (avatar selector; partners on my calendar).
 - [x] Per-partner location sharing toggle.
 
@@ -214,7 +214,7 @@ StillAlive/
 - [ ] APNs push, missed-check-in Edge Function.
 
 ### Phase 4 — Polish
-- [ ] Shortcuts App Intent + in-app setup guide.
+- [x] Shortcuts App Intent + in-app setup guide.
 - [ ] Lock Screen / Home widget showing a partner's latest check-in.
 - [ ] Accessibility (Dynamic Type, VoiceOver), localization (English, Vietnamese).
 - [ ] Privacy policy, App Store privacy labels, permission usage strings.
