@@ -115,7 +115,7 @@ Tab bar (bottom): **Map | Check-In | Notifications | Users | Settings**. The app
    - Tapping a day shows slot details (state, time, place name and coordinates); on my calendar it also lists partners.
    - Last location card below the calendar (mine, or the selected partner's; "doesn't want to share their location" when they don't).
 4. **Notifications**
-   - History of partner missed-check-in alerts, newest first, with an unread badge on the tab.
+   - History of partner missed-check-in alerts and incoming check-in requests (with their state: waiting, answered, set aside), newest first, with an unread badge on the tab. Tapping an open request opens its puzzle.
    - Tap to mark read and open that partner's calendar; swipe to delete; "Mark all as read".
 5. **Users**
    - Me: avatar (photo or initial), editable name, invite code, QR code and share link (`stillalive://invite/<code>`).

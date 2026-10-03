@@ -268,6 +268,16 @@
         }
       }
     },
+    "Answered": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đã trả lời"
+          }
+        }
+      }
+    },
     "Any mix of apps, for example 3 phone numbers, or 2 phones and a Zalo. Tap an app icon to change it.": {
       "localizations": {
         "vi": {
@@ -1536,6 +1546,16 @@
         }
       }
     },
+    "Set aside": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Để sau"
+          }
+        }
+      }
+    },
     "Set it up": {
       "localizations": {
         "vi": {
@@ -1965,6 +1985,16 @@
         }
       }
     },
+    "Waiting for you": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đang chờ bạn"
+          }
+        }
+      }
+    },
     "Wants to see your check-ins.": {
       "localizations": {
         "vi": {
@@ -1975,12 +2005,12 @@
         }
       }
     },
-    "When a partner misses a check-in, it shows up here.": {
+    "When a partner misses a check-in or asks you to check in, it shows up here.": {
       "localizations": {
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Khi người thân bỏ lỡ một lần điểm danh, thông báo sẽ hiện ở đây."
+            "value": "Khi người thân bỏ lỡ điểm danh hoặc nhờ bạn điểm danh, thông báo sẽ hiện ở đây."
           }
         }
       }

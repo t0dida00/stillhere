@@ -5,6 +5,13 @@ import SwiftData
 /// so the history stays after the banner is gone.
 @Model
 final class AlertRecord {
+    enum Kind: String {
+        /// A partner missed a check-in.
+        case partnerMissed
+        /// A partner asked me to check in.
+        case checkInRequest
+    }
+
     /// Same as the system notification's identifier, so an alert is saved once.
     @Attribute(.unique) var id: String
     var partnerID: String
@@ -15,6 +22,12 @@ final class AlertRecord {
     var scheduledAt: Date
     var createdAt: Date
     var isRead: Bool
+    /// `Kind`; alerts saved before kinds existed are missed check-ins.
+    var kindRaw: String = Kind.partnerMissed.rawValue
+    /// For `.checkInRequest`: the `CheckInRequest.id`.
+    var requestID: String?
+
+    var kind: Kind { Kind(rawValue: kindRaw) ?? .partnerMissed }
 
     init(id: String, partnerID: String, partnerName: String, dayKey: String, slotIndex: Int, scheduledAt: Date,
          createdAt: Date = .now, isRead: Bool = false) {
@@ -30,5 +43,9 @@ final class AlertRecord {
 
     static func identifier(partnerID: String, dayKey: String, slotIndex: Int) -> String {
         "partner-miss.\(partnerID).\(dayKey)#\(slotIndex)"
+    }
+
+    static func identifier(requestID: String) -> String {
+        "checkin-request.\(requestID)"
     }
 }

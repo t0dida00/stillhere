@@ -60,3 +60,39 @@ final class CheckInRequestServiceTests: XCTestCase {
         XCTAssertNotNil(service.request(id: "r2")?.answeredAt)
     }
 }
+
+@MainActor
+final class CheckInRequestAlertTests: XCTestCase {
+    func testRequestIsSavedInNotificationsAndReadOnceHandled() async throws {
+        let container = try ModelContainer(for: LocalUser.self, CheckInSlot.self, Partnership.self, AppSettings.self, AlertRecord.self,
+                                           CheckInRequest.self, configurations: ModelConfiguration(isStoredInMemoryOnly: true))
+        let context = container.mainContext
+        context.insert(Partnership(partnerID: "DAD00001", partnerName: "Dad", status: "accepted"))
+        let service = CheckInRequestService(context: context, sync: RequestSyncStub(id: "r1", partnerID: "DAD00001"))
+        await service.fetchNew()
+
+        let alert = try XCTUnwrap(try context.fetch(FetchDescriptor<AlertRecord>()).first)
+        XCTAssertEqual(alert.kind, .checkInRequest)
+        XCTAssertEqual(alert.requestID, "r1")
+        XCTAssertFalse(alert.isRead)
+
+        service.answerAll()
+        XCTAssertTrue(alert.isRead)
+    }
+}
+
+private struct RequestSyncStub: SyncService {
+    let id: String
+    let partnerID: String
+    func push(_ slots: [CheckInSlot]) async throws {}
+    func pull(partnerID: String) async throws -> [RemoteSlot] { [] }
+    func sendInvite(to partnerID: String) async throws {}
+    func respond(to partnerID: String, accept: Bool) async throws {}
+    func partnerSharesLocation(_ partnerID: String) async throws -> Bool { false }
+    func emergencyContacts(of partnerID: String) async throws -> [EmergencyContact] { [] }
+    func requestCheckIn(from partnerID: String) async throws {}
+    func incomingCheckInRequests() async throws -> [IncomingCheckInRequest] {
+        [IncomingCheckInRequest(id: id, partnerID: partnerID, requestedAt: .now)]
+    }
+    func answerCheckInRequest(_ id: String) async throws {}
+}

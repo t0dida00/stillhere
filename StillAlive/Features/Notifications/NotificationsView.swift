@@ -8,6 +8,7 @@ struct NotificationsView: View {
     @Query(sort: \AlertRecord.createdAt, order: .reverse) private var alerts: [AlertRecord]
     @Query private var partnerships: [Partnership]
     @Query private var users: [LocalUser]
+    @Query private var requests: [CheckInRequest]
 
     var body: some View {
         NavigationStack {
@@ -15,14 +16,15 @@ struct NotificationsView: View {
                 if alerts.isEmpty {
                     ContentUnavailableView("No notifications",
                                            systemImage: "bell.slash",
-                                           description: Text("When a partner misses a check-in, it shows up here."))
+                                           description: Text("When a partner misses a check-in or asks you to check in, it shows up here."))
                 } else {
                     List {
                         ForEach(alerts) { alert in
                             Button {
                                 open(alert)
                             } label: {
-                                AlertRow(alert: alert, name: name(for: alert), timeZone: users.first?.timeZone ?? .current)
+                                AlertRow(alert: alert, name: name(for: alert), timeZone: users.first?.timeZone ?? .current,
+                                         request: alert.requestID.flatMap { id in requests.first { $0.id == id } })
                             }
                             .buttonStyle(.plain)
                         }
@@ -55,6 +57,11 @@ struct NotificationsView: View {
     private func open(_ alert: AlertRecord) {
         alert.isRead = true
         try? context.save()
+        // An open request goes straight to its puzzle.
+        if alert.kind == .checkInRequest, let id = alert.requestID, requests.first(where: { $0.id == id })?.isOpen == true {
+            router.requestedCheckInRequestID = id
+            return
+        }
         guard partnerships.contains(where: { $0.partnerID == alert.partnerID && $0.isAccepted }) else { return }
         router.selectedTab = .main
         router.requestedPartnerID = alert.partnerID
@@ -65,6 +72,8 @@ private struct AlertRow: View {
     let alert: AlertRecord
     let name: String
     let timeZone: TimeZone
+    /// For a check-in request alert, the request (for its state).
+    var request: CheckInRequest?
 
     private var time: String {
         var style = Date.FormatStyle(date: .omitted, time: .shortened)
@@ -72,17 +81,39 @@ private struct AlertRow: View {
         return alert.scheduledAt.formatted(style)
     }
 
+    private var requestStatus: String {
+        guard let request else { return String(localized: "Waiting for you") }
+        if request.answeredAt != nil { return String(localized: "Answered") }
+        if request.dismissedAt != nil { return String(localized: "Set aside") }
+        return String(localized: "Waiting for you")
+    }
+
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
             AvatarView(name: name, id: alert.partnerID, size: 40)
                 .frame(width: 48, height: 48)
-                .background { DayProgressRing(states: [.missed], lineWidth: 2.5, gap: 1) }
+                .background {
+                    if alert.kind == .partnerMissed {
+                        DayProgressRing(states: [.missed], lineWidth: 2.5, gap: 1)
+                    } else {
+                        Circle().strokeBorder(Color.orange, lineWidth: 2.5)
+                    }
+                }
             VStack(alignment: .leading, spacing: 3) {
-                Text("\(name) missed a check-in")
-                    .font(.subheadline.weight(alert.isRead ? .regular : .semibold))
-                Text("The \(time) check-in on \(DayKey.display(alert.dayKey)) wasn't done.")
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                switch alert.kind {
+                case .partnerMissed:
+                    Text("\(name) missed a check-in")
+                        .font(.subheadline.weight(alert.isRead ? .regular : .semibold))
+                    Text("The \(time) check-in on \(DayKey.display(alert.dayKey)) wasn't done.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                case .checkInRequest:
+                    Text("\(name) asked you to check in")
+                        .font(.subheadline.weight(alert.isRead ? .regular : .semibold))
+                    Text(requestStatus)
+                        .font(.subheadline)
+                        .foregroundStyle(request?.isOpen == true ? Color.orange : Color.secondary)
+                }
                 Text(alert.createdAt.formatted(.relative(presentation: .named)))
                     .font(.caption)
                     .foregroundStyle(.tertiary)

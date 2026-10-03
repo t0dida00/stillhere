@@ -21,6 +21,12 @@ struct CheckInRequestService {
             guard known == 0, let partner = partners.first(where: { $0.partnerID == request.partnerID }) else { continue }
             context.insert(CheckInRequest(id: id, partnerID: partner.partnerID, partnerName: partner.displayName,
                                           requestedAt: request.requestedAt))
+            let alert = AlertRecord(id: AlertRecord.identifier(requestID: id), partnerID: partner.partnerID,
+                                    partnerName: partner.displayName, dayKey: "", slotIndex: 0,
+                                    scheduledAt: request.requestedAt, createdAt: request.requestedAt)
+            alert.kindRaw = AlertRecord.Kind.checkInRequest.rawValue
+            alert.requestID = id
+            context.insert(alert)
             await notifications.notifyCheckInRequest(id: id, name: partner.displayName)
         }
         try? context.save()
@@ -42,6 +48,7 @@ struct CheckInRequestService {
         guard !open.isEmpty else { return }
         for request in open {
             request.answeredAt = now
+            markAlertRead(requestID: request.id)
             let id = request.id
             Task { try? await sync.answerCheckInRequest(id) }
         }
@@ -51,6 +58,13 @@ struct CheckInRequestService {
     func dismiss(id: String, now: Date = .now) {
         guard let request = request(id: id), request.isOpen else { return }
         request.dismissedAt = now
+        markAlertRead(requestID: id)
         try? context.save()
+    }
+
+    /// A handled request needs no attention in the Notifications tab.
+    private func markAlertRead(requestID: String) {
+        let alertID = AlertRecord.identifier(requestID: requestID)
+        (try? context.fetch(FetchDescriptor<AlertRecord>(predicate: #Predicate { $0.id == alertID })))?.forEach { $0.isRead = true }
     }
 }

@@ -36,7 +36,10 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
         let userInfo = response.notification.request.content.userInfo
         if let requestID = userInfo["checkInRequestID"] as? String {
-            await MainActor.run { AppRouter.shared.requestedCheckInRequestID = requestID }
+            await MainActor.run {
+                AppRouter.shared.requestedCheckInRequestID = requestID
+                AppRouter.shared.openedAlertID = AlertRecord.identifier(requestID: requestID)
+            }
             return
         }
         if let partnerID = userInfo["partnerID"] as? String {
