@@ -34,6 +34,17 @@ struct MainView: View {
                 let byDay = Dictionary(grouping: slots, by: \.key.dayKey)
                 ScrollView {
                     VStack(spacing: 20) {
+                        // Compact header instead of a large navigation title, which left a tall gap above.
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Check-in")
+                                .font(.largeTitle.bold())
+                            Text(selectedPartner?.displayName ?? String(localized: "Me"))
+                                .font(.title3)
+                                .foregroundStyle(.secondary)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .accessibilityElement(children: .combine)
+                        .accessibilityAddTraits(.isHeader)
                         if !partners.isEmpty {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 16) {
@@ -70,7 +81,7 @@ struct MainView: View {
                     }
                     .padding()
                 }
-                .navigationTitle(selectedPartner?.displayName ?? "StillAlive?")
+                .toolbar(.hidden, for: .navigationBar)
                 .sheet(item: $selectedDay) { day in
                     DayDetailView(dayKey: day.dayKey, slots: byDay[day.dayKey] ?? [], timeZone: user.timeZone,
                                   partners: visibleCalendarPartners.compactMap { partner in

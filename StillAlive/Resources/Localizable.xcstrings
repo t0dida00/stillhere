@@ -408,6 +408,16 @@
         }
       }
     },
+    "Check-in": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Điểm danh"
+          }
+        }
+      }
+    },
     "Check-in %lld": {
       "localizations": {
         "vi": {
