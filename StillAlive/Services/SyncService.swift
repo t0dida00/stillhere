@@ -22,6 +22,8 @@ protocol SyncService {
     func partnerSharesLocation(_ partnerID: String) async throws -> Bool
     /// The emergency contacts the partner added, for reaching them when they miss check-ins.
     func emergencyContacts(of partnerID: String) async throws -> [EmergencyContact]
+    /// Asks the partner to check in now; with the backend, a push that opens their puzzle.
+    func requestCheckIn(from partnerID: String) async throws
 }
 
 /// The app's sync service. Mock partners until the backend exists (Phase 3).
@@ -37,6 +39,7 @@ struct NoopSyncService: SyncService {
     func respond(to partnerID: String, accept: Bool) async throws {}
     func partnerSharesLocation(_ partnerID: String) async throws -> Bool { false }
     func emergencyContacts(of partnerID: String) async throws -> [EmergencyContact] { [] }
+    func requestCheckIn(from partnerID: String) async throws {}
 }
 
 /// A test partner's own schedule for `MockSyncService`, saved on this phone. Used by debug
@@ -83,6 +86,9 @@ struct MockSyncService: SyncService {
     func emergencyContacts(of partnerID: String) async throws -> [EmergencyContact] {
         Self.emergencyContacts(for: partnerID)
     }
+
+    /// Nothing reaches a simulated partner; the app still records the request for its cooldown.
+    func requestCheckIn(from partnerID: String) async throws {}
 
     /// 0 to `PlanLimits.emergencyContacts` made-up contacts per partner, the same every time:
     /// a Vietnamese mobile number as Phone, Zalo or WhatsApp, or a Telegram username.

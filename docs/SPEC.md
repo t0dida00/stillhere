@@ -110,6 +110,7 @@ Tab bar (bottom): **Map | Check-In | Notifications | Users | Settings**. The app
    - Metrics row: `Checked In: n days`, current streak, missed count.
    - Calendar (month view). Each date has a ring with one segment per slot (green checked in, orange skipped, red missed, empty pending) and a filled background once decided (green all done, red any missed).
    - On my calendar, with **Show partners** on, partners appear below each date as small avatars inside their own ring; more than 2 collapse to one avatar plus a count.
+   - On a partner's view, when their latest decided check-in was missed, a full-width red **Request a check-in** button appears under the metrics. Holding it for 3 seconds (a darker band fills left to right; releasing early rewinds) sends `SyncService.requestCheckIn(from:)`; then it shows "Check-in requested from <name>" for a 5-minute cooldown. With the backend this is the "Are you okay?" push that opens their puzzle.
    - Holding a partner's avatar for 1 second opens their emergency contacts (from `SyncService.emergencyContacts(of:)`): copy each, or open the call or chat.
    - Tapping a day shows slot details (state, time, place name and coordinates); on my calendar it also lists partners.
    - Last location card below the calendar (mine, or the selected partner's; "doesn't want to share their location" when they don't).
@@ -240,4 +241,4 @@ StillAlive/
 
 1. Supabase vs CloudKit as the final backend?
 2. ~~Should a missed check-in alert partners immediately or only after both slots in a day are missed?~~ **Decided:** notify partners of every missed check-in (see §9).
-3. Should partners be allowed to send a "ping/are you okay?" message back?
+3. ~~Should partners be allowed to send a "ping/are you okay?" message back?~~ **Decided:** yes, "Request a check-in" after a miss (see §6).

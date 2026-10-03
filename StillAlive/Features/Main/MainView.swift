@@ -78,6 +78,9 @@ struct MainView: View {
                             slots.map(\.snapshot),
                             todayKey: DayKey.string(for: .now, in: user.timeZone)
                         ))
+                        if let partner = selectedPartner, MissedAlertRule.isMissingNow(partnerSlots.map(\.snapshot)) {
+                            RequestCheckInView(partner: partner)
+                        }
                         if selectedPartnerID == nil, !partners.isEmpty {
                             Toggle(isOn: $showPartners) {
                                 Label("Show partners", systemImage: "person.2")

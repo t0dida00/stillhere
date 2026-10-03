@@ -16,6 +16,8 @@ final class Partnership {
     var nickname: String?
     /// Up to when their missed check-ins have been checked for notifications.
     var lastMissCheckAt: Date?
+    /// When I last asked them to check in, for the request cooldown.
+    var lastCheckInRequestAt: Date?
 
     init(partnerID: String, partnerName: String, status: String = "pending", canSeeLocation: Bool = false, createdAt: Date = .now, isIncoming: Bool = false) {
         self.partnerID = partnerID

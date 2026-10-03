@@ -53,3 +53,26 @@ final class MockScenarioTests: XCTestCase {
         XCTAssertEqual(slots.first?.resolvedAt, date("2026-10-04T04:29:00Z"))
     }
 }
+
+final class RequestCheckInRuleTests: XCTestCase {
+    func snapshot(_ hour: Int, _ state: SlotState) -> SlotSnapshot {
+        SlotSnapshot(key: SlotKey(dayKey: "2026-10-04", slotIndex: hour),
+                     scheduledAt: Date(timeIntervalSince1970: TimeInterval(hour * 3600)), state: state)
+    }
+
+    func testMissingNowUsesTheLatestDecidedCheckIn() {
+        XCTAssertTrue(MissedAlertRule.isMissingNow([snapshot(9, .checkedIn), snapshot(21, .missed)]))
+        // A later pending check-in doesn't clear the miss.
+        XCTAssertTrue(MissedAlertRule.isMissingNow([snapshot(9, .missed), snapshot(21, .pending)]))
+        XCTAssertFalse(MissedAlertRule.isMissingNow([snapshot(9, .missed), snapshot(21, .checkedIn)]))
+        XCTAssertFalse(MissedAlertRule.isMissingNow([snapshot(9, .missed), snapshot(21, .skipped)]))
+        XCTAssertFalse(MissedAlertRule.isMissingNow([]))
+    }
+
+    func testRequestCooldown() {
+        let sent = Date(timeIntervalSince1970: 0)
+        XCTAssertTrue(MissedAlertRule.canRequestCheckIn(lastRequestAt: nil, now: sent))
+        XCTAssertFalse(MissedAlertRule.canRequestCheckIn(lastRequestAt: sent, now: sent.addingTimeInterval(60)))
+        XCTAssertTrue(MissedAlertRule.canRequestCheckIn(lastRequestAt: sent, now: sent.addingTimeInterval(5 * 60)))
+    }
+}

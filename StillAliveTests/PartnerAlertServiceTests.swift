@@ -13,6 +13,7 @@ private struct OneMissSync: SyncService {
     func respond(to partnerID: String, accept: Bool) async throws {}
     func partnerSharesLocation(_ partnerID: String) async throws -> Bool { false }
     func emergencyContacts(of partnerID: String) async throws -> [EmergencyContact] { [] }
+    func requestCheckIn(from partnerID: String) async throws {}
 }
 
 @MainActor

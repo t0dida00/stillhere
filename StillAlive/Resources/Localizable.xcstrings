@@ -468,6 +468,22 @@
         }
       }
     },
+    "Check-in requested from %@ · %@": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Check-in requested from %1$@ · %2$@"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đã yêu cầu %@ điểm danh · %@"
+          }
+        }
+      }
+    },
     "Check-in times": {
       "localizations": {
         "vi": {
@@ -790,6 +806,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Khó"
+          }
+        }
+      }
+    },
+    "Hold for 3 seconds": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giữ 3 giây"
           }
         }
       }
@@ -1416,6 +1442,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lặp lại cho mỗi giờ điểm danh."
+          }
+        }
+      }
+    },
+    "Request a check-in": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Yêu cầu điểm danh"
           }
         }
       }

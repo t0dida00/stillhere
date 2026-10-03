@@ -134,6 +134,20 @@ enum SlotRules {
 
 /// Partners are notified of every missed check-in (SPEC §9).
 enum MissedAlertRule {
+    /// True when the person's latest decided check-in was missed. Pending check-ins are
+    /// skipped, so a miss stays current until they next check in or skip.
+    static func isMissingNow(_ slots: [SlotSnapshot]) -> Bool {
+        slots.filter { $0.state != .pending }.max { $0.scheduledAt < $1.scheduledAt }?.state == .missed
+    }
+
+    /// How long after asking a partner to check in before I can ask again.
+    static let requestCooldown: TimeInterval = 5 * 60
+
+    static func canRequestCheckIn(lastRequestAt: Date?, now: Date) -> Bool {
+        guard let lastRequestAt else { return true }
+        return now.timeIntervalSince(lastRequestAt) >= requestCooldown
+    }
+
     /// Slots that became missed after `since` and by `now`, oldest first. A slot becomes missed
     /// when its grace window closes, which is its `resolvedAt`.
     static func newMisses(_ slots: [RemoteSlot], since: Date, now: Date) -> [RemoteSlot] {
