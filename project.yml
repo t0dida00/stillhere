@@ -1,0 +1,58 @@
+name: StillAlive
+options:
+  bundleIdPrefix: dev.khoa
+  deploymentTarget:
+    iOS: "17.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.0"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+targets:
+  StillAlive:
+    type: application
+    platform: iOS
+    sources:
+      - StillAlive
+    info:
+      path: StillAlive/Resources/Info.plist
+      properties:
+        CFBundleDisplayName: "StillAlive?"
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        UILaunchScreen: {}
+        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        NSAlarmKitUsageDescription: "StillAlive? rings an alarm at each check-in time so you don't miss it."
+        NSLocationWhenInUseUsageDescription: "If you turn it on, StillAlive? attaches your approximate location to a check-in so partners you choose can see where you checked in."
+    entitlements:
+      path: StillAlive/Resources/StillAlive.entitlements
+      properties:
+        com.apple.developer.usernotifications.time-sensitive: true
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: dev.khoa.stillalive
+        TARGETED_DEVICE_FAMILY: "1"
+        CODE_SIGN_STYLE: Automatic
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+  StillAliveTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - StillAliveTests
+    dependencies:
+      - target: StillAlive
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: dev.khoa.stillalive.tests
+schemes:
+  StillAlive:
+    build:
+      targets:
+        StillAlive: all
+        StillAliveTests: [test]
+    test:
+      targets:
+        - StillAliveTests

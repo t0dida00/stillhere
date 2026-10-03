@@ -1,0 +1,175 @@
+import SwiftData
+import SwiftUI
+
+struct SettingsView: View {
+    @Query private var settings: [AppSettings]
+    @Query private var users: [LocalUser]
+
+    var body: some View {
+        NavigationStack {
+            if let settings = settings.first, let user = users.first {
+                SettingsForm(settings: settings, user: user)
+                    .navigationTitle("Settings")
+            }
+        }
+    }
+}
+
+private struct SettingsForm: View {
+    @Bindable var settings: AppSettings
+    @Bindable var user: LocalUser
+    @Environment(\.modelContext) private var context
+    @State private var locationDenied = false
+
+    private static let maxSlots = 3
+
+    var body: some View {
+        Form {
+            Section {
+                ForEach(settings.slotTimes.indices, id: \.self) { index in
+                    DatePicker("Check-in \(index + 1)", selection: timeBinding(at: index), displayedComponents: .hourAndMinute)
+                }
+                .onDelete { settings.slotTimes.remove(atOffsets: $0) }
+                .deleteDisabled(settings.slotTimes.count <= 1)
+
+                if settings.slotTimes.count < Self.maxSlots {
+                    Button("Add check-in time", systemImage: "plus") {
+                        settings.slotTimes.append(min((settings.slotTimes.max() ?? 540) + 60, SlotPlanner.minutesPerDay - 1))
+                    }
+                }
+            } header: {
+                Text("Check-in times")
+            } footer: {
+                Text("Up to \(Self.maxSlots) times a day. Changes apply today, except times earlier than a check-in you've already finished today; those start tomorrow.")
+            }
+
+            Section("Grace & reminders") {
+                Stepper("Grace window: \(settings.graceMinutes) min", value: $settings.graceMinutes, in: 15...180, step: 15)
+                Picker("Remind every", selection: $settings.remindEveryMinutes) {
+                    ForEach([5, 10, 15, 30], id: \.self) { Text("\($0) min").tag($0) }
+                }
+            }
+
+            Section("Puzzle difficulty") {
+                Picker("Difficulty", selection: $settings.difficulty) {
+                    Text("Easy").tag(1)
+                    Text("Medium").tag(2)
+                    Text("Hard").tag(3)
+                }
+                .pickerStyle(.segmented)
+            }
+
+            Section {
+                Toggle("Attach location to check-ins", isOn: locationBinding)
+            } header: {
+                Text("Location")
+            } footer: {
+                Text(locationDenied
+                     ? "Location access is off for StillAlive?. You can allow it in the iOS Settings app."
+                     : "Off by default. Only partners you choose will be able to see it.")
+            }
+
+            Section("Time zone") {
+                NavigationLink {
+                    TimeZonePicker(selection: $user.timeZoneID)
+                } label: {
+                    LabeledContent("Time zone", value: user.timeZoneID)
+                }
+            }
+
+            Section {
+                NavigationLink("Auto-open with Shortcuts") { ShortcutsGuideView() }
+            }
+        }
+        .onChange(of: scheduleSignature) {
+            Task { await CheckInService(context: context).refresh() }
+        }
+        .onDisappear {
+            settings.slotTimes = SlotPlanner.normalized(settings.slotTimes)
+        }
+    }
+
+    /// Anything that changes which slots exist or when reminders fire.
+    private var scheduleSignature: String {
+        "\(SlotPlanner.normalized(settings.slotTimes))|\(settings.graceMinutes)|\(settings.remindEveryMinutes)|\(user.timeZoneID)"
+    }
+
+    private func timeBinding(at index: Int) -> Binding<Date> {
+        Binding {
+            let minutes = settings.slotTimes.indices.contains(index) ? settings.slotTimes[index] : 0
+            return Calendar.current.date(bySettingHour: minutes / 60, minute: minutes % 60, second: 0, of: .now) ?? .now
+        } set: { date in
+            let parts = Calendar.current.dateComponents([.hour, .minute], from: date)
+            guard settings.slotTimes.indices.contains(index) else { return }
+            settings.slotTimes[index] = (parts.hour ?? 0) * 60 + (parts.minute ?? 0)
+        }
+    }
+
+    private var locationBinding: Binding<Bool> {
+        Binding {
+            settings.shareLocation
+        } set: { enabled in
+            guard enabled else {
+                settings.shareLocation = false
+                return
+            }
+            Task {
+                let granted = await LocationService.shared.requestPermission()
+                settings.shareLocation = granted
+                locationDenied = !granted
+            }
+        }
+    }
+}
+
+private struct TimeZonePicker: View {
+    @Binding var selection: String
+    @Environment(\.dismiss) private var dismiss
+    @State private var search = ""
+
+    private var results: [String] {
+        let all = TimeZone.knownTimeZoneIdentifiers
+        return search.isEmpty ? all : all.filter { $0.localizedCaseInsensitiveContains(search) }
+    }
+
+    var body: some View {
+        List {
+            Button("Use device time zone (\(TimeZone.current.identifier))") {
+                selection = TimeZone.current.identifier
+                dismiss()
+            }
+            ForEach(results, id: \.self) { identifier in
+                Button {
+                    selection = identifier
+                    dismiss()
+                } label: {
+                    HStack {
+                        Text(identifier).foregroundStyle(Color.primary)
+                        Spacer()
+                        if identifier == selection { Image(systemName: "checkmark") }
+                    }
+                }
+            }
+        }
+        .searchable(text: $search)
+        .navigationTitle("Time zone")
+    }
+}
+
+struct ShortcutsGuideView: View {
+    var body: some View {
+        List {
+            Section {
+                Text("iOS doesn't let apps open themselves. A personal Shortcuts automation can open StillAlive? at each check-in time so the puzzle is waiting for you.")
+            }
+            Section("Set it up") {
+                Label("Open the Shortcuts app and go to Automation.", systemImage: "1.circle")
+                Label("Tap New Automation → Time of Day, pick your first check-in time, Daily.", systemImage: "2.circle")
+                Label("Choose Run Immediately.", systemImage: "3.circle")
+                Label("Add the action Open App → StillAlive?.", systemImage: "4.circle")
+                Label("Repeat for each check-in time.", systemImage: "5.circle")
+            }
+        }
+        .navigationTitle("Auto-open")
+    }
+}
