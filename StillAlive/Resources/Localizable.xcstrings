@@ -652,6 +652,16 @@
         }
       }
     },
+    "Language": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ngôn ngữ"
+          }
+        }
+      }
+    },
     "Last check-in": {
       "localizations": {
         "vi": {
@@ -948,6 +958,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mở ứng dụng Phím tắt và vào Tự động hoá."
+          }
+        }
+      }
+    },
+    "Opens StillAlive? in the Settings app. Tap Language there to switch between English and Tiếng Việt.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mở StillAlive? trong ứng dụng Cài đặt. Chạm Ngôn ngữ ở đó để chuyển giữa English và Tiếng Việt."
           }
         }
       }

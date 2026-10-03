@@ -20,6 +20,13 @@ private struct SettingsForm: View {
     @Bindable var user: LocalUser
     @Environment(\.modelContext) private var context
     @State private var locationDenied = false
+    @Environment(\.openURL) private var openURL
+
+    /// The language the app is showing, named in that language (e.g. "Tiếng Việt").
+    static var currentLanguageName: String {
+        let code = Bundle.main.preferredLocalizations.first ?? "en"
+        return Locale(identifier: code).localizedString(forLanguageCode: code)?.localizedCapitalized ?? code
+    }
 
     private static let maxSlots = 3
 
@@ -75,6 +82,26 @@ private struct SettingsForm: View {
                 } label: {
                     LabeledContent("Time zone", value: user.timeZoneID)
                 }
+            }
+
+            Section {
+                Button {
+                    if let url = URL(string: UIApplication.openSettingsURLString) {
+                        openURL(url)
+                    }
+                } label: {
+                    LabeledContent {
+                        HStack(spacing: 4) {
+                            Text(Self.currentLanguageName)
+                            Image(systemName: "arrow.up.forward.app")
+                        }
+                    } label: {
+                        Label("Language", systemImage: "globe")
+                    }
+                }
+                .foregroundStyle(.primary)
+            } footer: {
+                Text("Opens StillAlive? in the Settings app. Tap Language there to switch between English and Tiếng Việt.")
             }
 
             Section {
