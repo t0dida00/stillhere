@@ -49,6 +49,17 @@ final class NotificationService {
         try? await center.add(UNNotificationRequest(identifier: identifier, content: content, trigger: nil))
     }
 
+    /// A partner asked me to check in. Tapping it opens the puzzle for their request.
+    func notifyCheckInRequest(id: String, name: String) async {
+        let content = UNMutableNotificationContent()
+        content.title = String(localized: "\(name) asked you to check in")
+        content.body = String(localized: "Solve a quick puzzle to let them know you're okay.")
+        content.sound = .default
+        content.interruptionLevel = .timeSensitive
+        content.userInfo = ["checkInRequestID": id]
+        try? await center.add(UNNotificationRequest(identifier: "checkin-request.\(id)", content: content, trigger: nil))
+    }
+
     /// Removes the remaining reminders (pending and delivered) for a resolved slot.
     func cancel(_ key: SlotKey) async {
         let prefix = PlannedReminder.identifierPrefix(for: key)

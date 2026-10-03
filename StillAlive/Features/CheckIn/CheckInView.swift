@@ -1,8 +1,10 @@
 import SwiftData
 import SwiftUI
 
+/// The puzzle. For a scheduled slot it records checked in or skipped; for a partner's request,
+/// solving it answers the request and "Not now" sets it aside.
 struct CheckInView: View {
-    let slotKey: SlotKey
+    let target: CheckInTarget
 
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
@@ -13,7 +15,13 @@ struct CheckInView: View {
     @State private var dragOffset: CGFloat = 0
 
     private var puzzle: Puzzle {
-        PuzzleGenerator.puzzle(dayKey: slotKey.dayKey, slotIndex: slotKey.slotIndex, difficulty: settings.first?.difficulty ?? 1)
+        let difficulty = settings.first?.difficulty ?? 1
+        switch target {
+        case .slot(let key):
+            return PuzzleGenerator.puzzle(dayKey: key.dayKey, slotIndex: key.slotIndex, difficulty: difficulty)
+        case .request(let id, _):
+            return PuzzleGenerator.puzzle(dayKey: id, slotIndex: 0, difficulty: difficulty)
+        }
     }
 
     var body: some View {
@@ -24,10 +32,19 @@ struct CheckInView: View {
                 .accessibilityHidden(true)
 
             VStack(spacing: 8) {
-                Text("Still alive?")
-                    .font(.largeTitle.bold())
-                Text("Solve this to check in.")
-                    .foregroundStyle(.secondary)
+                switch target {
+                case .slot:
+                    Text("Still alive?")
+                        .font(.largeTitle.bold())
+                    Text("Solve this to check in.")
+                        .foregroundStyle(.secondary)
+                case .request(_, let name):
+                    Text("\(name) asked you to check in")
+                        .font(.title.bold())
+                        .multilineTextAlignment(.center)
+                    Text("Solve this to let them know you're okay.")
+                        .foregroundStyle(.secondary)
+                }
             }
 
             Spacer()
@@ -46,8 +63,14 @@ struct CheckInView: View {
 
             Keypad(input: $input, onSubmit: submit)
 
-            Button("Skip this check-in", role: .destructive, action: skip)
-                .padding(.top, 4)
+            switch target {
+            case .slot:
+                Button("Skip this check-in", role: .destructive, action: skip)
+                    .padding(.top, 4)
+            case .request:
+                Button("Not now", action: skip)
+                    .padding(.top, 4)
+            }
         }
         .padding()
         .offset(y: dragOffset)
@@ -73,13 +96,23 @@ struct CheckInView: View {
             return
         }
         solved = true
-        CheckInService(context: context).checkIn(slotKey)
+        switch target {
+        case .slot(let key):
+            CheckInService(context: context).checkIn(key)
+        case .request:
+            CheckInRequestService(context: context).answerAll()
+        }
         dismiss()
     }
 
-    /// Skip button and swipe-down both record `skipped`.
+    /// Skip button and swipe-down: a slot is recorded `skipped`; a request is set aside.
     private func skip() {
-        CheckInService(context: context).skip(slotKey)
+        switch target {
+        case .slot(let key):
+            CheckInService(context: context).skip(key)
+        case .request(let id, _):
+            CheckInRequestService(context: context).dismiss(id: id)
+        }
         dismiss()
     }
 }

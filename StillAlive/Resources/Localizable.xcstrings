@@ -1,6 +1,16 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "%@ asked you to check in": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ nhờ bạn điểm danh"
+          }
+        }
+      }
+    },
     "%@ doesn't want to share their location.": {
       "localizations": {
         "vi": {
@@ -1120,6 +1130,16 @@
         }
       }
     },
+    "Not now": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Để sau"
+          }
+        }
+      }
+    },
     "Not sharing": {
       "localizations": {
         "vi": {
@@ -1656,12 +1676,32 @@
         }
       }
     },
+    "Solve a quick puzzle to let them know you're okay.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giải một câu đố nhanh để họ biết bạn vẫn ổn."
+          }
+        }
+      }
+    },
     "Solve this to check in.": {
       "localizations": {
         "vi": {
           "stringUnit": {
             "state": "translated",
             "value": "Giải câu này để điểm danh."
+          }
+        }
+      }
+    },
+    "Solve this to let them know you're okay.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giải câu này để họ biết bạn vẫn ổn."
           }
         }
       }

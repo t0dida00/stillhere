@@ -123,6 +123,10 @@ Tab bar (bottom): **Map | Check-In | Notifications | Users | Settings**. The app
    - Requests: incoming invitations with Accept/Decline; Sent invites waiting for an answer.
    - Partners: avatar, nickname (only I see it), status, per-partner "Share my location" toggle with an explanation popup.
    - **Free-plan limits** (`PlanLimits`): 1 partner (accepted plus sent invites still waiting), 2 emergency contacts, 1 check-in time. At each limit the add button becomes "Upgrade to Premium"; at the partner limit, incoming requests still arrive, but Accept becomes "Upgrade to Premium" too (a placeholder message until Premium exists); Decline still works.
+5b. **Incoming check-in request**
+   - When a partner requests a check-in, I get a notification ("Dad asked you to check in"), and whenever the app opens with an open request, the puzzle screen pops up full-screen with that title.
+   - Solving it answers the request (`SyncService.answerCheckInRequest`); "Not now" or swiping down sets it aside. A scheduled check-in also answers open requests.
+   - Requests arrive through `SyncService.incomingCheckInRequests()` and are stored as `CheckInRequest`. With the backend they arrive by push, even when the app is closed.
 6. **Settings**
    - Slot times (add/remove/edit, default 9:00, at most 1 on the free plan), grace window, reminder interval.
    - Puzzle difficulty.

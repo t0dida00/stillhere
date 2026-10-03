@@ -6,9 +6,13 @@ import SwiftData
 /// `-mockPartner "Dad@04:28/1"`: an accepted partner "Dad" checking in daily at 04:28 with a
 /// 1-minute grace window, who misses every check-in from the start of today. Repeat the
 /// argument for more partners. Running it again with the same name updates that partner.
+///
+/// `-mockCheckInRequest "Dad"` makes the accepted partner called Dad (name or nickname) ask me
+/// to check in, through `MockSyncService.inbox`, so the notification and puzzle popup run as real.
 @MainActor
 enum MockScenario {
     static func apply(context: ModelContext, arguments: [String] = ProcessInfo.processInfo.arguments, now: Date = .now) {
+        addCheckInRequests(context: context, arguments: arguments, now: now)
         let specs = zip(arguments, arguments.dropFirst()).filter { $0.0 == "-mockPartner" }.map(\.1)
         guard !specs.isEmpty, let user = context.fetchUser() else { return }
         let startOfToday = DayKey.calendar(in: user.timeZone).startOfDay(for: now)
@@ -31,6 +35,21 @@ enum MockScenario {
         MockSchedule.saved = schedules
         try? context.save()
     }
+
+    /// Each launch with the argument sends one new request. Names match a partner's nickname or name.
+    private static func addCheckInRequests(context: ModelContext, arguments: [String], now: Date) {
+        let names = zip(arguments, arguments.dropFirst()).filter { $0.0 == "-mockCheckInRequest" }.map(\.1)
+        guard !names.isEmpty, !handledLaunch else { return }
+        handledLaunch = true
+        let partners = ((try? context.fetch(FetchDescriptor<Partnership>())) ?? []).filter(\.isAccepted)
+        for name in names {
+            guard let partner = partners.first(where: { $0.displayName == name || $0.partnerName == name }) else { continue }
+            MockSyncService.inbox.append(IncomingCheckInRequest(id: UUID().uuidString, partnerID: partner.partnerID, requestedAt: now))
+        }
+    }
+
+    /// Requests are sent once per launch, not on every foreground.
+    private static var handledLaunch = false
 
     /// "Dad@04:28/1" → ("Dad", 268, 1).
     static func parse(_ spec: String) -> (name: String, minutes: Int, grace: Int)? {

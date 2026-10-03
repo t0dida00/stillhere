@@ -24,6 +24,16 @@ protocol SyncService {
     func emergencyContacts(of partnerID: String) async throws -> [EmergencyContact]
     /// Asks the partner to check in now; with the backend, a push that opens their puzzle.
     func requestCheckIn(from partnerID: String) async throws
+    /// Partners asking me to check in, not yet answered.
+    func incomingCheckInRequests() async throws -> [IncomingCheckInRequest]
+    /// Tells the partner I answered their request (I'm okay).
+    func answerCheckInRequest(_ id: String) async throws
+}
+
+struct IncomingCheckInRequest: Codable, Equatable {
+    var id: String
+    var partnerID: String
+    var requestedAt: Date
 }
 
 /// The app's sync service. Mock partners until the backend exists (Phase 3).
@@ -40,6 +50,8 @@ struct NoopSyncService: SyncService {
     func partnerSharesLocation(_ partnerID: String) async throws -> Bool { false }
     func emergencyContacts(of partnerID: String) async throws -> [EmergencyContact] { [] }
     func requestCheckIn(from partnerID: String) async throws {}
+    func incomingCheckInRequests() async throws -> [IncomingCheckInRequest] { [] }
+    func answerCheckInRequest(_ id: String) async throws {}
 }
 
 /// A test partner's own schedule for `MockSyncService`, saved on this phone. Used by debug
@@ -89,6 +101,27 @@ struct MockSyncService: SyncService {
 
     /// Nothing reaches a simulated partner; the app still records the request for its cooldown.
     func requestCheckIn(from partnerID: String) async throws {}
+
+    /// Requests from simulated partners, put there by debug builds' `-mockCheckInRequest`.
+    func incomingCheckInRequests() async throws -> [IncomingCheckInRequest] {
+        Self.inbox
+    }
+
+    func answerCheckInRequest(_ id: String) async throws {
+        Self.inbox.removeAll { $0.id == id }
+    }
+
+    private static let inboxKey = "mockCheckInRequests"
+
+    static var inbox: [IncomingCheckInRequest] {
+        get {
+            guard let data = UserDefaults.standard.data(forKey: inboxKey) else { return [] }
+            return (try? JSONDecoder().decode([IncomingCheckInRequest].self, from: data)) ?? []
+        }
+        set {
+            UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: inboxKey)
+        }
+    }
 
     /// 0 to `PlanLimits.emergencyContacts` made-up contacts per partner, the same every time:
     /// a Vietnamese mobile number as Phone, Zalo or WhatsApp, or a Telegram username.

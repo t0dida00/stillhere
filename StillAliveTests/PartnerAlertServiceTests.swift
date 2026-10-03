@@ -14,12 +14,14 @@ private struct OneMissSync: SyncService {
     func partnerSharesLocation(_ partnerID: String) async throws -> Bool { false }
     func emergencyContacts(of partnerID: String) async throws -> [EmergencyContact] { [] }
     func requestCheckIn(from partnerID: String) async throws {}
+    func incomingCheckInRequests() async throws -> [IncomingCheckInRequest] { [] }
+    func answerCheckInRequest(_ id: String) async throws {}
 }
 
 @MainActor
 final class PartnerAlertServiceTests: XCTestCase {
     func testEachMissIsSavedOnceForTheNotificationsTab() async throws {
-        let container = try ModelContainer(for: LocalUser.self, CheckInSlot.self, Partnership.self, AppSettings.self, AlertRecord.self,
+        let container = try ModelContainer(for: LocalUser.self, CheckInSlot.self, Partnership.self, AppSettings.self, AlertRecord.self, CheckInRequest.self,
                                            configurations: ModelConfiguration(isStoredInMemoryOnly: true))
         let context = container.mainContext
         let date = { ISO8601DateFormatter().date(from: $0)! }

@@ -102,6 +102,10 @@ struct CheckInService {
         let deadline = SlotRules.deadline(for: slot.scheduledAt, graceMinutes: settings.graceMinutes)
         let state: SlotState = now < deadline ? .checkedIn : .missed
         resolve(slot, as: state, at: state == .checkedIn ? now : deadline)
+        if state == .checkedIn {
+            // Checking in shows I'm okay, which answers any partner's open request too.
+            CheckInRequestService(context: context).answerAll(now: now)
+        }
 
         if state == .checkedIn, settings.shareLocation {
             Task {

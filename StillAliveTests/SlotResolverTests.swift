@@ -15,7 +15,7 @@ final class SlotResolverTests: XCTestCase {
 
     override func setUp() async throws {
         container = try ModelContainer(
-            for: LocalUser.self, CheckInSlot.self, Partnership.self, AppSettings.self,
+            for: LocalUser.self, CheckInSlot.self, Partnership.self, AppSettings.self, AlertRecord.self, CheckInRequest.self,
             configurations: ModelConfiguration(isStoredInMemoryOnly: true)
         )
         context = container.mainContext
