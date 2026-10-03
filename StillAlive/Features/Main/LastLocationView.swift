@@ -84,8 +84,20 @@ private struct LocationCard: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Label("Last location", systemImage: "location.fill")
-                .font(.headline)
+            HStack {
+                Label("Last location", systemImage: "location.fill")
+                    .font(.headline)
+                Spacer()
+                if let coordinate {
+                    Button {
+                        openInMaps(coordinate)
+                    } label: {
+                        Label("Open in Maps", systemImage: "arrow.up.forward.app")
+                            .font(.subheadline)
+                    }
+                    .buttonStyle(.borderless)
+                }
+            }
 
             if let coordinate {
                 Map(initialPosition: .region(MKCoordinateRegion(center: coordinate, latitudinalMeters: 1500, longitudinalMeters: 1500)),
@@ -99,24 +111,14 @@ private struct LocationCard: View {
                 .onTapGesture { openInMaps(coordinate) }
                 .accessibilityHidden(true)
 
-                HStack(alignment: .top) {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text(placeName ?? String(format: "%.4f, %.4f", coordinate.latitude, coordinate.longitude))
-                            .font(.subheadline.weight(.semibold))
-                        if let updatedAt {
-                            Text("Updated \(updatedAt.formatted(.relative(presentation: .named)))")
-                                .font(.caption)
-                                .foregroundStyle(.secondary)
-                        }
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(placeName ?? String(format: "%.4f, %.4f", coordinate.latitude, coordinate.longitude))
+                        .font(.subheadline.weight(.semibold))
+                    if let updatedAt {
+                        Text("Updated \(updatedAt.formatted(.relative(presentation: .named)))")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
-                    Spacer()
-                    Button {
-                        openInMaps(coordinate)
-                    } label: {
-                        Label("Open in Maps", systemImage: "arrow.up.forward.app")
-                            .font(.subheadline)
-                    }
-                    .buttonStyle(.borderless)
                 }
             } else if showsPlaceholder {
                 RoundedRectangle(cornerRadius: 12)
