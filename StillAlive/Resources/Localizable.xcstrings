@@ -136,6 +136,16 @@
         }
       }
     },
+    "Add emergency contact": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thêm liên hệ khẩn cấp"
+          }
+        }
+      }
+    },
     "Add me on StillAlive? with code %@": {
       "localizations": {
         "vi": {
@@ -396,6 +406,16 @@
         }
       }
     },
+    "Contact via": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liên hệ qua"
+          }
+        }
+      }
+    },
     "Continue": {
       "localizations": {
         "vi": {
@@ -492,6 +512,16 @@
         }
       }
     },
+    "Delete contact": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Xoá liên hệ"
+          }
+        }
+      }
+    },
     "Demo partner": {
       "localizations": {
         "vi": {
@@ -542,6 +572,16 @@
         }
       }
     },
+    "Edit emergency contact": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sửa liên hệ khẩn cấp"
+          }
+        }
+      }
+    },
     "Edit name": {
       "localizations": {
         "vi": {
@@ -558,6 +598,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Sửa biệt danh"
+          }
+        }
+      }
+    },
+    "Emergency contact": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liên hệ khẩn cấp"
           }
         }
       }
@@ -852,6 +902,16 @@
         }
       }
     },
+    "New emergency contact": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liên hệ khẩn cấp mới"
+          }
+        }
+      }
+    },
     "Next month": {
       "localizations": {
         "vi": {
@@ -1062,12 +1122,12 @@
         }
       }
     },
-    "Partners use this code to request to see your check-ins.": {
+    "Partners use your code to request to see your check-ins. Emergency contacts (up to %lld) help them reach you if you miss check-ins.": {
       "localizations": {
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Người thân dùng mã này để xin xem các lần điểm danh của bạn."
+            "value": "Người thân dùng mã của bạn để xin xem các lần điểm danh. Liên hệ khẩn cấp (tối đa %lld) giúp họ liên lạc với bạn khi bạn bỏ lỡ điểm danh."
           }
         }
       }
@@ -1078,6 +1138,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Đang chờ"
+          }
+        }
+      }
+    },
+    "Phone": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Điện thoại"
+          }
+        }
+      }
+    },
+    "Phone number, with country code if they may call from abroad.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Số điện thoại, kèm mã quốc gia nếu người thân có thể gọi từ nước ngoài."
           }
         }
       }
@@ -1501,6 +1581,26 @@
         }
       }
     },
+    "The phone number registered with WhatsApp, with country code.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Số điện thoại đã đăng ký WhatsApp, kèm mã quốc gia."
+          }
+        }
+      }
+    },
+    "The phone number registered with Zalo.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Số điện thoại đã đăng ký Zalo."
+          }
+        }
+      }
+    },
     "Their invite code": {
       "localizations": {
         "vi": {
@@ -1657,6 +1757,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bạn đã thêm người thân này rồi."
+          }
+        }
+      }
+    },
+    "Your Telegram username (like @linh) or phone number.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tên người dùng Telegram (vd: @linh) hoặc số điện thoại."
           }
         }
       }

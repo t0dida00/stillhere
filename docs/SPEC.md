@@ -44,6 +44,7 @@ enum SlotState: String, Codable { case pending, checkedIn, skipped, missed }
     var lastPlaceName: String?
     var lastLocationAt: Date?
     @Attribute(.externalStorage) var avatarData: Data? // 256 px JPEG; nil shows the initial
+    var emergencyContactsData: Data? // JSON [EmergencyContact]: up to 3 of {kind: phone|zalo|whatsApp|telegram, value}
 }
 
 @Model final class CheckInSlot {
@@ -116,6 +117,7 @@ Tab bar (bottom): **Map | Check-In | Notifications | Users | Settings**. The app
    - Tap to mark read and open that partner's calendar; swipe to delete; "Mark all as read".
 5. **Users**
    - Me: avatar (photo or initial), editable name, invite code, QR code and share link (`stillalive://invite/<code>`).
+   - Me → Emergency contacts: up to 3, each Phone, Zalo, WhatsApp or Telegram plus a number or username. Partners will use them to reach you when you miss check-ins (shared once sync exists); each has a link that opens the call or chat (`tel:`, `zalo.me`, `wa.me`, `t.me`).
    - Requests: incoming invitations with Accept/Decline; Sent invites waiting for an answer.
    - Partners: avatar, nickname (only I see it), status, per-partner "Share my location" toggle with an explanation popup.
 6. **Settings**

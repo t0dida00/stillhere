@@ -11,6 +11,8 @@ struct UsersView: View {
     /// Prefilled into Add partner when it opens from an invite link.
     @State private var linkedCode = ""
     @State private var showingQR = false
+    /// The emergency contact being added or edited.
+    @State private var editingContact: EmergencyContact?
 
     private var received: [Partnership] { partnerships.filter { $0.isIncoming && $0.status == "pending" } }
     private var sent: [Partnership] { partnerships.filter { !$0.isIncoming && $0.status == "pending" } }
@@ -107,10 +109,58 @@ struct UsersView: View {
                       message: Text("Add me on StillAlive? with code \(user.id)")) {
                 Label("Share invite", systemImage: "square.and.arrow.up")
             }
+
+            emergencyContactRows(user)
         } header: {
             Text("Me")
         } footer: {
-            Text("Partners use this code to request to see your check-ins.")
+            Text("Partners use your code to request to see your check-ins. Emergency contacts (up to \(EmergencyContact.maxCount)) help them reach you if you miss check-ins.")
+        }
+        .sheet(item: $editingContact) { contact in
+            EmergencyContactEditor(
+                contact: contact,
+                isNew: !user.emergencyContacts.contains { $0.id == contact.id },
+                onSave: { saved in
+                    var contacts = user.emergencyContacts
+                    if let index = contacts.firstIndex(where: { $0.id == saved.id }) {
+                        contacts[index] = saved
+                    } else {
+                        contacts.append(saved)
+                    }
+                    user.emergencyContacts = contacts
+                    try? context.save()
+                },
+                onDelete: {
+                    user.emergencyContacts.removeAll { $0.id == contact.id }
+                    try? context.save()
+                }
+            )
+        }
+    }
+
+    @ViewBuilder
+    private func emergencyContactRows(_ user: LocalUser) -> some View {
+        let contacts = user.emergencyContacts
+        ForEach(contacts) { contact in
+            Button {
+                editingContact = contact
+            } label: {
+                EmergencyContactRow(contact: contact)
+            }
+            .foregroundStyle(.primary)
+        }
+        .onDelete { offsets in
+            var remaining = contacts
+            remaining.remove(atOffsets: offsets)
+            user.emergencyContacts = remaining
+            try? context.save()
+        }
+        if contacts.count < EmergencyContact.maxCount {
+            Button {
+                editingContact = EmergencyContact(kind: .phone, value: "")
+            } label: {
+                Label("Add emergency contact", systemImage: "cross.case")
+            }
         }
     }
 
@@ -132,6 +182,119 @@ struct UsersView: View {
         let name = demoCount == 0 ? String(localized: "Demo partner") : String(localized: "Demo partner \(demoCount + 1)")
         context.insert(Partnership(partnerID: code, partnerName: name, isIncoming: true))
         try? context.save()
+    }
+}
+
+private struct EmergencyContactRow: View {
+    let contact: EmergencyContact
+
+    var body: some View {
+        HStack(spacing: 12) {
+            Image(systemName: contact.kind.symbol)
+                .foregroundStyle(.white)
+                .frame(width: 30, height: 30)
+                .background(Self.color(for: contact.kind), in: RoundedRectangle(cornerRadius: 7))
+            VStack(alignment: .leading, spacing: 1) {
+                Text(contact.kind.title)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+                Text(contact.value)
+                    .font(.body.monospacedDigit())
+            }
+            Spacer()
+            Image(systemName: "pencil")
+                .foregroundStyle(.tint)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityHint("Edit emergency contact")
+    }
+
+    static func color(for kind: EmergencyContact.Kind) -> Color {
+        switch kind {
+        case .phone: .green
+        case .zalo: .blue
+        case .whatsApp: Color(red: 0.15, green: 0.68, blue: 0.38)
+        case .telegram: .cyan
+        }
+    }
+}
+
+/// Adds or edits one emergency contact: which app, and the number or username.
+private struct EmergencyContactEditor: View {
+    @State var contact: EmergencyContact
+    let isNew: Bool
+    var onSave: (EmergencyContact) -> Void
+    var onDelete: () -> Void
+
+    @Environment(\.dismiss) private var dismiss
+    @FocusState private var valueFocused: Bool
+
+    private var trimmed: String { contact.value.trimmingCharacters(in: .whitespacesAndNewlines) }
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section("Contact via") {
+                    Picker("Contact via", selection: $contact.kind) {
+                        ForEach(EmergencyContact.Kind.allCases) { kind in
+                            Text(kind.title).tag(kind)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .labelsHidden()
+                }
+
+                Section {
+                    TextField(placeholder, text: $contact.value)
+                        .keyboardType(contact.kind == .telegram ? .asciiCapable : .phonePad)
+                        .textContentType(contact.kind == .telegram ? .username : .telephoneNumber)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                        .focused($valueFocused)
+                } footer: {
+                    Text(hint)
+                }
+
+                if !isNew {
+                    Section {
+                        Button("Delete contact", role: .destructive) {
+                            onDelete()
+                            dismiss()
+                        }
+                    }
+                }
+            }
+            .navigationTitle(isNew ? "New emergency contact" : "Emergency contact")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        contact.value = trimmed
+                        onSave(contact)
+                        dismiss()
+                    }
+                    .disabled(trimmed.isEmpty)
+                }
+            }
+            .onAppear { valueFocused = isNew }
+        }
+        .presentationDetents([.medium])
+    }
+
+    private var placeholder: String {
+        contact.kind == .telegram ? "@username" : "+84 912 345 678"
+    }
+
+    private var hint: String {
+        switch contact.kind {
+        case .phone: String(localized: "Phone number, with country code if they may call from abroad.")
+        case .zalo: String(localized: "The phone number registered with Zalo.")
+        case .whatsApp: String(localized: "The phone number registered with WhatsApp, with country code.")
+        case .telegram: String(localized: "Your Telegram username (like @linh) or phone number.")
+        }
     }
 }
 
