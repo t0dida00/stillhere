@@ -136,7 +136,7 @@
         }
       }
     },
-    "Add emergency contact": {
+    "Add emergency contacts": {
       "localizations": {
         "vi": {
           "stringUnit": {
@@ -396,22 +396,22 @@
         }
       }
     },
+    "Choose up to %lld ways for partners to reach you.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chọn tối đa %lld cách để người thân liên lạc với bạn."
+          }
+        }
+      }
+    },
     "Codes have %lld characters.": {
       "localizations": {
         "vi": {
           "stringUnit": {
             "state": "translated",
             "value": "Mã có %lld ký tự."
-          }
-        }
-      }
-    },
-    "Contact via": {
-      "localizations": {
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Liên hệ qua"
           }
         }
       }
@@ -512,16 +512,6 @@
         }
       }
     },
-    "Delete contact": {
-      "localizations": {
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Xoá liên hệ"
-          }
-        }
-      }
-    },
     "Demo partner": {
       "localizations": {
         "vi": {
@@ -572,7 +562,7 @@
         }
       }
     },
-    "Edit emergency contact": {
+    "Edit emergency contacts": {
       "localizations": {
         "vi": {
           "stringUnit": {
@@ -602,7 +592,7 @@
         }
       }
     },
-    "Emergency contact": {
+    "Emergency contacts": {
       "localizations": {
         "vi": {
           "stringUnit": {
@@ -898,16 +888,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Lời mời của tôi"
-          }
-        }
-      }
-    },
-    "New emergency contact": {
-      "localizations": {
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Liên hệ khẩn cấp mới"
           }
         }
       }

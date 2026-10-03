@@ -11,8 +11,7 @@ struct UsersView: View {
     /// Prefilled into Add partner when it opens from an invite link.
     @State private var linkedCode = ""
     @State private var showingQR = false
-    /// The emergency contact being added or edited.
-    @State private var editingContact: EmergencyContact?
+    @State private var editingContacts = false
 
     private var received: [Partnership] { partnerships.filter { $0.isIncoming && $0.status == "pending" } }
     private var sent: [Partnership] { partnerships.filter { !$0.isIncoming && $0.status == "pending" } }
@@ -116,25 +115,11 @@ struct UsersView: View {
         } footer: {
             Text("Partners use your code to request to see your check-ins. Emergency contacts (up to \(EmergencyContact.maxCount)) help them reach you if you miss check-ins.")
         }
-        .sheet(item: $editingContact) { contact in
-            EmergencyContactEditor(
-                contact: contact,
-                isNew: !user.emergencyContacts.contains { $0.id == contact.id },
-                onSave: { saved in
-                    var contacts = user.emergencyContacts
-                    if let index = contacts.firstIndex(where: { $0.id == saved.id }) {
-                        contacts[index] = saved
-                    } else {
-                        contacts.append(saved)
-                    }
-                    user.emergencyContacts = contacts
-                    try? context.save()
-                },
-                onDelete: {
-                    user.emergencyContacts.removeAll { $0.id == contact.id }
-                    try? context.save()
-                }
-            )
+        .sheet(isPresented: $editingContacts) {
+            EmergencyContactsEditor(contacts: user.emergencyContacts) { saved in
+                user.emergencyContacts = saved
+                try? context.save()
+            }
         }
     }
 
@@ -143,7 +128,7 @@ struct UsersView: View {
         let contacts = user.emergencyContacts
         ForEach(contacts) { contact in
             Button {
-                editingContact = contact
+                editingContacts = true
             } label: {
                 EmergencyContactRow(contact: contact)
             }
@@ -155,12 +140,10 @@ struct UsersView: View {
             user.emergencyContacts = remaining
             try? context.save()
         }
-        if contacts.count < EmergencyContact.maxCount {
-            Button {
-                editingContact = EmergencyContact(kind: .phone, value: "")
-            } label: {
-                Label("Add emergency contact", systemImage: "cross.case")
-            }
+        Button {
+            editingContacts = true
+        } label: {
+            Label(contacts.isEmpty ? "Add emergency contacts" : "Edit emergency contacts", systemImage: "cross.case")
         }
     }
 
@@ -206,7 +189,7 @@ private struct EmergencyContactRow: View {
                 .foregroundStyle(.tint)
         }
         .accessibilityElement(children: .combine)
-        .accessibilityHint("Edit emergency contact")
+        .accessibilityHint("Edit emergency contacts")
     }
 
     static func color(for kind: EmergencyContact.Kind) -> Color {
@@ -219,77 +202,115 @@ private struct EmergencyContactRow: View {
     }
 }
 
-/// Adds or edits one emergency contact: which app, and the number or username.
-private struct EmergencyContactEditor: View {
-    @State var contact: EmergencyContact
-    let isNew: Bool
-    var onSave: (EmergencyContact) -> Void
-    var onDelete: () -> Void
+/// Edits all emergency contacts at once: switch on up to `EmergencyContact.maxCount` apps and
+/// fill in each one's number or username.
+private struct EmergencyContactsEditor: View {
+    let contacts: [EmergencyContact]
+    var onSave: ([EmergencyContact]) -> Void
 
     @Environment(\.dismiss) private var dismiss
-    @FocusState private var valueFocused: Bool
+    @State private var enabled: Set<EmergencyContact.Kind> = []
+    @State private var values: [EmergencyContact.Kind: String] = [:]
+    @FocusState private var focused: EmergencyContact.Kind?
 
-    private var trimmed: String { contact.value.trimmingCharacters(in: .whitespacesAndNewlines) }
+    private func trimmed(_ kind: EmergencyContact.Kind) -> String {
+        (values[kind] ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+    }
+
+    private var canSave: Bool { enabled.allSatisfy { !trimmed($0).isEmpty } }
 
     var body: some View {
         NavigationStack {
             Form {
-                Section("Contact via") {
-                    Picker("Contact via", selection: $contact.kind) {
-                        ForEach(EmergencyContact.Kind.allCases) { kind in
-                            Text(kind.title).tag(kind)
-                        }
-                    }
-                    .pickerStyle(.segmented)
-                    .labelsHidden()
-                }
-
-                Section {
-                    TextField(placeholder, text: $contact.value)
-                        .keyboardType(contact.kind == .telegram ? .asciiCapable : .phonePad)
-                        .textContentType(contact.kind == .telegram ? .username : .telephoneNumber)
-                        .textInputAutocapitalization(.never)
-                        .autocorrectionDisabled()
-                        .focused($valueFocused)
-                } footer: {
-                    Text(hint)
-                }
-
-                if !isNew {
+                ForEach(EmergencyContact.Kind.allCases) { kind in
                     Section {
-                        Button("Delete contact", role: .destructive) {
-                            onDelete()
-                            dismiss()
+                        Toggle(isOn: binding(for: kind)) {
+                            Label {
+                                Text(kind.title)
+                            } icon: {
+                                Image(systemName: kind.symbol)
+                                    .foregroundStyle(.white)
+                                    .frame(width: 28, height: 28)
+                                    .background(EmergencyContactRow.color(for: kind), in: RoundedRectangle(cornerRadius: 7))
+                            }
+                        }
+                        .disabled(!enabled.contains(kind) && enabled.count >= EmergencyContact.maxCount)
+
+                        if enabled.contains(kind) {
+                            TextField(Self.placeholder(for: kind), text: Binding(
+                                get: { values[kind] ?? "" },
+                                set: { values[kind] = $0 }
+                            ))
+                            .keyboardType(kind == .telegram ? .asciiCapable : .phonePad)
+                            .textContentType(kind == .telegram ? .username : .telephoneNumber)
+                            .textInputAutocapitalization(.never)
+                            .autocorrectionDisabled()
+                            .font(.body.monospacedDigit())
+                            .focused($focused, equals: kind)
+                        }
+                    } footer: {
+                        if enabled.contains(kind) {
+                            Text(Self.hint(for: kind))
                         }
                     }
                 }
             }
-            .navigationTitle(isNew ? "New emergency contact" : "Emergency contact")
+            .navigationTitle("Emergency contacts")
             .navigationBarTitleDisplayMode(.inline)
+            .safeAreaInset(edge: .top) {
+                Text("Choose up to \(EmergencyContact.maxCount) ways for partners to reach you.")
+                    .font(.footnote)
+                    .foregroundStyle(.secondary)
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 8)
+            }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
                 }
                 ToolbarItem(placement: .confirmationAction) {
-                    Button("Save") {
-                        contact.value = trimmed
-                        onSave(contact)
-                        dismiss()
-                    }
-                    .disabled(trimmed.isEmpty)
+                    Button("Save", action: save).disabled(!canSave)
                 }
             }
-            .onAppear { valueFocused = isNew }
+            .onAppear {
+                for contact in contacts {
+                    enabled.insert(contact.kind)
+                    values[contact.kind] = contact.value
+                }
+            }
         }
-        .presentationDetents([.medium])
     }
 
-    private var placeholder: String {
-        contact.kind == .telegram ? "@username" : "+84 912 345 678"
+    private func binding(for kind: EmergencyContact.Kind) -> Binding<Bool> {
+        Binding {
+            enabled.contains(kind)
+        } set: { on in
+            if on {
+                enabled.insert(kind)
+                focused = kind
+            } else {
+                enabled.remove(kind)
+            }
+        }
     }
 
-    private var hint: String {
-        switch contact.kind {
+    private func save() {
+        // One contact per app, in a fixed order; keep IDs of contacts that already existed.
+        let saved = EmergencyContact.Kind.allCases.filter(enabled.contains).map { kind in
+            var contact = contacts.first { $0.kind == kind } ?? EmergencyContact(kind: kind, value: "")
+            contact.value = trimmed(kind)
+            return contact
+        }
+        onSave(saved)
+        dismiss()
+    }
+
+    static func placeholder(for kind: EmergencyContact.Kind) -> String {
+        kind == .telegram ? "@username" : "+84 912 345 678"
+    }
+
+    static func hint(for kind: EmergencyContact.Kind) -> String {
+        switch kind {
         case .phone: String(localized: "Phone number, with country code if they may call from abroad.")
         case .zalo: String(localized: "The phone number registered with Zalo.")
         case .whatsApp: String(localized: "The phone number registered with WhatsApp, with country code.")
