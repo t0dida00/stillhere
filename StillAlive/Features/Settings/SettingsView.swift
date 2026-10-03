@@ -28,7 +28,7 @@ private struct SettingsForm: View {
         return Locale(identifier: code).localizedString(forLanguageCode: code)?.localizedCapitalized ?? code
     }
 
-    private static let maxSlots = 3
+    private static let maxSlots = PlanLimits.checkInTimes
 
     var body: some View {
         Form {

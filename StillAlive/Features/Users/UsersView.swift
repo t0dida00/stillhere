@@ -11,6 +11,9 @@ struct UsersView: View {
     /// Prefilled into Add partner when it opens from an invite link.
     @State private var linkedCode = ""
     @State private var showingQR = false
+    @State private var showingPremium = false
+
+    private var canAddPartner: Bool { PlanLimits.canAddPartner(partnerships) }
     @State private var editingContacts = false
 
     private var received: [Partnership] { partnerships.filter { $0.isIncoming && $0.status == "pending" } }
@@ -31,7 +34,8 @@ struct UsersView: View {
                             .foregroundStyle(.secondary)
                     }
                     ForEach(received) { request in
-                        RequestRow(partnership: request) { accept in respond(to: request, accept: accept) }
+                        RequestRow(partnership: request, canAccept: canAddPartner,
+                                   onUpgrade: { showingPremium = true }) { accept in respond(to: request, accept: accept) }
                     }
                     Button {
                         addDemoRequest()
@@ -63,13 +67,17 @@ struct UsersView: View {
                         offsets.map { partners[$0] }.forEach(context.delete)
                         try? context.save()
                     }
-                    Button {
-                        addingPartner = true
-                    } label: {
-                        Label("Add partner by code", systemImage: "person.badge.plus")
+                    if canAddPartner {
+                        Button {
+                            addingPartner = true
+                        } label: {
+                            Label("Add partner by code", systemImage: "person.badge.plus")
+                        }
+                    } else {
+                        UpgradeButton { showingPremium = true }
                     }
                 } header: {
-                    Text("Partners")
+                    Text("Partners \(PlanLimits.partnerSlotsUsed(partnerships))/\(PlanLimits.partners)")
                 } footer: {
                     Text("Until sync is available, partners are simulated: invites are accepted after a few seconds and check-ins are made up.")
                 }
@@ -95,8 +103,17 @@ struct UsersView: View {
             .onChange(of: router.pendingInviteCode, initial: true) { _, code in
                 guard let code else { return }
                 router.pendingInviteCode = nil
+                guard canAddPartner else {
+                    showingPremium = true
+                    return
+                }
                 linkedCode = code
                 addingPartner = true
+            }
+            .alert("Premium is coming soon", isPresented: $showingPremium) {
+                Button("OK", role: .cancel) {}
+            } message: {
+                Text("The free plan has up to \(PlanLimits.partners) partners, counting invites you've sent. Premium will let you add more. For now, remove a partner or cancel a sent invite to make room.")
             }
         }
     }
@@ -461,6 +478,9 @@ private struct MyAvatarRow: View {
 
 private struct RequestRow: View {
     let partnership: Partnership
+    /// False at the free plan's partner limit: the request stays, but accepting needs Premium.
+    var canAccept = true
+    var onUpgrade: () -> Void = {}
     var onRespond: (Bool) -> Void
 
     var body: some View {
@@ -472,11 +492,42 @@ private struct RequestRow: View {
             HStack {
                 Button("Decline", role: .destructive) { onRespond(false) }
                     .buttonStyle(.bordered)
-                Button("Accept") { onRespond(true) }
+                if canAccept {
+                    Button("Accept") { onRespond(true) }
+                        .buttonStyle(.borderedProminent)
+                } else {
+                    Button(action: onUpgrade) {
+                        Label("Upgrade to Premium", systemImage: "crown.fill")
+                    }
                     .buttonStyle(.borderedProminent)
+                    .tint(.orange)
+                }
+            }
+            if !canAccept {
+                Text("You have \(PlanLimits.partners) partners, the most on the free plan.")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
         }
         .padding(.vertical, 4)
+    }
+}
+
+/// Shown where adding a partner would go over the free plan's limit.
+private struct UpgradeButton: View {
+    var action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            HStack {
+                Label("Upgrade to Premium", systemImage: "crown.fill")
+                    .foregroundStyle(.orange)
+                Spacer()
+                Text("for more partners")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
+        }
     }
 }
 

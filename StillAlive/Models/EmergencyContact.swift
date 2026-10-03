@@ -27,7 +27,7 @@ struct EmergencyContact: Codable, Hashable, Identifiable {
         }
     }
 
-    static let maxCount = 3
+    static let maxCount = PlanLimits.emergencyContacts
 
     var id = UUID()
     var kind: Kind
