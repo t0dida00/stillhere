@@ -70,6 +70,25 @@
         }
       }
     },
+    "%lld of %lld": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$lld of %2$lld"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld/%lld"
+          }
+        }
+      }
+    },
+    "+84 912 345 678": {
+      "shouldTranslate": false
+    },
     "3D": {
       "shouldTranslate": false
     },
@@ -92,6 +111,9 @@
           }
         }
       }
+    },
+    "@username": {
+      "shouldTranslate": false
     },
     "A tiny daily check-in so the people you love know you're okay. No account needed.": {
       "localizations": {
@@ -132,6 +154,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Thêm giờ điểm danh"
+          }
+        }
+      }
+    },
+    "Add contact": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thêm liên hệ"
           }
         }
       }
@@ -202,6 +234,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Hãy cho phép StillAlive? dùng camera trong ứng dụng Cài đặt, hoặc nhập mã thay thế."
+          }
+        }
+      }
+    },
+    "Any mix of apps, for example 3 phone numbers, or 2 phones and a Zalo. Tap an app icon to change it.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kết hợp tuỳ ý, ví dụ 3 số điện thoại, hoặc 2 số điện thoại và 1 Zalo. Chạm biểu tượng ứng dụng để đổi."
+          }
+        }
+      }
+    },
+    "App": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ứng dụng"
+          }
+        }
+      }
+    },
+    "App: %@": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ứng dụng: %@"
           }
         }
       }
@@ -392,16 +454,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Chọn Chạy ngay lập tức."
-          }
-        }
-      }
-    },
-    "Choose up to %lld ways for partners to reach you.": {
-      "localizations": {
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Chọn tối đa %lld cách để người thân liên lạc với bạn."
           }
         }
       }

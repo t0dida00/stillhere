@@ -1,6 +1,6 @@
 import Foundation
 
-/// A way for partners to reach me when I miss check-ins. Up to `maxCount` per user.
+/// A way for partners to reach me when I miss check-ins. Up to `maxCount` per user, any mix of kinds.
 struct EmergencyContact: Codable, Hashable, Identifiable {
     enum Kind: String, Codable, CaseIterable, Identifiable {
         case phone, zalo, whatsApp, telegram
@@ -16,11 +16,12 @@ struct EmergencyContact: Codable, Hashable, Identifiable {
             }
         }
 
+        /// For menus, which can only show SF Symbols; rows use `ContactAppIcon`.
         var symbol: String {
             switch self {
             case .phone: "phone.fill"
-            case .zalo: "bubble.left.fill"
-            case .whatsApp: "message.fill"
+            case .zalo: "z.square.fill"
+            case .whatsApp: "phone.bubble.fill"
             case .telegram: "paperplane.fill"
             }
         }

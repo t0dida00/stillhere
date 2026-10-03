@@ -117,7 +117,7 @@ Tab bar (bottom): **Map | Check-In | Notifications | Users | Settings**. The app
    - Tap to mark read and open that partner's calendar; swipe to delete; "Mark all as read".
 5. **Users**
    - Me: avatar (photo or initial), editable name, invite code, QR code and share link (`stillalive://invite/<code>`).
-   - Emergency contacts (own section under Me): up to 3, at most one per app (Phone, Zalo, WhatsApp, Telegram), edited together in one form where each switched-on app shows its own field. Partners will use them to reach you when you miss check-ins (shared once sync exists); each has a link that opens the call or chat (`tel:`, `zalo.me`, `wa.me`, `t.me`).
+   - Emergency contacts (own section under Me): up to 3 in any mix of Phone, Zalo, WhatsApp and Telegram (e.g. 3 phones, or 2 phones and a Zalo), edited together in one form; each row has its app (tap the badge to change it), its own field and hint. Partners will use them to reach you when you miss check-ins (shared once sync exists); each has a link that opens the call or chat (`tel:`, `zalo.me`, `wa.me`, `t.me`).
    - Requests: incoming invitations with Accept/Decline; Sent invites waiting for an answer.
    - Partners: avatar, nickname (only I see it), status, per-partner "Share my location" toggle with an explanation popup.
 6. **Settings**

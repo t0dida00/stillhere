@@ -185,10 +185,7 @@ private struct EmergencyContactRow: View {
 
     var body: some View {
         HStack(spacing: 12) {
-            Image(systemName: contact.kind.symbol)
-                .foregroundStyle(.white)
-                .frame(width: 30, height: 30)
-                .background(Self.color(for: contact.kind), in: RoundedRectangle(cornerRadius: 7))
+            ContactAppIcon(kind: contact.kind)
             VStack(alignment: .leading, spacing: 1) {
                 Text(contact.kind.title)
                     .font(.caption)
@@ -203,79 +200,96 @@ private struct EmergencyContactRow: View {
         .accessibilityElement(children: .combine)
         .accessibilityHint("Edit emergency contacts")
     }
+}
 
-    static func color(for kind: EmergencyContact.Kind) -> Color {
-        switch kind {
-        case .phone: .green
-        case .zalo: .blue
-        case .whatsApp: Color(red: 0.15, green: 0.68, blue: 0.38)
-        case .telegram: .cyan
+/// App badge in each app's brand color: green phone, blue Zalo wordmark, green WhatsApp
+/// chat bubble, blue Telegram paper plane.
+struct ContactAppIcon: View {
+    let kind: EmergencyContact.Kind
+    var size: CGFloat = 32
+
+    var body: some View {
+        Group {
+            switch kind {
+            case .phone:
+                RoundedRectangle(cornerRadius: size * 0.24)
+                    .fill(Color(red: 0.20, green: 0.78, blue: 0.35))
+                    .overlay { symbol("phone.fill", scale: 0.5) }
+            case .zalo:
+                RoundedRectangle(cornerRadius: size * 0.24)
+                    .fill(Color(red: 0.0, green: 0.41, blue: 1.0))
+                    .overlay {
+                        Text(verbatim: "Zalo")
+                            .font(.system(size: size * 0.3, weight: .heavy, design: .rounded))
+                            .foregroundStyle(.white)
+                    }
+            case .whatsApp:
+                Circle()
+                    .fill(Color(red: 0.15, green: 0.83, blue: 0.40))
+                    .overlay { symbol("phone.bubble.fill", scale: 0.5) }
+            case .telegram:
+                Circle()
+                    .fill(Color(red: 0.13, green: 0.62, blue: 0.85))
+                    .overlay { symbol("paperplane.fill", scale: 0.46).offset(x: -size * 0.03, y: size * 0.02) }
+            }
         }
+        .frame(width: size, height: size)
+        .accessibilityHidden(true)
+    }
+
+    private func symbol(_ name: String, scale: CGFloat) -> some View {
+        Image(systemName: name)
+            .font(.system(size: size * scale, weight: .semibold))
+            .foregroundStyle(.white)
     }
 }
 
-/// Edits all emergency contacts at once: switch on up to `EmergencyContact.maxCount` apps and
-/// fill in each one's number or username.
+/// Edits all emergency contacts at once: up to `EmergencyContact.maxCount`, any mix of apps
+/// (3 phones, 2 phones and a Zalo, ...). Each row has its own app, field and hint.
 private struct EmergencyContactsEditor: View {
     let contacts: [EmergencyContact]
     var onSave: ([EmergencyContact]) -> Void
 
     @Environment(\.dismiss) private var dismiss
-    @State private var enabled: Set<EmergencyContact.Kind> = []
-    @State private var values: [EmergencyContact.Kind: String] = [:]
-    @FocusState private var focused: EmergencyContact.Kind?
+    @State private var rows: [EmergencyContact] = []
+    @FocusState private var focused: UUID?
 
-    private func trimmed(_ kind: EmergencyContact.Kind) -> String {
-        (values[kind] ?? "").trimmingCharacters(in: .whitespacesAndNewlines)
+    private var canSave: Bool {
+        rows.allSatisfy { !$0.value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
     }
-
-    private var canSave: Bool { enabled.allSatisfy { !trimmed($0).isEmpty } }
 
     var body: some View {
         NavigationStack {
             Form {
-                ForEach(EmergencyContact.Kind.allCases) { kind in
-                    Section {
-                        Toggle(isOn: binding(for: kind)) {
-                            Label {
-                                Text(kind.title)
-                            } icon: {
-                                Image(systemName: kind.symbol)
-                                    .foregroundStyle(.white)
-                                    .frame(width: 28, height: 28)
-                                    .background(EmergencyContactRow.color(for: kind), in: RoundedRectangle(cornerRadius: 7))
-                            }
-                        }
-                        .disabled(!enabled.contains(kind) && enabled.count >= EmergencyContact.maxCount)
-
-                        if enabled.contains(kind) {
-                            TextField(Self.placeholder(for: kind), text: Binding(
-                                get: { values[kind] ?? "" },
-                                set: { values[kind] = $0 }
-                            ))
-                            .keyboardType(kind == .telegram ? .asciiCapable : .phonePad)
-                            .textContentType(kind == .telegram ? .username : .telephoneNumber)
-                            .textInputAutocapitalization(.never)
-                            .autocorrectionDisabled()
-                            .font(.body.monospacedDigit())
-                            .focused($focused, equals: kind)
-                        }
-                    } footer: {
-                        if enabled.contains(kind) {
-                            Text(Self.hint(for: kind))
+                Section {
+                    ForEach($rows) { $row in
+                        ContactEditRow(contact: $row, focused: $focused) {
+                            rows.removeAll { $0.id == row.id }
                         }
                     }
+                    .onDelete { rows.remove(atOffsets: $0) }
+
+                    if rows.count < EmergencyContact.maxCount {
+                        Menu {
+                            ForEach(EmergencyContact.Kind.allCases) { kind in
+                                Button {
+                                    add(kind)
+                                } label: {
+                                    Label(kind.title, systemImage: kind.symbol)
+                                }
+                            }
+                        } label: {
+                            Label("Add contact", systemImage: "plus.circle.fill")
+                        }
+                    }
+                } header: {
+                    Text("\(rows.count) of \(EmergencyContact.maxCount)")
+                } footer: {
+                    Text("Any mix of apps, for example 3 phone numbers, or 2 phones and a Zalo. Tap an app icon to change it.")
                 }
             }
             .navigationTitle("Emergency contacts")
             .navigationBarTitleDisplayMode(.inline)
-            .safeAreaInset(edge: .top) {
-                Text("Choose up to \(EmergencyContact.maxCount) ways for partners to reach you.")
-                    .font(.footnote)
-                    .foregroundStyle(.secondary)
-                    .frame(maxWidth: .infinity)
-                    .padding(.top, 8)
-            }
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
@@ -285,44 +299,84 @@ private struct EmergencyContactsEditor: View {
                 }
             }
             .onAppear {
-                for contact in contacts {
-                    enabled.insert(contact.kind)
-                    values[contact.kind] = contact.value
-                }
+                rows = contacts
+                if rows.isEmpty { add(.phone) }
             }
         }
     }
 
-    private func binding(for kind: EmergencyContact.Kind) -> Binding<Bool> {
-        Binding {
-            enabled.contains(kind)
-        } set: { on in
-            if on {
-                enabled.insert(kind)
-                focused = kind
-            } else {
-                enabled.remove(kind)
-            }
-        }
+    private func add(_ kind: EmergencyContact.Kind) {
+        guard rows.count < EmergencyContact.maxCount else { return }
+        let contact = EmergencyContact(kind: kind, value: "")
+        rows.append(contact)
+        focused = contact.id
     }
 
     private func save() {
-        // One contact per app, in a fixed order; keep IDs of contacts that already existed.
-        let saved = EmergencyContact.Kind.allCases.filter(enabled.contains).map { kind in
-            var contact = contacts.first { $0.kind == kind } ?? EmergencyContact(kind: kind, value: "")
-            contact.value = trimmed(kind)
+        onSave(rows.map { row in
+            var contact = row
+            contact.value = row.value.trimmingCharacters(in: .whitespacesAndNewlines)
             return contact
-        }
-        onSave(saved)
+        })
         dismiss()
     }
+}
 
-    static func placeholder(for kind: EmergencyContact.Kind) -> String {
-        kind == .telegram ? "@username" : "+84 912 345 678"
+/// One contact in the editor: app (tap the icon to change), field and hint.
+private struct ContactEditRow: View {
+    @Binding var contact: EmergencyContact
+    var focused: FocusState<UUID?>.Binding
+    var onRemove: () -> Void
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            HStack(spacing: 12) {
+                Menu {
+                    Picker("App", selection: $contact.kind) {
+                        ForEach(EmergencyContact.Kind.allCases) { kind in
+                            Label(kind.title, systemImage: kind.symbol).tag(kind)
+                        }
+                    }
+                } label: {
+                    HStack(spacing: 3) {
+                        ContactAppIcon(kind: contact.kind, size: 36)
+                        Image(systemName: "chevron.up.chevron.down")
+                            .font(.caption2.weight(.semibold))
+                            .foregroundStyle(.secondary)
+                    }
+                }
+                .accessibilityLabel(Text("App: \(contact.kind.title)"))
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(contact.kind.title)
+                        .font(.caption.weight(.semibold))
+                        .foregroundStyle(.secondary)
+                    TextField(contact.kind == .telegram ? "@username" : "+84 912 345 678", text: $contact.value)
+                        .keyboardType(contact.kind == .telegram ? .asciiCapable : .phonePad)
+                        .textContentType(contact.kind == .telegram ? .username : .telephoneNumber)
+                        .textInputAutocapitalization(.never)
+                        .autocorrectionDisabled()
+                        .font(.body.monospacedDigit())
+                        .focused(focused, equals: contact.id)
+                }
+
+                Button(role: .destructive, action: onRemove) {
+                    Image(systemName: "minus.circle.fill")
+                        .font(.title3)
+                        .foregroundStyle(.red)
+                }
+                .buttonStyle(.borderless)
+                .accessibilityLabel("Remove")
+            }
+            Text(hint)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+        .padding(.vertical, 4)
     }
 
-    static func hint(for kind: EmergencyContact.Kind) -> String {
-        switch kind {
+    private var hint: String {
+        switch contact.kind {
         case .phone: String(localized: "Phone number, with country code if they may call from abroad.")
         case .zalo: String(localized: "The phone number registered with Zalo.")
         case .whatsApp: String(localized: "The phone number registered with WhatsApp, with country code.")
