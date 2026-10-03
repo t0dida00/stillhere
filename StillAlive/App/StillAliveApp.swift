@@ -4,11 +4,24 @@ import SwiftUI
 @main
 struct StillAliveApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
+    /// The animated opening screen, on cold start only. The app loads underneath it.
+    @State private var showSplash = true
 
     var body: some Scene {
         WindowGroup {
-            RootView()
-                .environment(AppRouter.shared)
+            ZStack {
+                RootView()
+                    .environment(AppRouter.shared)
+                if showSplash {
+                    SplashView()
+                        .transition(.opacity)
+                        .zIndex(1)
+                }
+            }
+            .task {
+                try? await Task.sleep(for: .milliseconds(UIAccessibility.isReduceMotionEnabled ? 700 : 1600))
+                withAnimation(.easeOut(duration: 0.35)) { showSplash = false }
+            }
         }
         .modelContainer(for: [LocalUser.self, CheckInSlot.self, Partnership.self, AppSettings.self, AlertRecord.self, CheckInRequest.self])
     }
