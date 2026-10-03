@@ -46,6 +46,9 @@ struct HoldToConfirmButton: View {
 
     @State private var progress: CGFloat = 0
     @State private var fired = 0
+    /// Set when the hold reached `duration`. `progress` can't tell: it jumps to 1 as soon as
+    /// the fill animation starts, even though the band is still drawing.
+    @State private var completed = false
 
     var body: some View {
         VStack(spacing: 2) {
@@ -70,13 +73,16 @@ struct HoldToConfirmButton: View {
         .clipShape(RoundedRectangle(cornerRadius: 14))
         .contentShape(RoundedRectangle(cornerRadius: 14))
         .onLongPressGesture(minimumDuration: duration, maximumDistance: 30) {
+            completed = true
             fired += 1
             action()
             withAnimation(.easeOut(duration: 0.3).delay(0.2)) { progress = 0 }
         } onPressingChanged: { pressing in
             if pressing {
+                completed = false
                 withAnimation(.linear(duration: duration)) { progress = 1 }
-            } else if progress < 1 {
+            } else if !completed {
+                // Let go early: rewind from wherever the band has reached.
                 withAnimation(.easeOut(duration: 0.25)) { progress = 0 }
             }
         }
