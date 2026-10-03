@@ -20,7 +20,8 @@ struct RequestCheckInView: View {
                 }
                 .font(.subheadline.weight(.semibold))
                 .foregroundStyle(.red)
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding(.horizontal, 16)
                 .padding(.vertical, 14)
                 .background(Color.red.opacity(0.1), in: RoundedRectangle(cornerRadius: 14))
             }
