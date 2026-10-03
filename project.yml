@@ -23,6 +23,10 @@ targets:
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         UILaunchScreen: {}
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        NSCameraUsageDescription: "StillAlive? uses the camera only to scan a partner's invite QR code."
+        CFBundleURLTypes:
+          - CFBundleURLName: dev.khoa.stillalive.invite
+            CFBundleURLSchemes: [stillalive]
         NSAlarmKitUsageDescription: "StillAlive? rings an alarm at each check-in time so you don't miss it."
         NSLocationWhenInUseUsageDescription: "If you turn it on, StillAlive? attaches your approximate location to a check-in so partners you choose can see where you checked in."
     entitlements:

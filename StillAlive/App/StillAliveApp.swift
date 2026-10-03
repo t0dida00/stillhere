@@ -45,6 +45,12 @@ struct RootView: View {
                 }
             }
         }
+        // Invite link, e.g. from scanning a QR code with the Camera app.
+        .onOpenURL { url in
+            guard !users.isEmpty, let code = IdentityService.code(fromScanned: url.absoluteString) else { return }
+            router.selectedTab = .users
+            router.pendingInviteCode = code
+        }
         // Re-runs on foreground and after onboarding. The puzzle shows first; rescheduling follows.
         .task(id: "\(scenePhase)|\(users.count)") {
             guard scenePhase == .active, !users.isEmpty else { return }

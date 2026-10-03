@@ -18,10 +18,23 @@
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
 	<string>$(MARKETING_VERSION)</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>dev.khoa.stillalive.invite</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>stillalive</string>
+			</array>
+		</dict>
+	</array>
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>NSAlarmKitUsageDescription</key>
 	<string>StillAlive? rings an alarm at each check-in time so you don't miss it.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>StillAlive? uses the camera only to scan a partner's invite QR code.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>If you turn it on, StillAlive? attaches your approximate location to a check-in so partners you choose can see where you checked in.</string>
 	<key>UILaunchScreen</key>

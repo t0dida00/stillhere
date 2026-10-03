@@ -17,6 +17,17 @@ final class IdentityServiceTests: XCTestCase {
         XCTAssertEqual(IdentityService.normalizeCode("ABCD1234EXTRA"), "ABCD1234")
     }
 
+    func testCodeFromScannedInvite() {
+        XCTAssertEqual(IdentityService.inviteURL(for: "ABCD1234").absoluteString, "stillalive://invite/ABCD1234")
+        XCTAssertEqual(IdentityService.code(fromScanned: "stillalive://invite/ABCD1234"), "ABCD1234")
+        XCTAssertEqual(IdentityService.code(fromScanned: "StillAlive://Invite/abcd-1234"), "ABCD1234")
+        XCTAssertEqual(IdentityService.code(fromScanned: " abcd 1234 "), "ABCD1234")
+        XCTAssertNil(IdentityService.code(fromScanned: "https://example.com/ABCD1234"))
+        XCTAssertNil(IdentityService.code(fromScanned: "stillalive://other/ABCD1234"))
+        XCTAssertNil(IdentityService.code(fromScanned: "Meet me at ABCD1234 tomorrow"))
+        XCTAssertNil(IdentityService.code(fromScanned: "ABC123"))
+    }
+
     func testIsValidCode() {
         XCTAssertTrue(IdentityService.isValidCode("ABCD1234"))
         XCTAssertFalse(IdentityService.isValidCode("ABCD123"))

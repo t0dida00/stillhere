@@ -16,6 +16,8 @@ final class AppRouter {
     var presentedCheckIn: SlotKey?
     /// Set by a notification tap; consumed by `RootView`.
     var requestedSlot: SlotKey?
+    /// Set by an opened invite link; consumed by `UsersView`, which opens Add partner with it.
+    var pendingInviteCode: String?
 }
 
 final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {

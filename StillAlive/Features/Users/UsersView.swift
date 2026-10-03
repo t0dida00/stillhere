@@ -6,7 +6,11 @@ struct UsersView: View {
     @Environment(\.modelContext) private var context
     @Query private var users: [LocalUser]
     @Query(sort: \Partnership.createdAt) private var partnerships: [Partnership]
+    @Environment(AppRouter.self) private var router
     @State private var addingPartner = false
+    /// Prefilled into Add partner when it opens from an invite link.
+    @State private var linkedCode = ""
+    @State private var showingQR = false
 
     private var received: [Partnership] { partnerships.filter { $0.isIncoming && $0.status == "pending" } }
     private var sent: [Partnership] { partnerships.filter { !$0.isIncoming && $0.status == "pending" } }
@@ -69,8 +73,19 @@ struct UsersView: View {
                 }
             }
             .navigationTitle("Users")
-            .sheet(isPresented: $addingPartner) {
-                AddPartnerView(ownCode: users.first?.id ?? "", existingCodes: Set(partnerships.map(\.partnerID)))
+            .sheet(isPresented: $addingPartner, onDismiss: { linkedCode = "" }) {
+                AddPartnerView(ownCode: users.first?.id ?? "", existingCodes: Set(partnerships.map(\.partnerID)), initialCode: linkedCode)
+            }
+            .sheet(isPresented: $showingQR) {
+                if let user = users.first {
+                    InviteQRView(name: user.displayName, code: user.id)
+                }
+            }
+            .onChange(of: router.pendingInviteCode, initial: true) { _, code in
+                guard let code else { return }
+                router.pendingInviteCode = nil
+                linkedCode = code
+                addingPartner = true
             }
         }
     }
@@ -83,8 +98,14 @@ struct UsersView: View {
                     .font(.body.monospaced().weight(.semibold))
                     .textSelection(.enabled)
             }
-            ShareLink(item: user.id, message: Text("Add me on StillAlive? with code \(user.id)")) {
-                Label("Share invite code", systemImage: "square.and.arrow.up")
+            Button {
+                showingQR = true
+            } label: {
+                Label("Show QR code", systemImage: "qrcode")
+            }
+            ShareLink(item: IdentityService.inviteURL(for: user.id),
+                      message: Text("Add me on StillAlive? with code \(user.id)")) {
+                Label("Share invite", systemImage: "square.and.arrow.up")
             }
         } header: {
             Text("Me")
@@ -343,12 +364,15 @@ private struct PartnerTitle: View {
 struct AddPartnerView: View {
     let ownCode: String
     let existingCodes: Set<String>
+    /// A code from an invite link, filled in when the sheet opens.
+    var initialCode = ""
 
     @Environment(\.modelContext) private var context
     @Environment(\.dismiss) private var dismiss
     @State private var code = ""
     @State private var name = ""
     @State private var sending = false
+    @State private var scanning = false
     @FocusState private var codeFocused: Bool
 
     private var problem: String? {
@@ -377,6 +401,11 @@ struct AddPartnerView: View {
                             let normalized = IdentityService.normalizeCode(newValue)
                             if normalized != newValue { code = normalized }
                         }
+                    Button {
+                        scanning = true
+                    } label: {
+                        Label("Scan QR code", systemImage: "qrcode.viewfinder")
+                    }
                 } header: {
                     Text("Their invite code")
                 } footer: {
@@ -405,7 +434,16 @@ struct AddPartnerView: View {
                     Button("Add", action: add).disabled(!canAdd)
                 }
             }
-            .onAppear { codeFocused = true }
+            .onAppear {
+                if code.isEmpty, !initialCode.isEmpty {
+                    code = initialCode
+                } else {
+                    codeFocused = true
+                }
+            }
+            .sheet(isPresented: $scanning) {
+                ScanInviteView { scanned in code = scanned }
+            }
         }
     }
 

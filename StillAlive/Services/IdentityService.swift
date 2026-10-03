@@ -50,6 +50,28 @@ enum IdentityService {
         return String(mapped.prefix(codeLength))
     }
 
+    /// Invite links look like `stillalive://invite/ABCD1234`; QR codes carry the same link.
+    static let inviteScheme = "stillalive"
+
+    static func inviteURL(for code: String) -> URL {
+        URL(string: "\(inviteScheme)://invite/\(code)")!
+    }
+
+    /// The invite code in a scanned QR payload or an opened link. Accepts our invite link or a
+    /// bare code; anything else (a web address, other text) gives nil.
+    static func code(fromScanned text: String) -> String? {
+        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
+        if let url = URL(string: trimmed), let scheme = url.scheme {
+            guard scheme.lowercased() == inviteScheme, url.host?.lowercased() == "invite" else { return nil }
+            let code = normalizeCode(url.lastPathComponent)
+            return isValidCode(code) ? code : nil
+        }
+        // A bare code: only spaces and dashes may be dropped, so longer text isn't cut down to a code.
+        let compact = trimmed.filter { !$0.isWhitespace && $0 != "-" }
+        let code = normalizeCode(compact)
+        return compact.count == codeLength && isValidCode(code) ? code : nil
+    }
+
     static func isValidCode(_ code: String) -> Bool {
         code.count == codeLength && code.allSatisfy(Set(alphabet).contains)
     }
