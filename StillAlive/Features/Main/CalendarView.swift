@@ -237,20 +237,22 @@ struct SlotMarker: View {
     }
 }
 
+/// One colored dot per outcome, matching the ring segments and backgrounds.
 private struct Legend: View {
-    private static let items: [(String, [SlotState])] = [
-        ("Checked in", [.checkedIn, .checkedIn]),
-        ("Skipped", [.skipped, .pending]),
-        ("Missed", [.missed]),
-        ("In progress", [.checkedIn, .pending]),
+    private static let items: [(LocalizedStringKey, Color)] = [
+        ("Checked in", .green),
+        ("Skipped", .orange),
+        ("Missed", .red),
     ]
 
     var body: some View {
-        HStack(spacing: 12) {
-            ForEach(Self.items, id: \.0) { label, states in
-                HStack(spacing: 4) {
-                    DayProgressRing(states: states, lineWidth: 1.5, gap: 1).frame(width: 14, height: 14)
-                    Text(label)
+        HStack(spacing: 16) {
+            ForEach(Array(Self.items.enumerated()), id: \.offset) { _, item in
+                HStack(spacing: 5) {
+                    Circle()
+                        .fill(item.1)
+                        .frame(width: 9, height: 9)
+                    Text(item.0)
                 }
             }
         }
