@@ -16,6 +16,8 @@ struct MainView: View {
     @State private var partnerSharesLocation = false
     /// Every accepted partner's days, shown under the dates on my calendar.
     @State private var calendarPartners: [CalendarPartner] = []
+    /// True once the "Check-in" header has scrolled off the top; shows the slim title bar instead.
+    @State private var headerScrolledAway = false
     @AppStorage("showPartnersOnCalendar") private var showPartners = true
 
     /// Partners drawn on my calendar and listed in day details.
@@ -45,6 +47,11 @@ struct MainView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .accessibilityElement(children: .combine)
                         .accessibilityAddTraits(.isHeader)
+                        .onGeometryChange(for: Bool.self) { proxy in
+                            proxy.frame(in: .scrollView).maxY < 0
+                        } action: { scrolledAway in
+                            headerScrolledAway = scrolledAway
+                        }
                         if !partners.isEmpty {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 16) {
@@ -82,6 +89,23 @@ struct MainView: View {
                     .padding()
                 }
                 .toolbar(.hidden, for: .navigationBar)
+                // Like the collapsed large titles on other tabs, without their tall bar at the top.
+                .overlay(alignment: .top) {
+                    if headerScrolledAway {
+                        VStack(spacing: 0) {
+                            Text("Check-in")
+                                .font(.headline)
+                            Text(selectedPartner?.displayName ?? String(localized: "Me"))
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding(.bottom, 8)
+                        .background(.bar, ignoresSafeAreaEdges: .top)
+                        .transition(.opacity)
+                    }
+                }
+                .animation(.easeInOut(duration: 0.2), value: headerScrolledAway)
                 .sheet(item: $selectedDay) { day in
                     DayDetailView(dayKey: day.dayKey, slots: byDay[day.dayKey] ?? [], timeZone: user.timeZone,
                                   partners: visibleCalendarPartners.compactMap { partner in
