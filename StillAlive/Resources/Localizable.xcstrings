@@ -594,6 +594,16 @@
         }
       }
     },
+    "Collapsed": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đã thu gọn"
+          }
+        }
+      }
+    },
     "Continue": {
       "localizations": {
         "vi": {
@@ -836,6 +846,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bật báo thức và thông báo"
+          }
+        }
+      }
+    },
+    "Expanded": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đã mở"
           }
         }
       }

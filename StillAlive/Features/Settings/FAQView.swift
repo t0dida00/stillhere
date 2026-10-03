@@ -21,15 +21,7 @@ struct FAQView: View {
             ForEach(sections) { section in
                 Section(section.title) {
                     ForEach(section.items) { item in
-                        DisclosureGroup {
-                            Text(item.answer)
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                                .padding(.vertical, 4)
-                        } label: {
-                            Text(item.question)
-                                .font(.body.weight(.medium))
-                        }
+                        FAQRow(item: item)
                     }
                 }
             }
@@ -41,6 +33,45 @@ struct FAQView: View {
         }
         .searchable(text: $search, prompt: Text("Search questions"))
         .navigationTitle("FAQ")
+    }
+}
+
+/// A question that expands to its answer in the same row. Unlike `DisclosureGroup`, the answer
+/// starts at the same left edge as the question.
+private struct FAQRow: View {
+    let item: FAQItem
+    @State private var expanded = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Button {
+                withAnimation(.easeInOut(duration: 0.2)) { expanded.toggle() }
+            } label: {
+                HStack(alignment: .firstTextBaseline) {
+                    Text(item.question)
+                        .font(.body.weight(.medium))
+                        .foregroundStyle(.primary)
+                        .multilineTextAlignment(.leading)
+                    Spacer(minLength: 8)
+                    Image(systemName: "chevron.right")
+                        .font(.footnote.weight(.semibold))
+                        .foregroundStyle(.tint)
+                        .rotationEffect(.degrees(expanded ? 90 : 0))
+                }
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityValue(expanded ? Text("Expanded") : Text("Collapsed"))
+
+            if expanded {
+                Text(item.answer)
+                    .font(.subheadline)
+                    .foregroundStyle(.secondary)
+                    .fixedSize(horizontal: false, vertical: true)
+                    .transition(.opacity)
+            }
+        }
+        .padding(.vertical, 4)
     }
 }
 
