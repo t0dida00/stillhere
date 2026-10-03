@@ -76,3 +76,16 @@ final class RequestCheckInRuleTests: XCTestCase {
         XCTAssertTrue(MissedAlertRule.canRequestCheckIn(lastRequestAt: sent, now: sent.addingTimeInterval(5 * 60)))
     }
 }
+
+final class LatestDecidedStateTests: XCTestCase {
+    func snapshot(_ hour: Int, _ state: SlotState) -> SlotSnapshot {
+        SlotSnapshot(key: SlotKey(dayKey: "2026-10-04", slotIndex: hour),
+                     scheduledAt: Date(timeIntervalSince1970: TimeInterval(hour * 3600)), state: state)
+    }
+
+    func testLatestDecidedStateSkipsPending() {
+        XCTAssertEqual(SlotRules.latestDecidedState([snapshot(9, .checkedIn), snapshot(21, .pending)]), .checkedIn)
+        XCTAssertEqual(SlotRules.latestDecidedState([snapshot(9, .missed), snapshot(13, .skipped)]), .skipped)
+        XCTAssertNil(SlotRules.latestDecidedState([snapshot(9, .pending)]))
+    }
+}

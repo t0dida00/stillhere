@@ -114,6 +114,12 @@ enum SlotPlanner {
 }
 
 enum SlotRules {
+    /// The state of the most recent check-in that's no longer pending: checked in, skipped or
+    /// missed. Nil before any check-in is decided.
+    static func latestDecidedState(_ slots: [SlotSnapshot]) -> SlotState? {
+        slots.filter { $0.state != .pending }.max { $0.scheduledAt < $1.scheduledAt }?.state
+    }
+
     static func deadline(for scheduledAt: Date, graceMinutes: Int) -> Date {
         scheduledAt.addingTimeInterval(TimeInterval(graceMinutes * 60))
     }
@@ -137,7 +143,7 @@ enum MissedAlertRule {
     /// True when the person's latest decided check-in was missed. Pending check-ins are
     /// skipped, so a miss stays current until they next check in or skip.
     static func isMissingNow(_ slots: [SlotSnapshot]) -> Bool {
-        slots.filter { $0.state != .pending }.max { $0.scheduledAt < $1.scheduledAt }?.state == .missed
+        SlotRules.latestDecidedState(slots) == .missed
     }
 
     /// How long after asking a partner to check in before I can ask again.

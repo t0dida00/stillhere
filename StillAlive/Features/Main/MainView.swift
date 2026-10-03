@@ -56,12 +56,16 @@ struct MainView: View {
                         }
                         if !partners.isEmpty {
                             ScrollView(.horizontal, showsIndicators: false) {
-                                HStack(spacing: 16) {
+                                HStack(spacing: 12) {
                                     PersonChip(name: String(localized: "Me"), avatarName: user.displayName, id: user.id, imageData: user.avatarData,
-                                               isSelected: selectedPartnerID == nil) { selectedPartnerID = nil }
+                                               isSelected: selectedPartnerID == nil,
+                                               latestState: SlotRules.latestDecidedState(allSlots.filter { $0.ownerID == user.id }.map(\.snapshot))) {
+                                        selectedPartnerID = nil
+                                    }
                                     ForEach(partners) { partner in
                                         PersonChip(name: partner.displayName, avatarName: partner.displayName, id: partner.partnerID,
                                                    isSelected: selectedPartnerID == partner.partnerID,
+                                                   latestState: latestState(of: partner.partnerID),
                                                    onHold: { contactsPartner = partner }) { selectedPartnerID = partner.partnerID }
                                     }
                                 }
@@ -152,6 +156,12 @@ struct MainView: View {
         }
     }
 
+    /// A partner's latest decided check-in, from the slots loaded for the calendar.
+    private func latestState(of partnerID: String) -> SlotState? {
+        let slots = calendarPartners.first { $0.id == partnerID }?.slotsByDay.values.flatMap { $0 } ?? []
+        return SlotRules.latestDecidedState(slots.map(\.snapshot))
+    }
+
     private var selectedPartner: Partnership? {
         partners.first { $0.partnerID == selectedPartnerID }
     }
@@ -185,18 +195,36 @@ private struct PersonChip: View {
     let id: String
     var imageData: Data?
     let isSelected: Bool
+    /// Their latest decided check-in; colors the ring around the selected avatar.
+    var latestState: SlotState?
     /// Called after holding the avatar for `holdDuration`; nil for me.
     var onHold: (() -> Void)?
     var action: () -> Void
 
     static let holdDuration: Double = 1
+    private static let avatarSize: CGFloat = 52
+    private static let selectedScale: CGFloat = 1.3
+
+    /// Green checked in, orange skipped, red missed; grey before any check-in is decided.
+    private var ringColor: Color {
+        switch latestState {
+        case .checkedIn: .green
+        case .skipped: .orange
+        case .missed: .red
+        case .pending, nil: Color(.systemGray3)
+        }
+    }
 
     var body: some View {
         Button(action: action) {
             VStack(spacing: 6) {
-                AvatarView(name: avatarName, id: id, imageData: imageData, size: 52)
+                AvatarView(name: avatarName, id: id, imageData: imageData, size: Self.avatarSize)
                     .padding(3)
-                    .overlay(Circle().strokeBorder(isSelected ? Color.accentColor : .clear, lineWidth: 2.5))
+                    .overlay(Circle().strokeBorder(isSelected ? ringColor : .clear, lineWidth: 2.5))
+                    .scaleEffect(isSelected ? Self.selectedScale : 1)
+                    // Room for the selected size, so it isn't clipped or overlapping neighbours.
+                    .frame(width: (Self.avatarSize + 6) * Self.selectedScale, height: (Self.avatarSize + 6) * Self.selectedScale)
+                    .animation(.spring(response: 0.35, dampingFraction: 0.6), value: isSelected)
                 Text(name)
                     .font(.caption.weight(isSelected ? .semibold : .regular))
                     .foregroundStyle(isSelected ? Color.primary : Color.secondary)
