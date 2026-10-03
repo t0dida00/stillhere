@@ -1,10 +1,12 @@
 import SwiftUI
 
-/// Shown over the app on a cold start: the heart beats twice with ripples, a heartbeat line
-/// draws across, and the name fades in. With Reduce Motion it's a still version.
+/// Shown over the app on a cold start: a thumbs-up ("I'm okay") springs up and bounces twice
+/// with ripples, a heartbeat line draws across, and the name fades in. With Reduce Motion it's
+/// a still version.
 struct SplashView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
-    @State private var beat = false
+    @State private var thumbUp = false
+    @State private var bounces = 0
     @State private var ripple = false
     @State private var lineProgress: CGFloat = 0
     @State private var showName = false
@@ -15,7 +17,7 @@ struct SplashView: View {
 
             VStack(spacing: 28) {
                 ZStack {
-                    // Ripples spreading out from the heart on each beat.
+                    // Ripples spreading out from the thumb as it bounces.
                     ForEach(0..<2) { index in
                         Circle()
                             .stroke(Color.accentColor.opacity(0.35), lineWidth: 2)
@@ -24,10 +26,14 @@ struct SplashView: View {
                             .opacity(ripple ? 0 : 0.8)
                             .animation(reduceMotion ? nil : .easeOut(duration: 1.1).delay(Double(index) * 0.45), value: ripple)
                     }
-                    Image(systemName: "heart.circle.fill")
+                    Image(systemName: "hand.thumbsup.circle.fill")
                         .font(.system(size: 96))
                         .foregroundStyle(Color.accentColor)
-                        .scaleEffect(beat ? 1.12 : 1)
+                        .symbolEffect(.bounce, value: bounces)
+                        // Raised like a thumb: from small and tilted back to upright.
+                        .scaleEffect(thumbUp ? 1 : 0.4)
+                        .rotationEffect(.degrees(thumbUp ? 0 : -35))
+                        .opacity(thumbUp ? 1 : 0)
                 }
                 .frame(height: 200)
 
@@ -49,19 +55,20 @@ struct SplashView: View {
 
     private func play() async {
         guard !reduceMotion else {
+            thumbUp = true
             lineProgress = 1
             showName = true
             return
         }
+        withAnimation(.spring(response: 0.45, dampingFraction: 0.55)) { thumbUp = true }
+        withAnimation(.easeInOut(duration: 1.0).delay(0.15)) { lineProgress = 1 }
+        withAnimation(.easeOut(duration: 0.5).delay(0.55)) { showName = true }
+        try? await Task.sleep(for: .milliseconds(380))
         ripple = true
-        withAnimation(.easeInOut(duration: 1.0)) { lineProgress = 1 }
-        withAnimation(.easeOut(duration: 0.5).delay(0.5)) { showName = true }
-        // Two quick beats, like a pulse: lub-dub.
+        // Two bounces once it's up.
         for _ in 0..<2 {
-            withAnimation(.spring(response: 0.18, dampingFraction: 0.45)) { beat = true }
-            try? await Task.sleep(for: .milliseconds(160))
-            withAnimation(.spring(response: 0.25, dampingFraction: 0.6)) { beat = false }
-            try? await Task.sleep(for: .milliseconds(300))
+            bounces += 1
+            try? await Task.sleep(for: .milliseconds(380))
         }
     }
 }
