@@ -521,12 +521,11 @@ private struct UpgradeButton: View {
         Button(action: action) {
             HStack {
                 Text("Upgrade to Premium")
-                    .foregroundStyle(.orange)
                 Spacer()
                 Text("for more partners")
                     .font(.caption)
-                    .foregroundStyle(.secondary)
             }
+            .foregroundStyle(.orange)
         }
     }
 }
