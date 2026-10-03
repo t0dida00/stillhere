@@ -46,4 +46,5 @@ Tabs: **Map – Check-In – Users – Settings**.
 - **Map**: a 3D globe with me and every partner who shares their location as avatar pins. Tap a person to fly to them; 3D, globe and map-type (Standard / Satellite) buttons sit in one row at the top.
 - **Shortcuts and Siri**: the *Open Check-in* action opens the app on Check-In, and the puzzle appears if a check-in is due. Use it in a Time of Day automation (Settings → Auto-open with Shortcuts) or say "Check in with StillAlive?".
 - **QR invites**: Users → Me → Show QR code encodes `stillalive://invite/<code>`. Scan it in Add partner, or with the Camera app, which opens Add partner with the code filled in.
+- **Languages**: English and Vietnamese, following the iPhone's language. Text lives in `StillAlive/Resources/Localizable.xcstrings` (and `InfoPlist.xcstrings` for permission prompts). After adding UI text, rebuild with `SWIFT_EMIT_LOC_STRINGS=YES` and run `xcrun xcstringstool sync` on the `.stringsdata` files to pick up new strings, then translate them.
 - **Missed-check-in alerts** (planned, Phase 3): partners are alerted when 2 check-ins in a row are missed. See [docs/SPEC.md](docs/SPEC.md) §9.

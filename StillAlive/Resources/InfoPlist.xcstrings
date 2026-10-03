@@ -1,0 +1,57 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "NSAlarmKitUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "StillAlive? rings an alarm at each check-in time so you don't miss it."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "StillAlive? reo báo thức vào mỗi giờ điểm danh để bạn không bỏ lỡ."
+          }
+        }
+      }
+    },
+    "NSCameraUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "StillAlive? uses the camera only to scan a partner's invite QR code."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "StillAlive? chỉ dùng camera để quét mã QR mời của người thân."
+          }
+        }
+      }
+    },
+    "NSLocationWhenInUseUsageDescription": {
+      "extractionState": "manual",
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "If you turn it on, StillAlive? attaches your approximate location to a check-in so partners you choose can see where you checked in."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nếu bạn bật, StillAlive? sẽ đính kèm vị trí gần đúng khi điểm danh để những người thân bạn chọn biết bạn điểm danh ở đâu."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

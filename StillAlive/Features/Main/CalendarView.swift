@@ -145,10 +145,12 @@ private struct DayCell: View {
     }
 
     private var accessibilityText: String {
-        var text = "Day \(day): " + (states.isEmpty ? "no check-ins" : "\(done) of \(states.count) done; " + states.map(\.label).joined(separator: ", "))
+        var text = states.isEmpty
+            ? String(localized: "Day \(day): no check-ins")
+            : String(localized: "Day \(day): \(done) of \(states.count) done") + "; " + states.map(\.label).joined(separator: ", ")
         for partner in partners {
             let partnerDone = partner.states.filter { $0 == .checkedIn || $0 == .skipped }.count
-            text += ". \(partner.name): \(partnerDone) of \(partner.states.count) done"
+            text += ". " + String(localized: "\(partner.name): \(partnerDone) of \(partner.states.count) done")
         }
         return text
     }

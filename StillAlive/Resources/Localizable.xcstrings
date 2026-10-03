@@ -1,0 +1,1640 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "%@ doesn't want to share their location.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ không muốn chia sẻ vị trí."
+          }
+        }
+      }
+    },
+    "%@ hasn't checked in with a location yet.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ chưa điểm danh kèm vị trí nào."
+          }
+        }
+      }
+    },
+    "%@ will see where you checked in and where you last used the app. You can turn this off anytime.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ sẽ thấy nơi bạn điểm danh và nơi bạn dùng ứng dụng gần nhất. Bạn có thể tắt bất cứ lúc nào."
+          }
+        }
+      }
+    },
+    "%@: %lld of %lld done": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "%1$@: %2$lld of %3$lld done"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@: xong %lld/%lld"
+          }
+        }
+      }
+    },
+    "%lld": {
+      "shouldTranslate": false
+    },
+    "%lld min": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%lld phút"
+          }
+        }
+      }
+    },
+    "3D": {
+      "shouldTranslate": false
+    },
+    "3D off": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tắt 3D"
+          }
+        }
+      }
+    },
+    "3D on": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bật 3D"
+          }
+        }
+      }
+    },
+    "A tiny daily check-in so the people you love know you're okay. No account needed.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Một lần điểm danh nhỏ mỗi ngày để người thân biết bạn vẫn ổn. Không cần tài khoản."
+          }
+        }
+      }
+    },
+    "ABCD1234": {
+      "shouldTranslate": false
+    },
+    "Accept": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đồng ý"
+          }
+        }
+      }
+    },
+    "Add": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thêm"
+          }
+        }
+      }
+    },
+    "Add check-in time": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thêm giờ điểm danh"
+          }
+        }
+      }
+    },
+    "Add me on StillAlive? with code %@": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thêm mình trên StillAlive? bằng mã %@"
+          }
+        }
+      }
+    },
+    "Add partner": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thêm người thân"
+          }
+        }
+      }
+    },
+    "Add partner by code": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thêm người thân bằng mã"
+          }
+        }
+      }
+    },
+    "Add photo": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thêm ảnh"
+          }
+        }
+      }
+    },
+    "Add the action Open Check-in (search for StillAlive?).": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thêm tác vụ Mở điểm danh (tìm StillAlive?)."
+          }
+        }
+      }
+    },
+    "Allow camera access for StillAlive? in the Settings app, or type the code instead.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hãy cho phép StillAlive? dùng camera trong ứng dụng Cài đặt, hoặc nhập mã thay thế."
+          }
+        }
+      }
+    },
+    "Ask your partner for the code on their Users tab. Spaces and dashes are ignored.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hỏi người thân mã ở thẻ Mọi người của họ. Dấu cách và gạch ngang được bỏ qua."
+          }
+        }
+      }
+    },
+    "Ask your partner to scan this in StillAlive? (Users → Add partner → Scan QR code), or with the Camera app.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nhờ người thân quét mã này trong StillAlive? (Mọi người → Thêm người thân → Quét mã QR) hoặc bằng ứng dụng Camera."
+          }
+        }
+      }
+    },
+    "At %@": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lúc %@"
+          }
+        }
+      }
+    },
+    "At each check-in time an alarm rings. Tap Check in and solve a quick puzzle. Reminder notifications follow until you do.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đến giờ điểm danh, báo thức sẽ reo. Chạm Điểm danh và giải một câu đố nhanh. Thông báo nhắc sẽ tiếp tục cho đến khi bạn làm xong."
+          }
+        }
+      }
+    },
+    "Attach location to check-ins": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đính kèm vị trí khi điểm danh"
+          }
+        }
+      }
+    },
+    "Attach your approximate location to check-ins. Off by default; you choose which partners see it.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đính kèm vị trí gần đúng khi điểm danh. Mặc định tắt; bạn chọn người thân nào được xem."
+          }
+        }
+      }
+    },
+    "Auto-open": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tự mở"
+          }
+        }
+      }
+    },
+    "Auto-open with Shortcuts": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tự mở bằng Phím tắt"
+          }
+        }
+      }
+    },
+    "Camera not available": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Không dùng được camera"
+          }
+        }
+      }
+    },
+    "Cancel": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Huỷ"
+          }
+        }
+      }
+    },
+    "Change photo": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đổi ảnh"
+          }
+        }
+      }
+    },
+    "Check In": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Điểm danh"
+          }
+        }
+      }
+    },
+    "Check in": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Điểm danh"
+          }
+        }
+      }
+    },
+    "Check-In": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Điểm danh"
+          }
+        }
+      }
+    },
+    "Check-in %lld": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lần điểm danh %lld"
+          }
+        }
+      }
+    },
+    "Check-in reminders": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nhắc điểm danh"
+          }
+        }
+      }
+    },
+    "Check-in times": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giờ điểm danh"
+          }
+        }
+      }
+    },
+    "Checked in": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đã điểm danh"
+          }
+        }
+      }
+    },
+    "Choose Run Immediately.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chọn Chạy ngay lập tức."
+          }
+        }
+      }
+    },
+    "Codes have %lld characters.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mã có %lld ký tự."
+          }
+        }
+      }
+    },
+    "Continue": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tiếp tục"
+          }
+        }
+      }
+    },
+    "Couldn't finish setup": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Không thể hoàn tất cài đặt"
+          }
+        }
+      }
+    },
+    "Couldn't get your location.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Không lấy được vị trí của bạn."
+          }
+        }
+      }
+    },
+    "Day": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ngày"
+          }
+        }
+      }
+    },
+    "Day %lld: %lld of %lld done": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "Day %1$lld: %2$lld of %3$lld done"
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ngày %lld: xong %lld/%lld"
+          }
+        }
+      }
+    },
+    "Day %lld: no check-ins": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ngày %lld: không có lần điểm danh"
+          }
+        }
+      }
+    },
+    "Decline": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Từ chối"
+          }
+        }
+      }
+    },
+    "Declined": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đã từ chối"
+          }
+        }
+      }
+    },
+    "Delete": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Xoá"
+          }
+        }
+      }
+    },
+    "Demo partner": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Người thân thử"
+          }
+        }
+      }
+    },
+    "Demo partner %lld": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Người thân thử %lld"
+          }
+        }
+      }
+    },
+    "Difficulty": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Độ khó"
+          }
+        }
+      }
+    },
+    "Done": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Xong"
+          }
+        }
+      }
+    },
+    "Easy": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dễ"
+          }
+        }
+      }
+    },
+    "Edit name": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sửa tên"
+          }
+        }
+      }
+    },
+    "Edit nickname": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sửa biệt danh"
+          }
+        }
+      }
+    },
+    "Enable alarms and notifications": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bật báo thức và thông báo"
+          }
+        }
+      }
+    },
+    "Finding address…": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đang tìm địa chỉ…"
+          }
+        }
+      }
+    },
+    "Finding your location…": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đang tìm vị trí của bạn…"
+          }
+        }
+      }
+    },
+    "Finish": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hoàn tất"
+          }
+        }
+      }
+    },
+    "Grace & reminders": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thời gian chờ & nhắc nhở"
+          }
+        }
+      }
+    },
+    "Grace window: %lld min": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thời gian chờ: %lld phút"
+          }
+        }
+      }
+    },
+    "Hard": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Khó"
+          }
+        }
+      }
+    },
+    "Invitations to join someone's circle. Accepting lets them see your check-ins and you see theirs.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lời mời tham gia nhóm của ai đó. Đồng ý để họ thấy lần điểm danh của bạn và bạn thấy của họ."
+          }
+        }
+      }
+    },
+    "Invite code": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mã mời"
+          }
+        }
+      }
+    },
+    "Invite sent": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đã gửi lời mời"
+          }
+        }
+      }
+    },
+    "Last check-in": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lần điểm danh gần nhất"
+          }
+        }
+      }
+    },
+    "Last location": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vị trí gần nhất"
+          }
+        }
+      }
+    },
+    "Loading…": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đang tải…"
+          }
+        }
+      }
+    },
+    "Location": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vị trí"
+          }
+        }
+      }
+    },
+    "Location (optional)": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vị trí (không bắt buộc)"
+          }
+        }
+      }
+    },
+    "Location access is off for StillAlive?. You can allow it in the iOS Settings app.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "StillAlive? chưa được phép dùng vị trí. Bạn có thể cho phép trong ứng dụng Cài đặt của iOS."
+          }
+        }
+      }
+    },
+    "Location access was not allowed. You can change this later in Settings.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chưa được cho phép dùng vị trí. Bạn có thể đổi sau trong Cài đặt."
+          }
+        }
+      }
+    },
+    "Location is off": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vị trí đang tắt"
+          }
+        }
+      }
+    },
+    "Location is off in Settings, so nothing is shared until you turn it on there.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vị trí đang tắt trong Cài đặt, nên chưa có gì được chia sẻ cho đến khi bạn bật lên."
+          }
+        }
+      }
+    },
+    "Location is off, so this isn't updated. Turn it on in Settings.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vị trí đang tắt nên thông tin này không được cập nhật. Hãy bật trong Cài đặt."
+          }
+        }
+      }
+    },
+    "Location not found yet": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chưa tìm thấy vị trí"
+          }
+        }
+      }
+    },
+    "Map": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bản đồ"
+          }
+        }
+      }
+    },
+    "Map type": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kiểu bản đồ"
+          }
+        }
+      }
+    },
+    "Me": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tôi"
+          }
+        }
+      }
+    },
+    "Medium": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vừa"
+          }
+        }
+      }
+    },
+    "Missed": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bỏ lỡ"
+          }
+        }
+      }
+    },
+    "My invite": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lời mời của tôi"
+          }
+        }
+      }
+    },
+    "Next month": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tháng sau"
+          }
+        }
+      }
+    },
+    "Nickname": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Biệt danh"
+          }
+        }
+      }
+    },
+    "Nickname (optional)": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Biệt danh (không bắt buộc)"
+          }
+        }
+      }
+    },
+    "No check-ins scheduled this day.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Không có lần điểm danh nào trong ngày này."
+          }
+        }
+      }
+    },
+    "No invitations right now.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hiện chưa có lời mời nào."
+          }
+        }
+      }
+    },
+    "No location yet": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chưa có vị trí"
+          }
+        }
+      }
+    },
+    "Not sharing": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Không chia sẻ"
+          }
+        }
+      }
+    },
+    "OK": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "OK"
+          }
+        }
+      }
+    },
+    "Off by default. Only partners you choose will be able to see it.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mặc định tắt. Chỉ những người thân bạn chọn mới xem được."
+          }
+        }
+      }
+    },
+    "Only you see this. Leave it empty to use %@.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chỉ mình bạn thấy. Để trống để dùng %@."
+          }
+        }
+      }
+    },
+    "Only you see this. You can change it later on the Users tab.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chỉ mình bạn thấy. Bạn có thể đổi sau ở thẻ Mọi người."
+          }
+        }
+      }
+    },
+    "Open Check-in": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mở điểm danh"
+          }
+        }
+      }
+    },
+    "Open the Shortcuts app and go to Automation.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mở ứng dụng Phím tắt và vào Tự động hoá."
+          }
+        }
+      }
+    },
+    "Opens StillAlive? on Check-In. If a check-in is due, its puzzle appears.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mở StillAlive? ở thẻ Điểm danh. Nếu đã đến giờ điểm danh, câu đố sẽ hiện ra."
+          }
+        }
+      }
+    },
+    "Partner": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Người thân"
+          }
+        }
+      }
+    },
+    "Partners": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Người thân"
+          }
+        }
+      }
+    },
+    "Partners see this name.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Người thân sẽ thấy tên này."
+          }
+        }
+      }
+    },
+    "Partners use this code to request to see your check-ins.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Người thân dùng mã này để xin xem các lần điểm danh của bạn."
+          }
+        }
+      }
+    },
+    "Pending": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đang chờ"
+          }
+        }
+      }
+    },
+    "Point the camera at your partner's invite QR code.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hướng camera vào mã QR mời của người thân."
+          }
+        }
+      }
+    },
+    "Previous month": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tháng trước"
+          }
+        }
+      }
+    },
+    "Puzzle difficulty": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Độ khó câu đố"
+          }
+        }
+      }
+    },
+    "QR code for invite code %@": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mã QR cho mã mời %@"
+          }
+        }
+      }
+    },
+    "Remind every": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nhắc mỗi"
+          }
+        }
+      }
+    },
+    "Reminder: you haven't checked in yet.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nhắc nhở: bạn chưa điểm danh."
+          }
+        }
+      }
+    },
+    "Remove": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Xoá"
+          }
+        }
+      }
+    },
+    "Remove nickname": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Xoá biệt danh"
+          }
+        }
+      }
+    },
+    "Remove photo": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Xoá ảnh"
+          }
+        }
+      }
+    },
+    "Remove your photo?": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Xoá ảnh của bạn?"
+          }
+        }
+      }
+    },
+    "Repeat for each check-in time.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lặp lại cho mỗi giờ điểm danh."
+          }
+        }
+      }
+    },
+    "Requests": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lời mời"
+          }
+        }
+      }
+    },
+    "Satellite": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vệ tinh"
+          }
+        }
+      }
+    },
+    "Save": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lưu"
+          }
+        }
+      }
+    },
+    "Say \"Check in with StillAlive?\" to Siri, or find Open Check-in in Spotlight.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nói với Siri \"Check in with StillAlive?\", hoặc tìm Mở điểm danh trong Spotlight."
+          }
+        }
+      }
+    },
+    "Scan QR code": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quét mã QR"
+          }
+        }
+      }
+    },
+    "Sent": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đã gửi"
+          }
+        }
+      }
+    },
+    "Set it up": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cách cài đặt"
+          }
+        }
+      }
+    },
+    "Settings": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cài đặt"
+          }
+        }
+      }
+    },
+    "Share": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chia sẻ"
+          }
+        }
+      }
+    },
+    "Share invite": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chia sẻ lời mời"
+          }
+        }
+      }
+    },
+    "Share my location": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chia sẻ vị trí của tôi"
+          }
+        }
+      }
+    },
+    "Share your location with %@?": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chia sẻ vị trí của bạn với %@?"
+          }
+        }
+      }
+    },
+    "Show QR code": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hiện mã QR"
+          }
+        }
+      }
+    },
+    "Show partners": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hiện người thân"
+          }
+        }
+      }
+    },
+    "Show the whole globe": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hiện toàn bộ quả địa cầu"
+          }
+        }
+      }
+    },
+    "Simulate an invitation": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tạo lời mời thử"
+          }
+        }
+      }
+    },
+    "Siri": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Siri"
+          }
+        }
+      }
+    },
+    "Skip this check-in": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bỏ qua lần điểm danh này"
+          }
+        }
+      }
+    },
+    "Skipped": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bỏ qua"
+          }
+        }
+      }
+    },
+    "Slot": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lượt"
+          }
+        }
+      }
+    },
+    "Solve this to check in.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giải câu này để điểm danh."
+          }
+        }
+      }
+    },
+    "Standard": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tiêu chuẩn"
+          }
+        }
+      }
+    },
+    "Still alive?": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Còn ổn chứ?"
+          }
+        }
+      }
+    },
+    "StillAlive?": {
+      "shouldTranslate": false
+    },
+    "Stop": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dừng"
+          }
+        }
+      }
+    },
+    "Streak": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chuỗi ngày"
+          }
+        }
+      }
+    },
+    "Submit answer": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gửi đáp án"
+          }
+        }
+      }
+    },
+    "Tap New Automation → Time of Day, pick your first check-in time, Daily.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chạm Tự động hoá mới → Thời gian trong ngày, chọn giờ điểm danh đầu tiên, Hằng ngày."
+          }
+        }
+      }
+    },
+    "That QR code isn't a StillAlive? invite.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mã QR này không phải lời mời StillAlive?."
+          }
+        }
+      }
+    },
+    "That's your own code.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đây là mã của chính bạn."
+          }
+        }
+      }
+    },
+    "Their invite code": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mã mời của họ"
+          }
+        }
+      }
+    },
+    "Time to check in": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đến giờ điểm danh"
+          }
+        }
+      }
+    },
+    "Time to check in. Solve a quick puzzle to let them know you're okay.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đến giờ điểm danh. Giải một câu đố nhanh để mọi người biết bạn vẫn ổn."
+          }
+        }
+      }
+    },
+    "Time zone": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Múi giờ"
+          }
+        }
+      }
+    },
+    "Turn on location in Settings to save where you last used the app.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bật vị trí trong Cài đặt để lưu nơi bạn dùng ứng dụng gần nhất."
+          }
+        }
+      }
+    },
+    "Unknown place": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Không rõ địa điểm"
+          }
+        }
+      }
+    },
+    "Until sync is available, partners are simulated: invites are accepted after a few seconds and check-ins are made up.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Khi chưa có đồng bộ, người thân chỉ là mô phỏng: lời mời được chấp nhận sau vài giây và các lần điểm danh là dữ liệu giả."
+          }
+        }
+      }
+    },
+    "Up to %lld times a day. Changes apply today, except times earlier than a check-in you've already finished today; those start tomorrow.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tối đa %lld lần mỗi ngày. Thay đổi có hiệu lực ngay hôm nay, trừ những giờ sớm hơn lần điểm danh bạn đã hoàn tất hôm nay; các giờ đó bắt đầu từ ngày mai."
+          }
+        }
+      }
+    },
+    "Updated %@": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cập nhật %@"
+          }
+        }
+      }
+    },
+    "Use device time zone (%@)": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dùng múi giờ của máy (%@)"
+          }
+        }
+      }
+    },
+    "Users": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mọi người"
+          }
+        }
+      }
+    },
+    "Waiting": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đang chờ"
+          }
+        }
+      }
+    },
+    "Wants to see your check-ins.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Muốn xem các lần điểm danh của bạn."
+          }
+        }
+      }
+    },
+    "You've already added this partner.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bạn đã thêm người thân này rồi."
+          }
+        }
+      }
+    },
+    "Your answer: %@": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đáp án của bạn: %@"
+          }
+        }
+      }
+    },
+    "Your avatar goes back to your initial.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ảnh đại diện sẽ trở lại chữ cái đầu tên bạn."
+          }
+        }
+      }
+    },
+    "Your name": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tên của bạn"
+          }
+        }
+      }
+    },
+    "check-ins": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "lần điểm danh"
+          }
+        }
+      }
+    },
+    "day": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ngày"
+          }
+        }
+      }
+    },
+    "days": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ngày"
+          }
+        }
+      }
+    },
+    "e.g. Mom": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "vd: Mẹ"
+          }
+        }
+      }
+    },
+    "iOS doesn't let apps open themselves. A personal Shortcuts automation can open StillAlive? at each check-in time so the puzzle is waiting for you.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "iOS không cho ứng dụng tự mở. Một tự động hoá trong Phím tắt có thể mở StillAlive? vào mỗi giờ điểm danh để câu đố chờ sẵn."
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

@@ -216,7 +216,8 @@ StillAlive/
 ### Phase 4 — Polish
 - [x] Shortcuts App Intent + in-app setup guide.
 - [ ] Lock Screen / Home widget showing a partner's latest check-in.
-- [ ] Accessibility (Dynamic Type, VoiceOver), localization (English, Vietnamese).
+- [x] Localization (English, Vietnamese) via `Localizable.xcstrings` and `InfoPlist.xcstrings`.
+- [ ] Accessibility (Dynamic Type, VoiceOver).
 - [ ] Privacy policy, App Store privacy labels, permission usage strings.
 
 ## 12. Rules for Claude Code

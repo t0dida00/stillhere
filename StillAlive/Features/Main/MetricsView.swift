@@ -11,7 +11,7 @@ struct MetricsView: View {
         }
     }
 
-    private func tile(_ title: String, value: String, unit: String, color: Color) -> some View {
+    private func tile(_ title: LocalizedStringKey, value: String, unit: LocalizedStringKey, color: Color) -> some View {
         VStack(alignment: .leading, spacing: 2) {
             Text(title)
                 .font(.caption)

@@ -21,8 +21,8 @@ final class NotificationService {
             let content = UNMutableNotificationContent()
             content.title = "StillAlive?"
             content.body = reminder.sequence == 0
-                ? "Time to check in. Solve a quick puzzle to let them know you're okay."
-                : "Reminder: you haven't checked in yet."
+                ? String(localized: "Time to check in. Solve a quick puzzle to let them know you're okay.")
+                : String(localized: "Reminder: you haven't checked in yet.")
             content.sound = .default
             content.interruptionLevel = .timeSensitive
             content.threadIdentifier = reminder.key.id

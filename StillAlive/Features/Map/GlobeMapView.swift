@@ -65,7 +65,7 @@ struct GlobeMapView: View {
                         .frame(width: 48, height: 48)
                         .background(.regularMaterial, in: Circle())
                 }
-                .accessibilityLabel(is3D ? "3D on" : "3D off")
+                .accessibilityLabel(is3D ? Text("3D on") : Text("3D off"))
                 Button {
                     selectedID = nil
                     withAnimation(.easeInOut(duration: 1.5)) {
@@ -122,11 +122,11 @@ struct GlobeMapView: View {
         let coordinate = user.lastLatitude.flatMap { lat in user.lastLongitude.map { CLLocationCoordinate2D(latitude: lat, longitude: $0) } }
         let detail: String
         if coordinate == nil {
-            detail = settings.first?.shareLocation == true ? "Location not found yet" : "Location is off"
+            detail = settings.first?.shareLocation == true ? String(localized: "Location not found yet") : String(localized: "Location is off")
         } else {
-            detail = user.lastPlaceName ?? "Last location"
+            detail = user.lastPlaceName ?? String(localized: "Last location")
         }
-        return PersonPin(id: user.id, name: "Me", avatarName: user.displayName, imageData: user.avatarData,
+        return PersonPin(id: user.id, name: String(localized: "Me"), avatarName: user.displayName, imageData: user.avatarData,
                          coordinate: coordinate, detail: detail, updatedAt: user.lastLocationAt)
     }
 
@@ -172,7 +172,7 @@ struct GlobeMapView: View {
                     .max { ($0.resolvedAt ?? $0.scheduledAt) < ($1.resolvedAt ?? $1.scheduledAt) }
             }
             let coordinate = latest.flatMap { slot in slot.latitude.flatMap { lat in slot.longitude.map { CLLocationCoordinate2D(latitude: lat, longitude: $0) } } }
-            let detail = !shares ? "Not sharing" : coordinate == nil ? "No location yet" : (latest?.placeName ?? "Last check-in")
+            let detail = !shares ? String(localized: "Not sharing") : coordinate == nil ? String(localized: "No location yet") : (latest?.placeName ?? String(localized: "Last check-in"))
             loaded[partner.partnerID] = PersonPin(id: partner.partnerID, name: partner.displayName, avatarName: partner.displayName,
                                                  coordinate: coordinate, detail: detail, updatedAt: latest?.resolvedAt)
         }
@@ -192,8 +192,8 @@ enum MapType: String, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .standard: "Standard"
-        case .satellite: "Satellite"
+        case .standard: String(localized: "Standard")
+        case .satellite: String(localized: "Satellite")
         }
     }
 
@@ -224,7 +224,7 @@ struct PersonPin: Identifiable {
     var updatedAt: Date?
 
     static func loading(for partner: Partnership) -> PersonPin {
-        PersonPin(id: partner.partnerID, name: partner.displayName, avatarName: partner.displayName, detail: "Loading…")
+        PersonPin(id: partner.partnerID, name: partner.displayName, avatarName: partner.displayName, detail: String(localized: "Loading…"))
     }
 }
 

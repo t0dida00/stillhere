@@ -81,7 +81,7 @@ struct ScanInviteView: View {
                     }
                     .ignoresSafeArea(edges: .bottom)
                     .overlay(alignment: .bottom) {
-                        Text(rejected ? "That QR code isn't a StillAlive? invite." : "Point the camera at your partner's invite QR code.")
+                        Text(rejected ? "That QR code isn't a StillAlive? invite." as LocalizedStringKey : "Point the camera at your partner's invite QR code.")
                             .font(.subheadline.weight(.semibold))
                             .padding(.horizontal, 16)
                             .padding(.vertical, 10)

@@ -1,5 +1,6 @@
 name: StillAlive
 options:
+  developmentLanguage: en
   bundleIdPrefix: dev.khoa
   deploymentTarget:
     iOS: "17.0"
@@ -19,6 +20,7 @@ targets:
       path: StillAlive/Resources/Info.plist
       properties:
         CFBundleDisplayName: "StillAlive?"
+        CFBundleLocalizations: [en, vi]
         CFBundleShortVersionString: "$(MARKETING_VERSION)"
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         UILaunchScreen: {}

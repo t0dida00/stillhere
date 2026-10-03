@@ -25,6 +25,8 @@ enum DayKey {
         var calendar = Calendar(identifier: .gregorian)
         calendar.timeZone = timeZone
         calendar.firstWeekday = Calendar.current.firstWeekday
+        // Only affects names such as weekday symbols, never day keys.
+        calendar.locale = .current
         return calendar
     }
 

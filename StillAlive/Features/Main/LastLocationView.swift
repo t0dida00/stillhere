@@ -14,10 +14,10 @@ struct LastLocationView: View {
             coordinate: coordinate,
             placeName: user.lastPlaceName,
             updatedAt: user.lastLocationAt,
-            emptyText: sharingOn ? (locating ? nil : "Couldn't get your location.") : nil,
+            emptyText: sharingOn ? (locating ? nil : String(localized: "Couldn't get your location.")) : nil,
             footnote: sharingOn ? nil : coordinate == nil
-                ? "Turn on location in Settings to save where you last used the app."
-                : "Location is off, so this isn't updated. Turn it on in Settings.",
+                ? String(localized: "Turn on location in Settings to save where you last used the app.")
+                : String(localized: "Location is off, so this isn't updated. Turn it on in Settings."),
             showsPlaceholder: sharingOn
         )
         // Refresh whenever the card appears with sharing on, so turning it on shows a pin right away.
@@ -61,8 +61,8 @@ struct PartnerLocationView: View {
             placeName: placeName,
             updatedAt: latest?.resolvedAt,
             emptyText: nil,
-            footnote: !sharesLocation ? "\(name) doesn't want to share their location."
-                : coordinate == nil ? "\(name) hasn't checked in with a location yet." : nil,
+            footnote: !sharesLocation ? String(localized: "\(name) doesn't want to share their location.")
+                : coordinate == nil ? String(localized: "\(name) hasn't checked in with a location yet.") : nil,
             showsPlaceholder: false
         )
         .task(id: latest?.id) {

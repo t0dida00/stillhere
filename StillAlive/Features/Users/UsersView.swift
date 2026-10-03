@@ -128,8 +128,8 @@ struct UsersView: View {
 
     private func addDemoRequest() {
         guard let code = try? IdentityService.generatePublicID() else { return }
-        let demoCount = partnerships.filter { $0.partnerName.hasPrefix("Demo partner") }.count
-        let name = demoCount == 0 ? "Demo partner" : "Demo partner \(demoCount + 1)"
+        let demoCount = partnerships.filter { $0.partnerName.hasPrefix(String(localized: "Demo partner")) }.count
+        let name = demoCount == 0 ? String(localized: "Demo partner") : String(localized: "Demo partner \(demoCount + 1)")
         context.insert(Partnership(partnerID: code, partnerName: name, isIncoming: true))
         try? context.save()
     }
@@ -149,7 +149,9 @@ private struct MyAvatarRow: View {
                 Text(user.displayName)
                     .font(.title3.weight(.semibold))
                 HStack(spacing: 16) {
-                    PhotosPicker(user.avatarData == nil ? "Add photo" : "Change photo", selection: $pickedPhoto, matching: .images)
+                    PhotosPicker(selection: $pickedPhoto, matching: .images) {
+                        Text(user.avatarData == nil ? "Add photo" as LocalizedStringKey : "Change photo")
+                    }
                     if user.avatarData != nil {
                         Button("Remove", role: .destructive) {
                             confirmingRemovePhoto = true
@@ -269,9 +271,9 @@ private struct PartnerRow: View {
 
     private var shareMessage: String {
         let name = partnership.displayName
-        var message = "\(name) will see where you checked in and where you last used the app. You can turn this off anytime."
+        var message = String(localized: "\(name) will see where you checked in and where you last used the app. You can turn this off anytime.")
         if settings.first?.shareLocation != true {
-            message += "\n\nLocation is off in Settings, so nothing is shared until you turn it on there."
+            message += "\n\n" + String(localized: "Location is off in Settings, so nothing is shared until you turn it on there.")
         }
         return message
     }
@@ -329,9 +331,9 @@ private struct PartnerRow: View {
 
     private var statusLabel: String {
         switch partnership.status {
-        case "accepted": "Partner"
-        case "declined": "Declined"
-        default: "Invite sent"
+        case "accepted": String(localized: "Partner")
+        case "declined": String(localized: "Declined")
+        default: String(localized: "Invite sent")
         }
     }
 
@@ -377,9 +379,9 @@ struct AddPartnerView: View {
 
     private var problem: String? {
         if code.isEmpty { return nil }
-        if code.count < IdentityService.codeLength { return "Codes have \(IdentityService.codeLength) characters." }
-        if code == ownCode { return "That's your own code." }
-        if existingCodes.contains(code) { return "You've already added this partner." }
+        if code.count < IdentityService.codeLength { return String(localized: "Codes have \(IdentityService.codeLength) characters.") }
+        if code == ownCode { return String(localized: "That's your own code.") }
+        if existingCodes.contains(code) { return String(localized: "You've already added this partner.") }
         return nil
     }
 
@@ -409,7 +411,7 @@ struct AddPartnerView: View {
                 } header: {
                     Text("Their invite code")
                 } footer: {
-                    Text(problem ?? "Ask your partner for the code on their Users tab. Spaces and dashes are ignored.")
+                    Text(problem ?? String(localized: "Ask your partner for the code on their Users tab. Spaces and dashes are ignored."))
                         .foregroundStyle(problem == nil ? Color.secondary : Color.red)
                 }
 

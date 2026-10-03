@@ -36,7 +36,7 @@ struct MainView: View {
                         if !partners.isEmpty {
                             ScrollView(.horizontal, showsIndicators: false) {
                                 HStack(spacing: 16) {
-                                    PersonChip(name: "Me", avatarName: user.displayName, id: user.id, imageData: user.avatarData,
+                                    PersonChip(name: String(localized: "Me"), avatarName: user.displayName, id: user.id, imageData: user.avatarData,
                                                isSelected: selectedPartnerID == nil) { selectedPartnerID = nil }
                                     ForEach(partners) { partner in
                                         PersonChip(name: partner.displayName, avatarName: partner.displayName, id: partner.partnerID,
@@ -269,7 +269,7 @@ private struct SlotPlaceLabel: View {
     var body: some View {
         Label {
             VStack(alignment: .leading, spacing: 2) {
-                Text(slot.placeName ?? lookedUp ?? (lookupFailed ? "Unknown place" : "Finding address…"))
+                Text(slot.placeName ?? lookedUp ?? (lookupFailed ? String(localized: "Unknown place") : String(localized: "Finding address…")))
                 if let lat = slot.latitude, let lon = slot.longitude {
                     Text(String(format: "%.5f, %.5f", lat, lon))
                         .font(.caption.monospacedDigit())
@@ -293,10 +293,10 @@ private struct SlotPlaceLabel: View {
 extension SlotState {
     var label: String {
         switch self {
-        case .pending: "Pending"
-        case .checkedIn: "Checked in"
-        case .skipped: "Skipped"
-        case .missed: "Missed"
+        case .pending: String(localized: "Pending")
+        case .checkedIn: String(localized: "Checked in")
+        case .skipped: String(localized: "Skipped")
+        case .missed: String(localized: "Missed")
         }
     }
 }
