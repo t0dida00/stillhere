@@ -68,7 +68,7 @@ struct MainView: View {
                                 .padding(.horizontal, 4)
                                 .padding(.vertical, 4)
                             }
-                            Text("Hold a partner for 3 seconds to see their emergency contacts.")
+                            Text("Press and hold a partner to see their emergency contacts.")
                                 .font(.caption)
                                 .foregroundStyle(.secondary)
                                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -186,7 +186,7 @@ private struct PersonChip: View {
     var onHold: (() -> Void)?
     var action: () -> Void
 
-    static let holdDuration: Double = 3
+    static let holdDuration: Double = 1
 
     var body: some View {
         Button(action: action) {

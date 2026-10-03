@@ -538,6 +538,16 @@
         }
       }
     },
+    "Copy a number or username, or open it in its app.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sao chép số điện thoại hoặc tên người dùng, hoặc mở trong ứng dụng tương ứng."
+          }
+        }
+      }
+    },
     "Couldn't finish setup": {
       "localizations": {
         "vi": {
@@ -780,16 +790,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Khó"
-          }
-        }
-      }
-    },
-    "Hold a partner for 3 seconds to see their emergency contacts.": {
-      "localizations": {
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Giữ ảnh người thân 3 giây để xem liên hệ khẩn cấp của họ."
           }
         }
       }
@@ -1310,6 +1310,16 @@
         }
       }
     },
+    "Press and hold a partner to see their emergency contacts.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nhấn giữ ảnh người thân để xem liên hệ khẩn cấp của họ."
+          }
+        }
+      }
+    },
     "Previous month": {
       "localizations": {
         "vi": {
@@ -1669,16 +1679,6 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gửi đáp án"
-          }
-        }
-      }
-    },
-    "Tap Copy to put a number or username on the clipboard.": {
-      "localizations": {
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Chạm Sao chép để sao chép số điện thoại hoặc tên người dùng."
           }
         }
       }

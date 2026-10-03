@@ -25,7 +25,7 @@ struct PartnerContactsView: View {
                                 row(contact)
                             }
                         } footer: {
-                            Text("Tap Copy to put a number or username on the clipboard.")
+                            Text("Copy a number or username, or open it in its app.")
                         }
                     }
                 } else {
@@ -60,15 +60,14 @@ struct PartnerContactsView: View {
             Button {
                 copy(contact)
             } label: {
-                Label(copiedID == contact.id ? "Copied" : "Copy",
-                      systemImage: copiedID == contact.id ? "checkmark" : "doc.on.doc")
+                RoundIcon(systemName: copiedID == contact.id ? "checkmark" : "doc.on.doc",
+                          tint: copiedID == contact.id ? .green : .accentColor)
             }
-            .buttonStyle(.bordered)
-            .controlSize(.small)
+            .buttonStyle(.borderless)
+            .accessibilityLabel(copiedID == contact.id ? Text("Copied") : Text("Copy"))
             if let url = contact.url {
                 Link(destination: url) {
-                    Image(systemName: "arrow.up.forward.app")
-                        .font(.title3)
+                    RoundIcon(systemName: "arrow.up.forward", tint: .accentColor)
                 }
                 .buttonStyle(.borderless)
                 .accessibilityLabel("Open in \(contact.kind.title)")
@@ -86,5 +85,21 @@ struct PartnerContactsView: View {
             try? await Task.sleep(for: .seconds(1.5))
             if copiedID == contact.id { copiedID = nil }
         }
+    }
+}
+
+/// Copy and Open share this look: an accent icon on a light circle of the same color.
+private struct RoundIcon: View {
+    let systemName: String
+    let tint: Color
+
+    var body: some View {
+        Image(systemName: systemName)
+            .font(.system(size: 15, weight: .semibold))
+            .foregroundStyle(tint)
+            .frame(width: 34, height: 34)
+            .background(tint.opacity(0.14), in: Circle())
+            .contentTransition(.symbolEffect(.replace))
+            .animation(.default, value: systemName)
     }
 }
