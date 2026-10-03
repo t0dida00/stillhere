@@ -338,6 +338,16 @@
         }
       }
     },
+    "At each check-in time an alarm rings (or a notification on older iOS). Open it and solve a quick math puzzle. That's it: your partners can see you're okay. Reminders keep coming every few minutes until you check in or the grace window ends.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đến giờ điểm danh, báo thức sẽ reo (hoặc thông báo trên iOS cũ hơn). Mở ra và giải một câu đố toán nhanh. Vậy là xong: người thân sẽ thấy bạn vẫn ổn. Thông báo nhắc sẽ đến vài phút một lần cho đến khi bạn điểm danh hoặc hết thời gian chờ."
+          }
+        }
+      }
+    },
     "At each check-in time an alarm rings. Tap Check in and solve a quick puzzle. Reminder notifications follow until you do.": {
       "localizations": {
         "vi": {
@@ -398,6 +408,26 @@
         }
       }
     },
+    "Can I change my check-in time?": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tôi có thể đổi giờ điểm danh không?"
+          }
+        }
+      }
+    },
+    "Can partners ask me to check in?": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Người thân có thể nhờ tôi điểm danh không?"
+          }
+        }
+      }
+    },
     "Cancel": {
       "localizations": {
         "vi": {
@@ -444,6 +474,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Điểm danh"
+          }
+        }
+      }
+    },
+    "Check that alarms and notifications are allowed for Still Here in the iOS Settings app, and that Still Here is allowed in your Focus modes. Alarms need iOS 26 or later; on older versions you get notifications instead. Opening the app once a day also keeps reminders up to date.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hãy kiểm tra Still Here đã được phép dùng báo thức và thông báo trong ứng dụng Cài đặt của iOS, và được cho phép trong các chế độ Tập trung. Báo thức cần iOS 26 trở lên; trên phiên bản cũ hơn, bạn sẽ nhận thông báo thay thế. Mở ứng dụng mỗi ngày một lần cũng giúp nhắc nhở luôn được cập nhật."
           }
         }
       }
@@ -510,6 +550,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Giờ điểm danh"
+          }
+        }
+      }
+    },
+    "Check-ins": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Điểm danh"
           }
         }
       }
@@ -700,6 +750,26 @@
         }
       }
     },
+    "Do I need an account?": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tôi có cần tài khoản không?"
+          }
+        }
+      }
+    },
+    "Does it work without internet?": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ứng dụng có hoạt động khi không có mạng không?"
+          }
+        }
+      }
+    },
     "Done": {
       "localizations": {
         "vi": {
@@ -770,6 +840,16 @@
         }
       }
     },
+    "FAQ": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Câu hỏi thường gặp"
+          }
+        }
+      }
+    },
     "Finding address…": {
       "localizations": {
         "vi": {
@@ -836,6 +916,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Giữ 3 giây"
+          }
+        }
+      }
+    },
+    "How do I add a partner?": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Làm sao để thêm người thân?"
+          }
+        }
+      }
+    },
+    "How does a check-in work?": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Điểm danh hoạt động thế nào?"
+          }
+        }
+      }
+    },
+    "If you don't check in before the grace window ends (1 hour by default), it counts as missed and shows red on your calendar. Your partners are notified of every missed check-in, and they can ask you to check in.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nếu bạn không điểm danh trước khi hết thời gian chờ (mặc định 1 giờ), lần đó tính là bỏ lỡ và hiện màu đỏ trên lịch. Người thân sẽ nhận thông báo cho mỗi lần bỏ lỡ và có thể nhờ bạn điểm danh."
           }
         }
       }
@@ -1140,6 +1250,26 @@
         }
       }
     },
+    "No. Still Here creates an invite code for you. It's kept in your iCloud Keychain, so it stays the same if you reinstall the app or move to a new iPhone.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Không. Still Here tạo cho bạn một mã mời. Mã được lưu trong Chuỗi khoá iCloud, nên vẫn giữ nguyên khi bạn cài lại ứng dụng hoặc chuyển sang iPhone mới."
+          }
+        }
+      }
+    },
+    "Nobody, unless you turn Location on in Settings. Even then, only partners you choose with Share my location see it: where you checked in and where you last used the app. Your location is only read while the app is open.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Không ai cả, trừ khi bạn bật Vị trí trong Cài đặt. Kể cả khi đó, chỉ những người thân bạn chọn bằng Chia sẻ vị trí của tôi mới thấy: nơi bạn điểm danh và nơi bạn dùng ứng dụng gần nhất. Vị trí chỉ được đọc khi ứng dụng đang mở."
+          }
+        }
+      }
+    },
     "Not now": {
       "localizations": {
         "vi": {
@@ -1186,6 +1316,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mặc định tắt. Chỉ những người thân bạn chọn mới xem được."
+          }
+        }
+      }
+    },
+    "On the Users tab, tap Add partner by code and type their invite code, or tap Scan QR code and scan theirs. You can also share your own invite from Users → Me. The free plan includes %lld partner, counting invites you've sent.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ở thẻ Mọi người, chạm Thêm người thân bằng mã và nhập mã mời của họ, hoặc chạm Quét mã QR để quét mã của họ. Bạn cũng có thể chia sẻ lời mời của mình từ Mọi người → Tôi. Gói miễn phí có %lld người thân, tính cả lời mời bạn đã gửi."
           }
         }
       }
@@ -1280,6 +1420,16 @@
         }
       }
     },
+    "Partners": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Người thân"
+          }
+        }
+      }
+    },
     "Partners %lld/%lld": {
       "localizations": {
         "en": {
@@ -1346,6 +1496,16 @@
         }
       }
     },
+    "Plans": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gói"
+          }
+        }
+      }
+    },
     "Point the camera at your partner's invite QR code.": {
       "localizations": {
         "vi": {
@@ -1366,6 +1526,16 @@
         }
       }
     },
+    "Premium is coming soon. It will raise the free plan's limits: more partners, more emergency contacts and more check-in times a day.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Premium sắp ra mắt. Gói này sẽ nâng giới hạn của gói miễn phí: thêm người thân, thêm liên hệ khẩn cấp và thêm giờ điểm danh mỗi ngày."
+          }
+        }
+      }
+    },
     "Press and hold a partner to see their emergency contacts.": {
       "localizations": {
         "vi": {
@@ -1382,6 +1552,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Tháng trước"
+          }
+        }
+      }
+    },
+    "Privacy & data": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Quyền riêng tư & dữ liệu"
           }
         }
       }
@@ -1536,6 +1716,16 @@
         }
       }
     },
+    "Search questions": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tìm câu hỏi"
+          }
+        }
+      }
+    },
     "Sent": {
       "localizations": {
         "vi": {
@@ -1682,6 +1872,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bỏ qua"
+          }
+        }
+      }
+    },
+    "Skipping is a choice: you tapped Skip or swiped the puzzle away. It shows orange and still counts as a finished day, so your streak continues. Missing means nothing happened in time; it shows red and breaks your streak.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bỏ qua là lựa chọn của bạn: bạn đã chạm Bỏ qua hoặc vuốt câu đố đi. Lần đó hiện màu cam và vẫn tính là ngày hoàn thành, nên chuỗi ngày vẫn tiếp tục. Bỏ lỡ nghĩa là không có gì xảy ra kịp thời; lần đó hiện màu đỏ và làm đứt chuỗi ngày."
           }
         }
       }
@@ -2005,12 +2205,132 @@
         }
       }
     },
+    "Ways for partners to reach you if you miss check-ins: phone, Zalo, WhatsApp or Telegram. Add up to %lld on the Users tab. To see a partner's contacts, press and hold their avatar on Check-In.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Cách để người thân liên lạc với bạn khi bạn bỏ lỡ điểm danh: điện thoại, Zalo, WhatsApp hoặc Telegram. Thêm tối đa %lld ở thẻ Mọi người. Để xem liên hệ của người thân, nhấn giữ ảnh của họ ở thẻ Điểm danh."
+          }
+        }
+      }
+    },
+    "What are emergency contacts?": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liên hệ khẩn cấp là gì?"
+          }
+        }
+      }
+    },
+    "What does Premium include?": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Premium gồm những gì?"
+          }
+        }
+      }
+    },
+    "What happens if I miss a check-in?": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Nếu tôi bỏ lỡ điểm danh thì sao?"
+          }
+        }
+      }
+    },
+    "What happens when a partner misses a check-in?": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Khi người thân bỏ lỡ điểm danh thì sao?"
+          }
+        }
+      }
+    },
+    "What's the difference between skipping and missing?": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bỏ qua và bỏ lỡ khác nhau thế nào?"
+          }
+        }
+      }
+    },
     "When a partner misses a check-in or asks you to check in, it shows up here.": {
       "localizations": {
         "vi": {
           "stringUnit": {
             "state": "translated",
             "value": "Khi người thân bỏ lỡ điểm danh hoặc nhờ bạn điểm danh, thông báo sẽ hiện ở đây."
+          }
+        }
+      }
+    },
+    "Who can see my location?": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ai có thể thấy vị trí của tôi?"
+          }
+        }
+      }
+    },
+    "Why didn't my alarm ring?": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Vì sao báo thức không reo?"
+          }
+        }
+      }
+    },
+    "Yes, in Settings → Check-in times. A new time applies today, unless it's earlier than a check-in you've already finished today; then it starts tomorrow. The free plan has %lld check-in time a day.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Có, trong Cài đặt → Giờ điểm danh. Giờ mới có hiệu lực ngay hôm nay, trừ khi sớm hơn lần điểm danh bạn đã hoàn tất hôm nay; khi đó sẽ bắt đầu từ ngày mai. Gói miễn phí có %lld giờ điểm danh mỗi ngày."
+          }
+        }
+      }
+    },
+    "Yes. Check-ins, alarms and reminders work offline. Partner updates need a connection.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Có. Điểm danh, báo thức và nhắc nhở hoạt động khi không có mạng. Cập nhật từ người thân cần có kết nối."
+          }
+        }
+      }
+    },
+    "Yes. When a partner asks, you get a notification and the puzzle opens as soon as you open the app. Solving it lets them know you're okay; Not now sets the request aside.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Có. Khi người thân nhờ, bạn sẽ nhận thông báo và câu đố hiện ra ngay khi bạn mở ứng dụng. Giải xong là họ biết bạn vẫn ổn; Để sau sẽ tạm gác yêu cầu lại."
+          }
+        }
+      }
+    },
+    "You get a notification, and it's saved on the Notifications tab. On their Check-In view, a red Request a check-in button appears: hold it for 3 seconds to ask them to check in.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bạn sẽ nhận thông báo, và thông báo được lưu ở thẻ Thông báo. Ở trang Điểm danh của họ sẽ hiện nút đỏ Yêu cầu điểm danh: giữ 3 giây để nhờ họ điểm danh."
           }
         }
       }

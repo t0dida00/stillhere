@@ -135,6 +135,7 @@ Tab bar (bottom): **Map | Check-In | Notifications | Users | Settings**. The app
    - Location toggle.
    - Time zone (default: device).
    - "Auto-open with Shortcuts" guide.
+   - FAQ: searchable questions grouped by Check-ins, Partners, Privacy & data and Plans; plan numbers read from `PlanLimits`.
 7. **Check-in screen** (full-screen cover)
    - Shows a random grade-3 puzzle and a numeric keypad.
    - Wrong answer: shake, let them retry (unlimited).

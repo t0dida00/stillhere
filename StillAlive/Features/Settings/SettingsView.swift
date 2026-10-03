@@ -110,6 +110,14 @@ private struct SettingsForm: View {
             Section {
                 NavigationLink("Auto-open with Shortcuts") { ShortcutsGuideView() }
             }
+
+            Section {
+                NavigationLink {
+                    FAQView()
+                } label: {
+                    Label("FAQ", systemImage: "questionmark.circle")
+                }
+            }
         }
         .premiumComingSoon(isPresented: $showingPremium,
                            message: "You've reached the free plan's check-in time limit. Premium will let you add more. You can still change the time you have.")
