@@ -19,7 +19,7 @@ struct StillAliveApp: App {
                 }
             }
             .task {
-                try? await Task.sleep(for: .milliseconds(UIAccessibility.isReduceMotionEnabled ? 700 : 1600))
+                try? await Task.sleep(for: .milliseconds(UIAccessibility.isReduceMotionEnabled ? 700 : 2200))
                 withAnimation(.easeOut(duration: 0.35)) { showSplash = false }
             }
         }

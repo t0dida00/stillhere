@@ -1,13 +1,13 @@
 import SwiftUI
 
-/// Shown over the app on a cold start: a thumbs-up ("I'm okay") springs up and bounces twice
-/// with ripples, a heartbeat line draws across, and the name fades in. With Reduce Motion it's
-/// a still version.
+/// Shown over the app on a cold start: three "I'm okay" signs slide past, thumbs-up, check mark,
+/// then OK, each with a ripple; a heartbeat line draws across, and the name fades in. With
+/// Reduce Motion it's a still version showing OK.
 struct SplashView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var thumbUp = false
-    @State private var bounces = 0
-    @State private var ripple = false
+    /// Which sign is showing: 0 thumbs-up, 1 check mark, 2 OK.
+    @State private var step = 0
     @State private var lineProgress: CGFloat = 0
     @State private var showName = false
 
@@ -17,24 +17,23 @@ struct SplashView: View {
 
             VStack(spacing: 28) {
                 ZStack {
-                    // Ripples spreading out from the thumb as it bounces.
-                    ForEach(0..<2) { index in
-                        Circle()
-                            .stroke(Color.accentColor.opacity(0.35), lineWidth: 2)
-                            .frame(width: 96, height: 96)
-                            .scaleEffect(ripple ? 2.1 : 1)
-                            .opacity(ripple ? 0 : 0.8)
-                            .animation(reduceMotion ? nil : .easeOut(duration: 1.1).delay(Double(index) * 0.45), value: ripple)
+                    // A fresh ripple each time a sign arrives.
+                    if thumbUp && !reduceMotion {
+                        RippleRings().id(step)
                     }
-                    Image(systemName: "hand.thumbsup.circle.fill")
-                        .font(.system(size: 96))
-                        .foregroundStyle(Color.accentColor)
-                        .symbolEffect(.bounce, value: bounces)
-                        // Raised like a thumb: from small and tilted back to upright.
+                    SplashSign(step: step)
+                        .id(step)
+                        .transition(.asymmetric(
+                            insertion: .move(edge: .trailing).combined(with: .opacity),
+                            removal: .move(edge: .leading).combined(with: .opacity)
+                        ))
+                        // The first sign is raised like a thumb: from small and tilted back to upright.
                         .scaleEffect(thumbUp ? 1 : 0.4)
                         .rotationEffect(.degrees(thumbUp ? 0 : -35))
                         .opacity(thumbUp ? 1 : 0)
                 }
+                .frame(width: 220)
+                .clipped()
                 .frame(height: 200)
 
                 HeartbeatLine()
@@ -56,20 +55,68 @@ struct SplashView: View {
     private func play() async {
         guard !reduceMotion else {
             thumbUp = true
+            step = SplashSign.count - 1
             lineProgress = 1
             showName = true
             return
         }
         withAnimation(.spring(response: 0.45, dampingFraction: 0.55)) { thumbUp = true }
-        withAnimation(.easeInOut(duration: 1.0).delay(0.15)) { lineProgress = 1 }
-        withAnimation(.easeOut(duration: 0.5).delay(0.55)) { showName = true }
-        try? await Task.sleep(for: .milliseconds(380))
-        ripple = true
-        // Two bounces once it's up.
-        for _ in 0..<2 {
-            bounces += 1
-            try? await Task.sleep(for: .milliseconds(380))
+        withAnimation(.easeInOut(duration: 1.4).delay(0.15)) { lineProgress = 1 }
+        withAnimation(.easeOut(duration: 0.5).delay(1.2)) { showName = true }
+        // Slide to the next sign while the previous one leaves to the left.
+        for next in 1..<SplashSign.count {
+            try? await Task.sleep(for: .milliseconds(560))
+            withAnimation(.spring(response: 0.42, dampingFraction: 0.8)) { step = next }
         }
+    }
+
+}
+
+/// The splash's "I'm okay" signs, in order: thumbs-up, check mark, OK.
+private struct SplashSign: View {
+    static let count = 3
+    let step: Int
+
+    var body: some View {
+        Group {
+            switch step {
+            case 0:
+                Image(systemName: "hand.thumbsup.circle.fill")
+                    .font(.system(size: 96))
+            case 1:
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 96))
+            default:
+                Circle()
+                    .frame(width: 96, height: 96)
+                    .overlay {
+                        Text(verbatim: "OK")
+                            .font(.system(size: 38, weight: .heavy, design: .rounded))
+                            .foregroundStyle(Color(.systemBackground))
+                    }
+            }
+        }
+        .foregroundStyle(Color.accentColor)
+        .frame(width: 110, height: 110)
+    }
+}
+
+/// One ripple of two rings spreading out from the sign.
+private struct RippleRings: View {
+    @State private var spread = false
+
+    var body: some View {
+        ZStack {
+            ForEach(0..<2) { index in
+                Circle()
+                    .stroke(Color.accentColor.opacity(0.35), lineWidth: 2)
+                    .frame(width: 96, height: 96)
+                    .scaleEffect(spread ? 2.0 : 1)
+                    .opacity(spread ? 0 : 0.8)
+                    .animation(.easeOut(duration: 0.9).delay(Double(index) * 0.25), value: spread)
+            }
+        }
+        .onAppear { spread = true }
     }
 }
 
