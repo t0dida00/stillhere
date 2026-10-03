@@ -8,7 +8,7 @@ final class AppRouter {
     static let shared = AppRouter()
 
     enum Tab: Hashable {
-        case map, main, users, settings
+        case map, main, notifications, users, settings
     }
 
     var selectedTab: Tab = .main
@@ -20,6 +20,8 @@ final class AppRouter {
     var pendingInviteCode: String?
     /// Set by a partner notification tap; consumed by `MainView`, which shows their calendar.
     var requestedPartnerID: String?
+    /// The alert opened from a system notification; `RootView` marks it read.
+    var openedAlertID: String?
 }
 
 final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -35,6 +37,7 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
             await MainActor.run {
                 AppRouter.shared.selectedTab = .main
                 AppRouter.shared.requestedPartnerID = partnerID
+                AppRouter.shared.openedAlertID = userInfo["alertID"] as? String
             }
             return
         }

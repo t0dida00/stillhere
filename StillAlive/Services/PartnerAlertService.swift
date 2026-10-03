@@ -20,6 +20,11 @@ struct PartnerAlertService {
             }
             let slots = (try? await sync.pull(partnerID: partner.partnerID)) ?? []
             for slot in MissedAlertRule.newMisses(slots, since: since, now: now) {
+                let id = AlertRecord.identifier(partnerID: partner.partnerID, dayKey: slot.dayKey, slotIndex: slot.slotIndex)
+                let saved = (try? context.fetchCount(FetchDescriptor<AlertRecord>(predicate: #Predicate { $0.id == id }))) ?? 0
+                guard saved == 0 else { continue }
+                context.insert(AlertRecord(id: id, partnerID: partner.partnerID, partnerName: partner.displayName,
+                                           dayKey: slot.dayKey, slotIndex: slot.slotIndex, scheduledAt: slot.scheduledAt, createdAt: now))
                 await notifications.notifyPartnerMissed(partnerID: partner.partnerID, name: partner.displayName,
                                                         slot: slot, timeZone: user.timeZone)
             }

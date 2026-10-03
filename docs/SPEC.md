@@ -95,7 +95,7 @@ enum SlotState: String, Codable { case pending, checkedIn, skipped, missed }
 
 ## 6. Screens and Navigation
 
-Tab bar (bottom): **Map | Check-In | Users | Settings**. The app opens on Check-In.
+Tab bar (bottom): **Map | Check-In | Notifications | Users | Settings**. The app opens on Check-In.
 
 1. **Onboarding / Setup** (first launch only)
    - Generates the ID, asks for display name.
@@ -111,17 +111,20 @@ Tab bar (bottom): **Map | Check-In | Users | Settings**. The app opens on Check-
    - On my calendar, with **Show partners** on, partners appear below each date as small avatars inside their own ring; more than 2 collapse to one avatar plus a count.
    - Tapping a day shows slot details (state, time, place name and coordinates); on my calendar it also lists partners.
    - Last location card below the calendar (mine, or the selected partner's; "doesn't want to share their location" when they don't).
-4. **Users**
+4. **Notifications**
+   - History of partner missed-check-in alerts, newest first, with an unread badge on the tab.
+   - Tap to mark read and open that partner's calendar; swipe to delete; "Mark all as read".
+5. **Users**
    - Me: avatar (photo or initial), editable name, invite code, QR code and share link (`stillalive://invite/<code>`).
    - Requests: incoming invitations with Accept/Decline; Sent invites waiting for an answer.
    - Partners: avatar, nickname (only I see it), status, per-partner "Share my location" toggle with an explanation popup.
-5. **Settings**
+6. **Settings**
    - Slot times (add/remove/edit, default 9:00 and 21:00, at most 3), grace window, reminder interval.
    - Puzzle difficulty.
    - Location toggle.
    - Time zone (default: device).
    - "Auto-open with Shortcuts" guide.
-6. **Check-in screen** (full-screen cover)
+7. **Check-in screen** (full-screen cover)
    - Shows a random grade-3 puzzle and a numeric keypad.
    - Wrong answer: shake, let them retry (unlimited).
    - Correct answer: mark `checkedIn`, success haptic, dismiss.

@@ -10,7 +10,7 @@ struct StillAliveApp: App {
             RootView()
                 .environment(AppRouter.shared)
         }
-        .modelContainer(for: [LocalUser.self, CheckInSlot.self, Partnership.self, AppSettings.self])
+        .modelContainer(for: [LocalUser.self, CheckInSlot.self, Partnership.self, AppSettings.self, AlertRecord.self])
     }
 }
 
@@ -19,6 +19,7 @@ struct RootView: View {
     @Environment(\.scenePhase) private var scenePhase
     @Environment(AppRouter.self) private var router
     @Query private var users: [LocalUser]
+    @Query(filter: #Predicate<AlertRecord> { !$0.isRead }) private var unreadAlerts: [AlertRecord]
 
     var body: some View {
         @Bindable var router = router
@@ -33,6 +34,10 @@ struct RootView: View {
                     MainView()
                         .tabItem { Label("Check-In", systemImage: "calendar.badge.checkmark") }
                         .tag(AppRouter.Tab.main)
+                    NotificationsView()
+                        .tabItem { Label("Notifications", systemImage: "bell") }
+                        .badge(unreadAlerts.count)
+                        .tag(AppRouter.Tab.notifications)
                     UsersView()
                         .tabItem { Label("Users", systemImage: "person.2") }
                         .tag(AppRouter.Tab.users)
@@ -44,6 +49,14 @@ struct RootView: View {
                     CheckInView(slotKey: key)
                 }
             }
+        }
+        // Opening an alert's system notification marks it read in the Notifications tab.
+        .onChange(of: router.openedAlertID) { _, id in
+            guard let id else { return }
+            router.openedAlertID = nil
+            let descriptor = FetchDescriptor<AlertRecord>(predicate: #Predicate { $0.id == id })
+            (try? context.fetch(descriptor))?.forEach { $0.isRead = true }
+            try? context.save()
         }
         // Invite link, e.g. from scanning a QR code with the Camera app.
         .onOpenURL { url in

@@ -802,6 +802,16 @@
         }
       }
     },
+    "Mark all as read": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đánh dấu đã đọc tất cả"
+          }
+        }
+      }
+    },
     "Me": {
       "localizations": {
         "vi": {
@@ -902,12 +912,32 @@
         }
       }
     },
+    "No notifications": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Không có thông báo"
+          }
+        }
+      }
+    },
     "Not sharing": {
       "localizations": {
         "vi": {
           "stringUnit": {
             "state": "translated",
             "value": "Không chia sẻ"
+          }
+        }
+      }
+    },
+    "Notifications": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thông báo"
           }
         }
       }
@@ -1531,6 +1561,16 @@
         }
       }
     },
+    "Unread": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chưa đọc"
+          }
+        }
+      }
+    },
     "Until sync is available, partners are simulated: invites are accepted after a few seconds and check-ins are made up.": {
       "localizations": {
         "vi": {
@@ -1597,6 +1637,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Muốn xem các lần điểm danh của bạn."
+          }
+        }
+      }
+    },
+    "When a partner misses a check-in, it shows up here.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Khi người thân bỏ lỡ một lần điểm danh, thông báo sẽ hiện ở đây."
           }
         }
       }

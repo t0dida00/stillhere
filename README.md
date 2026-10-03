@@ -29,7 +29,7 @@ To run on a device, set your team in Xcode (Signing & Capabilities). The app use
 
 Phase 1 (local-only prototype) is implemented. Phase 2 (partners) is implemented on mock data, except QR codes. Backend sync (Phase 3) and polish (Phase 4) are not. See the roadmap in [docs/SPEC.md](docs/SPEC.md) §11.
 
-Tabs: **Map – Check-In – Users – Settings**.
+Tabs: **Map – Check-In – Notifications – Users – Settings**.
 
 ## Behaviour
 
@@ -47,4 +47,4 @@ Tabs: **Map – Check-In – Users – Settings**.
 - **Shortcuts and Siri**: the *Open Check-in* action opens the app on Check-In, and the puzzle appears if a check-in is due. Use it in a Time of Day automation (Settings → Auto-open with Shortcuts) or say "Check in with StillAlive?".
 - **QR invites**: Users → Me → Show QR code encodes `stillalive://invite/<code>`. Scan it in Add partner, or with the Camera app, which opens Add partner with the code filled in.
 - **Languages**: English and Vietnamese, following the iPhone's language. Text lives in `StillAlive/Resources/Localizable.xcstrings` (and `InfoPlist.xcstrings` for permission prompts). After adding UI text, rebuild with `SWIFT_EMIT_LOC_STRINGS=YES` and run `xcrun xcstringstool sync` on the `.stringsdata` files to pick up new strings, then translate them.
-- **Partner missed check-ins**: you get a notification for every check-in a partner misses, and tapping it opens their calendar. For now the app checks on the phone (on opening and every 5 minutes while open); with the backend it becomes a server push that arrives even when the app is closed. See [docs/SPEC.md](docs/SPEC.md) §9.
+- **Partner missed check-ins**: you get a notification for every check-in a partner misses, and tapping it opens their calendar. The Notifications tab keeps the history, with an unread badge. For now the app checks on the phone (on opening and every 5 minutes while open); with the backend it becomes a server push that arrives even when the app is closed. See [docs/SPEC.md](docs/SPEC.md) §9.

@@ -44,8 +44,8 @@ final class NotificationService {
         content.sound = .default
         content.interruptionLevel = .timeSensitive
         content.threadIdentifier = "partner.\(partnerID)"
-        content.userInfo = ["partnerID": partnerID]
-        let identifier = "partner-miss.\(partnerID).\(slot.dayKey)#\(slot.slotIndex)"
+        let identifier = AlertRecord.identifier(partnerID: partnerID, dayKey: slot.dayKey, slotIndex: slot.slotIndex)
+        content.userInfo = ["partnerID": partnerID, "alertID": identifier]
         try? await center.add(UNNotificationRequest(identifier: identifier, content: content, trigger: nil))
     }
 
