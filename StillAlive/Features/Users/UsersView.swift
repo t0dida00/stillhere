@@ -129,7 +129,7 @@ struct UsersView: View {
                 Label("Show QR code", systemImage: "qrcode")
             }
             ShareLink(item: IdentityService.inviteURL(for: user.id),
-                      message: Text("Add me on StillAlive? with code \(user.id)")) {
+                      message: Text("Add me on Still Here with code \(user.id)")) {
                 Label("Share invite", systemImage: "square.and.arrow.up")
             }
         } header: {

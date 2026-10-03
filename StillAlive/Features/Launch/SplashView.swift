@@ -36,14 +36,14 @@ struct SplashView: View {
                     .stroke(Color.accentColor, style: StrokeStyle(lineWidth: 3, lineCap: .round, lineJoin: .round))
                     .frame(width: 220, height: 44)
 
-                Text(verbatim: "StillAlive?")
+                Text(verbatim: "Still Here")
                     .font(.largeTitle.bold())
                     .opacity(showName ? 1 : 0)
                     .offset(y: showName ? 0 : 8)
             }
         }
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(Text(verbatim: "StillAlive?"))
+        .accessibilityLabel(Text(verbatim: "Still Here"))
         .task { await play() }
     }
 

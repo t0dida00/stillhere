@@ -19,18 +19,19 @@ targets:
     info:
       path: StillAlive/Resources/Info.plist
       properties:
-        CFBundleDisplayName: "StillAlive?"
+        CFBundleDisplayName: "Still Here"
         CFBundleLocalizations: [en, vi]
         CFBundleShortVersionString: "$(MARKETING_VERSION)"
         CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
         UILaunchScreen: {}
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
-        NSCameraUsageDescription: "StillAlive? uses the camera only to scan a partner's invite QR code."
+        NSCameraUsageDescription: "Still Here uses the camera only to scan a partner's invite QR code."
         CFBundleURLTypes:
           - CFBundleURLName: dev.khoa.stillalive.invite
-            CFBundleURLSchemes: [stillalive]
-        NSAlarmKitUsageDescription: "StillAlive? rings an alarm at each check-in time so you don't miss it."
-        NSLocationWhenInUseUsageDescription: "If you turn it on, StillAlive? attaches your approximate location to a check-in so partners you choose can see where you checked in."
+            # stillalive: links and QR codes shared before the rename.
+            CFBundleURLSchemes: [stillhere, stillalive]
+        NSAlarmKitUsageDescription: "Still Here rings an alarm at each check-in time so you don't miss it."
+        NSLocationWhenInUseUsageDescription: "If you turn it on, Still Here attaches your approximate location to a check-in so partners you choose can see where you checked in."
     entitlements:
       path: StillAlive/Resources/StillAlive.entitlements
       properties:

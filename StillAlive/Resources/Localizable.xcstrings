@@ -208,12 +208,12 @@
         }
       }
     },
-    "Add me on StillAlive? with code %@": {
+    "Add me on Still Here with code %@": {
       "localizations": {
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Thêm mình trên StillAlive? bằng mã %@"
+            "value": "Thêm mình trên Still Here bằng mã %@"
           }
         }
       }
@@ -248,22 +248,22 @@
         }
       }
     },
-    "Add the action Open Check-in (search for StillAlive?).": {
+    "Add the action Open Check-in (search for Still Here).": {
       "localizations": {
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Thêm tác vụ Mở điểm danh (tìm StillAlive?)."
+            "value": "Thêm tác vụ Mở điểm danh (tìm Still Here)."
           }
         }
       }
     },
-    "Allow camera access for StillAlive? in the Settings app, or type the code instead.": {
+    "Allow camera access for Still Here in the Settings app, or type the code instead.": {
       "localizations": {
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Hãy cho phép StillAlive? dùng camera trong ứng dụng Cài đặt, hoặc nhập mã thay thế."
+            "value": "Hãy cho phép Still Here dùng camera trong ứng dụng Cài đặt, hoặc nhập mã thay thế."
           }
         }
       }
@@ -318,12 +318,12 @@
         }
       }
     },
-    "Ask your partner to scan this in StillAlive? (Users → Add partner → Scan QR code), or with the Camera app.": {
+    "Ask your partner to scan this in Still Here (Users → Add partner → Scan QR code), or with the Camera app.": {
       "localizations": {
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nhờ người thân quét mã này trong StillAlive? (Mọi người → Thêm người thân → Quét mã QR) hoặc bằng ứng dụng Camera."
+            "value": "Nhờ người thân quét mã này trong Still Here (Mọi người → Thêm người thân → Quét mã QR) hoặc bằng ứng dụng Camera."
           }
         }
       }
@@ -930,12 +930,12 @@
         }
       }
     },
-    "Location access is off for StillAlive?. You can allow it in the iOS Settings app.": {
+    "Location access is off for Still Here. You can allow it in the iOS Settings app.": {
       "localizations": {
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "StillAlive? chưa được phép dùng vị trí. Bạn có thể cho phép trong ứng dụng Cài đặt của iOS."
+            "value": "Still Here chưa được phép dùng vị trí. Bạn có thể cho phép trong ứng dụng Cài đặt của iOS."
           }
         }
       }
@@ -1250,22 +1250,22 @@
         }
       }
     },
-    "Opens StillAlive? in the Settings app. Tap Language there to switch between English and Tiếng Việt.": {
+    "Opens Still Here in the Settings app. Tap Language there to switch between English and Tiếng Việt.": {
       "localizations": {
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mở StillAlive? trong ứng dụng Cài đặt. Chạm Ngôn ngữ ở đó để chuyển giữa English và Tiếng Việt."
+            "value": "Mở Still Here trong ứng dụng Cài đặt. Chạm Ngôn ngữ ở đó để chuyển giữa English và Tiếng Việt."
           }
         }
       }
     },
-    "Opens StillAlive? on Check-In. If a check-in is due, its puzzle appears.": {
+    "Opens Still Here on Check-In. If a check-in is due, its puzzle appears.": {
       "localizations": {
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mở StillAlive? ở thẻ Điểm danh. Nếu đã đến giờ điểm danh, câu đố sẽ hiện ra."
+            "value": "Mở Still Here ở thẻ Điểm danh. Nếu đã đến giờ điểm danh, câu đố sẽ hiện ra."
           }
         }
       }
@@ -1516,12 +1516,12 @@
         }
       }
     },
-    "Say \"Check in with StillAlive?\" to Siri, or find Open Check-in in Spotlight.": {
+    "Say \"Check in with Still Here\" to Siri, or find Open Check-in in Spotlight.": {
       "localizations": {
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Nói với Siri \"Check in with StillAlive?\", hoặc tìm Mở điểm danh trong Spotlight."
+            "value": "Nói với Siri \"Check in with Still Here\", hoặc tìm Mở điểm danh trong Spotlight."
           }
         }
       }
@@ -1736,18 +1736,18 @@
         }
       }
     },
-    "Still alive?": {
+    "Still Here": {
+      "shouldTranslate": false
+    },
+    "Still here?": {
       "localizations": {
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Còn ổn chứ?"
+            "value": "Vẫn ổn chứ?"
           }
         }
       }
-    },
-    "StillAlive?": {
-      "shouldTranslate": false
     },
     "Stop": {
       "localizations": {
@@ -1789,12 +1789,12 @@
         }
       }
     },
-    "That QR code isn't a StillAlive? invite.": {
+    "That QR code isn't a Still Here invite.": {
       "localizations": {
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "Mã QR này không phải lời mời StillAlive?."
+            "value": "Mã QR này không phải lời mời Still Here."
           }
         }
       }
@@ -2175,12 +2175,12 @@
         }
       }
     },
-    "iOS doesn't let apps open themselves. A personal Shortcuts automation can open StillAlive? at each check-in time so the puzzle is waiting for you.": {
+    "iOS doesn't let apps open themselves. A personal Shortcuts automation can open Still Here at each check-in time so the puzzle is waiting for you.": {
       "localizations": {
         "vi": {
           "stringUnit": {
             "state": "translated",
-            "value": "iOS không cho ứng dụng tự mở. Một tự động hoá trong Phím tắt có thể mở StillAlive? vào mỗi giờ điểm danh để câu đố chờ sẵn."
+            "value": "iOS không cho ứng dụng tự mở. Một tự động hoá trong Phím tắt có thể mở Still Here vào mỗi giờ điểm danh để câu đố chờ sẵn."
           }
         }
       }

@@ -19,7 +19,7 @@ final class NotificationService {
 
         for reminder in plan {
             let content = UNMutableNotificationContent()
-            content.title = "StillAlive?"
+            content.title = "Still Here"
             content.body = reminder.sequence == 0
                 ? String(localized: "Time to check in. Solve a quick puzzle to let them know you're okay.")
                 : String(localized: "Reminder: you haven't checked in yet.")

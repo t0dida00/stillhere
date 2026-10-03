@@ -18,7 +18,10 @@ final class IdentityServiceTests: XCTestCase {
     }
 
     func testCodeFromScannedInvite() {
-        XCTAssertEqual(IdentityService.inviteURL(for: "ABCD1234").absoluteString, "stillalive://invite/ABCD1234")
+        XCTAssertEqual(IdentityService.inviteURL(for: "ABCD1234").absoluteString, "stillhere://invite/ABCD1234")
+        XCTAssertEqual(IdentityService.code(fromScanned: "stillhere://invite/ABCD1234"), "ABCD1234")
+        XCTAssertEqual(IdentityService.code(fromScanned: "StillHere://Invite/abcd-1234"), "ABCD1234")
+        // Links and QR codes from before the rename.
         XCTAssertEqual(IdentityService.code(fromScanned: "stillalive://invite/ABCD1234"), "ABCD1234")
         XCTAssertEqual(IdentityService.code(fromScanned: "StillAlive://Invite/abcd-1234"), "ABCD1234")
         XCTAssertEqual(IdentityService.code(fromScanned: " abcd 1234 "), "ABCD1234")

@@ -32,7 +32,7 @@ struct OnboardingView: View {
 
     private var nameStep: some View {
         VStack(spacing: 16) {
-            header("heart.circle.fill", "StillAlive?", "A tiny daily check-in so the people you love know you're okay. No account needed.")
+            header("heart.circle.fill", "Still Here", "A tiny daily check-in so the people you love know you're okay. No account needed.")
             TextField("Your name", text: $name)
                 .textFieldStyle(.roundedBorder)
                 .textContentType(.givenName)

@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
-	<string>StillAlive?</string>
+	<string>Still Here</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -30,6 +30,7 @@
 			<string>dev.khoa.stillalive.invite</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
+				<string>stillhere</string>
 				<string>stillalive</string>
 			</array>
 		</dict>
@@ -37,11 +38,11 @@
 	<key>CFBundleVersion</key>
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>NSAlarmKitUsageDescription</key>
-	<string>StillAlive? rings an alarm at each check-in time so you don't miss it.</string>
+	<string>Still Here rings an alarm at each check-in time so you don't miss it.</string>
 	<key>NSCameraUsageDescription</key>
-	<string>StillAlive? uses the camera only to scan a partner's invite QR code.</string>
+	<string>Still Here uses the camera only to scan a partner's invite QR code.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>If you turn it on, StillAlive? attaches your approximate location to a check-in so partners you choose can see where you checked in.</string>
+	<string>If you turn it on, Still Here attaches your approximate location to a check-in so partners you choose can see where you checked in.</string>
 	<key>UILaunchScreen</key>
 	<dict/>
 	<key>UISupportedInterfaceOrientations</key>

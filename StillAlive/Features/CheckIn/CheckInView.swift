@@ -34,7 +34,7 @@ struct CheckInView: View {
             VStack(spacing: 8) {
                 switch target {
                 case .slot:
-                    Text("Still alive?")
+                    Text("Still here?")
                         .font(.largeTitle.bold())
                     Text("Solve this to check in.")
                         .foregroundStyle(.secondary)

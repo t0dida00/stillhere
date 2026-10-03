@@ -1,4 +1,4 @@
-# StillAlive?
+# Still Here
 
 Offline-first iOS app for daily "I'm alive" check-ins between people who are apart. Full spec: [docs/SPEC.md](docs/SPEC.md).
 
@@ -48,7 +48,7 @@ Tabs: **Map – Check-In – Notifications – Users – Settings**.
 - **Partner emergency contacts**: on Check-In, hold a partner's avatar for 1 second to see their emergency contacts, copy them or open the call or chat. Demo partners have 0–2 made-up contacts each.
 - **Partners on my calendar**: with *Show partners* on, each date shows partners below it as small avatars inside their own ring; more than 2 collapse to one avatar plus a count. Tapping a day lists my check-ins, then each partner's.
 - **Map**: a 3D globe with me and every partner who shares their location as avatar pins. Tap a person to fly to them; 3D, globe and map-type (Standard / Satellite) buttons sit in one row at the top.
-- **Shortcuts and Siri**: the *Open Check-in* action opens the app on Check-In, and the puzzle appears if a check-in is due. Use it in a Time of Day automation (Settings → Auto-open with Shortcuts) or say "Check in with StillAlive?".
-- **QR invites**: Users → Me → Show QR code encodes `stillalive://invite/<code>`. Scan it in Add partner, or with the Camera app, which opens Add partner with the code filled in.
+- **Shortcuts and Siri**: the *Open Check-in* action opens the app on Check-In, and the puzzle appears if a check-in is due. Use it in a Time of Day automation (Settings → Auto-open with Shortcuts) or say "Check in with Still Here".
+- **QR invites**: Users → Me → Show QR code encodes `stillhere://invite/<code>` (old `stillalive://` links still work). Scan it in Add partner, or with the Camera app, which opens Add partner with the code filled in.
 - **Languages**: English and Vietnamese, following the iPhone's language. Text lives in `StillAlive/Resources/Localizable.xcstrings` (and `InfoPlist.xcstrings` for permission prompts). After adding UI text, rebuild with `SWIFT_EMIT_LOC_STRINGS=YES` and run `xcrun xcstringstool sync` on the `.stringsdata` files to pick up new strings, then translate them.
 - **Partner missed check-ins**: you get a notification for every check-in a partner misses, and tapping it opens their calendar. The Notifications tab keeps the history, with an unread badge. For now the app checks on the phone (on opening and every 5 minutes while open); with the backend it becomes a server push that arrives even when the app is closed. See [docs/SPEC.md](docs/SPEC.md) §9.

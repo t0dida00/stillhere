@@ -2,7 +2,7 @@ import CoreImage.CIFilterBuiltins
 import SwiftUI
 import VisionKit
 
-/// My invite as a QR code. It encodes `stillalive://invite/<code>`, so the system Camera app opens it too.
+/// My invite as a QR code. It encodes `stillhere://invite/<code>`, so the system Camera app opens it too.
 struct InviteQRView: View {
     let name: String
     let code: String
@@ -12,7 +12,7 @@ struct InviteQRView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 24) {
-                Text("Ask your partner to scan this in StillAlive? (Users → Add partner → Scan QR code), or with the Camera app.")
+                Text("Ask your partner to scan this in Still Here (Users → Add partner → Scan QR code), or with the Camera app.")
                     .multilineTextAlignment(.center)
                     .foregroundStyle(.secondary)
 
@@ -81,7 +81,7 @@ struct ScanInviteView: View {
                     }
                     .ignoresSafeArea(edges: .bottom)
                     .overlay(alignment: .bottom) {
-                        Text(rejected ? "That QR code isn't a StillAlive? invite." as LocalizedStringKey : "Point the camera at your partner's invite QR code.")
+                        Text(rejected ? "That QR code isn't a Still Here invite." as LocalizedStringKey : "Point the camera at your partner's invite QR code.")
                             .font(.subheadline.weight(.semibold))
                             .padding(.horizontal, 16)
                             .padding(.vertical, 10)
@@ -91,7 +91,7 @@ struct ScanInviteView: View {
                 } else {
                     ContentUnavailableView("Camera not available",
                                            systemImage: "camera.fill",
-                                           description: Text("Allow camera access for StillAlive? in the Settings app, or type the code instead."))
+                                           description: Text("Allow camera access for Still Here in the Settings app, or type the code instead."))
                 }
             }
             .navigationTitle("Scan QR code")

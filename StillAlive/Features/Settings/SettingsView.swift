@@ -75,7 +75,7 @@ private struct SettingsForm: View {
                 Text("Location")
             } footer: {
                 Text(locationDenied
-                     ? "Location access is off for StillAlive?. You can allow it in the iOS Settings app."
+                     ? "Location access is off for Still Here. You can allow it in the iOS Settings app."
                      : "Off by default. Only partners you choose will be able to see it.")
             }
 
@@ -104,7 +104,7 @@ private struct SettingsForm: View {
                 }
                 .foregroundStyle(.primary)
             } footer: {
-                Text("Opens StillAlive? in the Settings app. Tap Language there to switch between English and Tiếng Việt.")
+                Text("Opens Still Here in the Settings app. Tap Language there to switch between English and Tiếng Việt.")
             }
 
             Section {
@@ -192,17 +192,17 @@ struct ShortcutsGuideView: View {
     var body: some View {
         List {
             Section {
-                Text("iOS doesn't let apps open themselves. A personal Shortcuts automation can open StillAlive? at each check-in time so the puzzle is waiting for you.")
+                Text("iOS doesn't let apps open themselves. A personal Shortcuts automation can open Still Here at each check-in time so the puzzle is waiting for you.")
             }
             Section("Set it up") {
                 Label("Open the Shortcuts app and go to Automation.", systemImage: "1.circle")
                 Label("Tap New Automation → Time of Day, pick your first check-in time, Daily.", systemImage: "2.circle")
                 Label("Choose Run Immediately.", systemImage: "3.circle")
-                Label("Add the action Open Check-in (search for StillAlive?).", systemImage: "4.circle")
+                Label("Add the action Open Check-in (search for Still Here).", systemImage: "4.circle")
                 Label("Repeat for each check-in time.", systemImage: "5.circle")
             }
             Section {
-                Label("Say \"Check in with StillAlive?\" to Siri, or find Open Check-in in Spotlight.", systemImage: "mic")
+                Label("Say \"Check in with Still Here\" to Siri, or find Open Check-in in Spotlight.", systemImage: "mic")
             } header: {
                 Text("Siri")
             }

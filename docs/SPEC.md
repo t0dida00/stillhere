@@ -1,10 +1,12 @@
-# StillAlive? — iOS App Build Spec
+# Still Here — iOS App Build Spec
+
+> Renamed from "StillAlive?". The bundle ID (`dev.khoa.stillalive`), Xcode project and module (`StillAlive`) and internal keys keep the old name on purpose.
 
 > Hand this file to Claude Code. Work **phase by phase**. After each phase: build, run tests, summarize what changed, and stop for review before starting the next phase.
 
 ## 1. Product Summary
 
-StillAlive? is an offline-first iOS app for daily "I'm alive" check-ins between people who are apart (e.g. long-distance partners). Each user checks in at fixed times (default 9:00 and 21:00). Invited partners can see, on their own device, whether the user checked in, skipped, or missed each slot.
+Still Here is an offline-first iOS app for daily "I'm alive" check-ins between people who are apart (e.g. long-distance partners). Each user checks in at fixed times (default 9:00 and 21:00). Invited partners can see, on their own device, whether the user checked in, skipped, or missed each slot.
 
 **Core principles**
 - No sign-up or login. Identity is a generated unique ID.
@@ -17,7 +19,7 @@ StillAlive? is an offline-first iOS app for daily "I'm alive" check-ins between 
 - iOS **cannot** lock the screen or force a popup. Do NOT attempt to. The puzzle is triggered via:
   1. **Time-sensitive local notifications** at each slot time (repeat every 10 min until the grace window ends). Tapping opens the puzzle screen.
   2. **Open-app trigger**: if a slot is pending when the app opens/foregrounds, show the puzzle immediately (full-screen cover).
-  3. **Optional Shortcuts automation**: Settings shows a guide for creating a Shortcuts time automation ("At 9:00 → Open App StillAlive?"). No code beyond an in-app instructions screen and an App Intent "Open Check-in".
+  3. **Optional Shortcuts automation**: Settings shows a guide for creating a Shortcuts time automation ("At 9:00 → Open Check-in"). No code beyond an in-app instructions screen and an App Intent "Open Check-in".
 - On iOS 26+, use **AlarmKit** for the alarm at each slot time (rings through silent mode and Focus; its "Check in" button opens the puzzle). Follow-up reminders stay as `UserNotifications`. On iOS 17–25, notifications only.
 - Minimum deployment target: **iOS 17** (SwiftData).
 
@@ -118,7 +120,7 @@ Tab bar (bottom): **Map | Check-In | Notifications | Users | Settings**. The app
    - History of partner missed-check-in alerts and incoming check-in requests (with their state: waiting, answered, set aside), newest first, with an unread badge on the tab. Tapping an open request opens its puzzle.
    - Tap to mark read and open that partner's calendar; swipe to delete; "Mark all as read".
 5. **Users**
-   - Me: avatar (photo or initial), editable name, invite code, QR code and share link (`stillalive://invite/<code>`).
+   - Me: avatar (photo or initial), editable name, invite code, QR code and share link (`stillhere://invite/<code>`; `stillalive://` from before the rename is still accepted).
    - Emergency contacts (own section under Me): up to 2 in any mix of Phone, Zalo, WhatsApp and Telegram (e.g. 2 phones, or a phone and a Zalo), edited together in one form; each row has its app (tap the badge to change it), its own field and hint. Partners will use them to reach you when you miss check-ins (shared once sync exists); each has a link that opens the call or chat (`tel:`, `zalo.me`, `wa.me`, `t.me`).
    - Requests: incoming invitations with Accept/Decline; Sent invites waiting for an answer.
    - Partners: avatar, nickname (only I see it), status, per-partner "Share my location" toggle with an explanation popup.

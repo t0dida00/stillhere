@@ -50,8 +50,10 @@ enum IdentityService {
         return String(mapped.prefix(codeLength))
     }
 
-    /// Invite links look like `stillalive://invite/ABCD1234`; QR codes carry the same link.
-    static let inviteScheme = "stillalive"
+    /// Invite links look like `stillhere://invite/ABCD1234`; QR codes carry the same link.
+    static let inviteScheme = "stillhere"
+    /// Schemes from before the rename to Still Here; old links and QR codes still work.
+    static let legacyInviteSchemes = ["stillalive"]
 
     static func inviteURL(for code: String) -> URL {
         URL(string: "\(inviteScheme)://invite/\(code)")!
@@ -62,7 +64,8 @@ enum IdentityService {
     static func code(fromScanned text: String) -> String? {
         let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
         if let url = URL(string: trimmed), let scheme = url.scheme {
-            guard scheme.lowercased() == inviteScheme, url.host?.lowercased() == "invite" else { return nil }
+            guard ([inviteScheme] + legacyInviteSchemes).contains(scheme.lowercased()),
+                  url.host?.lowercased() == "invite" else { return nil }
             let code = normalizeCode(url.lastPathComponent)
             return isValidCode(code) ? code : nil
         }

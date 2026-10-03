@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-StillAlive? is an offline-first iOS 17+ app (SwiftUI + SwiftData) for daily "I'm alive" check-ins. [docs/SPEC.md](docs/SPEC.md) is the source of truth for product behaviour, phases and rules. Phase 1 (local-only) is done. Phase 2 (partners) runs on mock data, except QR codes. Phases 3–4 (backend sync, polish) are not.
+Still Here (code name StillAlive; formerly "StillAlive?") is an offline-first iOS 17+ app (SwiftUI + SwiftData) for daily "I'm alive" check-ins. [docs/SPEC.md](docs/SPEC.md) is the source of truth for product behaviour, phases and rules. Phase 1 (local-only) is done. Phase 2 (partners) runs on mock data, except QR codes. Phases 3–4 (backend sync, polish) are not.
 
 ## Commands
 
@@ -64,6 +64,8 @@ All partner data goes through the `SyncService` protocol, and `Sync.shared` (in 
 **Plan limits.** All free-plan limits live in `Models/PlanLimits.swift` (1 partner, 2 emergency contacts, 1 check-in time); `EmergencyContact.maxCount`, Settings' slot limit and the `AppSettings` default (09:00 only) follow it. `UpgradeRow` and `.premiumComingSoon` (Features/Premium) replace add buttons at a limit. The partner limit counts accepted partners plus pending sent invites (`PlanLimits.partnerSlotsUsed`). Existing partners over the limit are kept; only new accepts and adds are blocked.
 
 **Check-in requests.** `CheckInView` takes a `CheckInTarget`: `.slot(SlotKey)` or `.request(id:from:)`. `CheckInRequestService` fetches `SyncService.incomingCheckInRequests()` on foreground and in the 5-minute loop, saves new ones as `CheckInRequest` with a notification (`checkInRequestID` in `userInfo`), and `RootView.showCheckInRequest` presents the oldest open one when nothing else is showing. Solving a slot or a request answers all open requests. Debug: `-mockCheckInRequest "Dad"` puts a request in `MockSyncService.inbox`.
+
+**Naming.** User-facing name is "Still Here" (`CFBundleDisplayName`, splash, notifications, prompts). The bundle ID `dev.khoa.stillalive`, project/target/module `StillAlive`, Keychain service, UserDefaults keys and logger subsystem deliberately keep the old name so installed data carries over. Invite links use `stillhere://`; `IdentityService.legacyInviteSchemes` keeps `stillalive://` working.
 
 **Localization.** English (source) and Vietnamese, in `Resources/Localizable.xcstrings` and `Resources/InfoPlist.xcstrings`. SwiftUI literals are picked up automatically. Text built as a `String` (status labels, ternaries, helper parameters, notification bodies) must use `String(localized:)` or a `LocalizedStringKey` parameter, or it stays English. To add new strings to the catalog from the command line:
 
