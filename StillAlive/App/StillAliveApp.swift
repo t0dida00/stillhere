@@ -59,14 +59,16 @@ struct RootView: View {
             await service.reschedule()
             await service.recordLastLocation()
             await service.backfillPlaceNames()
+            await PartnerAlertService(context: context).checkForMisses()
         }
-        // Keeps the last location fresh while the app is open; stops when it leaves the foreground.
+        // Keeps the last location and partner miss alerts fresh while the app is open; stops when it leaves the foreground.
         .task(id: scenePhase) {
             guard scenePhase == .active, !users.isEmpty else { return }
             while !Task.isCancelled {
                 try? await Task.sleep(for: CheckInService.locationRefreshInterval)
                 guard !Task.isCancelled else { return }
                 await CheckInService(context: context).recordLastLocation()
+                await PartnerAlertService(context: context).checkForMisses()
             }
         }
         // Notification or alarm tap while already active.

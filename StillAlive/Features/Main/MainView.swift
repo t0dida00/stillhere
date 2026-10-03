@@ -11,6 +11,7 @@ struct MainView: View {
     @State private var selectedDay: SlotDay?
     /// nil = me; otherwise an accepted partner's ID.
     @State private var selectedPartnerID: String?
+    @Environment(AppRouter.self) private var router
     @State private var partnerSlots: [DisplaySlot] = []
     @State private var partnerSharesLocation = false
     /// Every accepted partner's days, shown under the dates on my calendar.
@@ -76,6 +77,13 @@ struct MainView: View {
                                       partner.slotsByDay[day.dayKey].map { DayDetailView.PartnerSlots(id: partner.id, name: partner.name, slots: $0) }
                                   })
                         .presentationDetents([.medium, .large])
+                }
+                .onChange(of: router.requestedPartnerID, initial: true) { _, id in
+                    guard let id else { return }
+                    router.requestedPartnerID = nil
+                    if partners.contains(where: { $0.partnerID == id }) {
+                        selectedPartnerID = id
+                    }
                 }
                 .task(id: selectedPartnerID) {
                     await loadPartnerSlots()

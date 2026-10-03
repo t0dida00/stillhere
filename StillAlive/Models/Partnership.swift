@@ -14,6 +14,8 @@ final class Partnership {
     var isIncoming: Bool = false
     /// What I call them; shown instead of `partnerName` when set.
     var nickname: String?
+    /// Up to when their missed check-ins have been checked for notifications.
+    var lastMissCheckAt: Date?
 
     init(partnerID: String, partnerName: String, status: String = "pending", canSeeLocation: Bool = false, createdAt: Date = .now, isIncoming: Bool = false) {
         self.partnerID = partnerID

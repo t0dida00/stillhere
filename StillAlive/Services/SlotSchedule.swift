@@ -132,36 +132,16 @@ enum SlotRules {
     }
 }
 
-/// When partners are told about missed check-ins (SPEC §9). The server applies the same rule;
-/// the app uses it to show a run of misses on a partner's calendar.
+/// Partners are notified of every missed check-in (SPEC §9).
 enum MissedAlertRule {
-    /// Misses in a row that trigger the first alert.
-    static let threshold = 2
-
-    enum Alert: Equatable {
-        /// The run just reached `threshold`.
-        case missedInARow(Int)
-        /// The run grew past what partners were already told.
-        case stillMissing(Int)
-        /// A check-in or skip ended a run that partners were alerted about.
-        case allGood
-    }
-
-    /// Misses at the end of `slots`, by scheduled time and across days. Pending slots are
-    /// ignored, since they haven't been decided yet; a check-in or skip ends the run.
-    static func consecutiveMisses(_ slots: [SlotSnapshot]) -> Int {
-        var count = 0
-        for slot in slots.filter({ $0.state != .pending }).sorted(by: { $0.scheduledAt > $1.scheduledAt }) {
-            guard slot.state == .missed else { break }
-            count += 1
-        }
-        return count
-    }
-
-    /// The alert to send now, given the current run and the run length partners were last told about.
-    static func alert(run: Int, alreadyAlerted: Int) -> Alert? {
-        if run == 0 { return alreadyAlerted >= threshold ? .allGood : nil }
-        guard run >= threshold, run > alreadyAlerted else { return nil }
-        return alreadyAlerted < threshold ? .missedInARow(run) : .stillMissing(run)
+    /// Slots that became missed after `since` and by `now`, oldest first. A slot becomes missed
+    /// when its grace window closes, which is its `resolvedAt`.
+    static func newMisses(_ slots: [RemoteSlot], since: Date, now: Date) -> [RemoteSlot] {
+        slots
+            .filter { slot in
+                guard slot.state == .missed, let missedAt = slot.resolvedAt else { return false }
+                return missedAt > since && missedAt <= now
+            }
+            .sorted { ($0.resolvedAt ?? $0.scheduledAt) < ($1.resolvedAt ?? $1.scheduledAt) }
     }
 }

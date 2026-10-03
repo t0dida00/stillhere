@@ -18,6 +18,8 @@ final class AppRouter {
     var requestedSlot: SlotKey?
     /// Set by an opened invite link; consumed by `UsersView`, which opens Add partner with it.
     var pendingInviteCode: String?
+    /// Set by a partner notification tap; consumed by `MainView`, which shows their calendar.
+    var requestedPartnerID: String?
 }
 
 final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -28,7 +30,15 @@ final class AppDelegate: NSObject, UIApplicationDelegate, UNUserNotificationCent
 
     /// Notification tap → open the check-in screen for that slot.
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse) async {
-        guard let key = SlotKey(userInfo: response.notification.request.content.userInfo) else { return }
+        let userInfo = response.notification.request.content.userInfo
+        if let partnerID = userInfo["partnerID"] as? String {
+            await MainActor.run {
+                AppRouter.shared.selectedTab = .main
+                AppRouter.shared.requestedPartnerID = partnerID
+            }
+            return
+        }
+        guard let key = SlotKey(userInfo: userInfo) else { return }
         await MainActor.run { AppRouter.shared.requestedSlot = key }
     }
 

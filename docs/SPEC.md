@@ -161,10 +161,10 @@ protocol SyncService {
 - Server (Supabase): tables `users`, `partnerships`, `slots`. Row-level security so a user can only read slots of accepted partners and only write their own.
 - Realtime subscription so a partner's check-in appears immediately; APNs push as fallback.
 - **Missed-check-in alert**: an Edge Function (cron every few minutes) marks slots `missed` after the grace window and pushes a notification to accepted partners. This must run server-side because the phone may be off.
-  - **Rule:** alert when **2 check-ins in a row** are missed, counted by scheduled time across midnight (21:00 missed, then 09:00 next day missed, alerts).
-  - A check-in or a skip ends the run.
-  - One alert when the run reaches 2. Each further miss in the same run sends one follow-up. The check-in that ends a run sends an "all good" push.
-  - Store the last alerted run length per user so the same run never alerts twice. The app shares the rule as a pure, unit-tested function (`MissedAlertRule`).
+  - **Rule:** notify accepted partners of **every** missed check-in: one notification per missed slot, all the same level.
+  - Each notification says who missed which check-in ("Linh missed a check-in — The 21:00 check-in on 04/10/2026 wasn't done."), and tapping it opens that partner's calendar.
+  - The server records, per partner pair, up to when misses were notified, so none is sent twice and a new partner isn't flooded with old history. The app shares the rule as a pure, unit-tested function (`MissedAlertRule.newMisses`).
+  - Until the backend exists, the app runs the same check locally (`PartnerAlertService`) on foreground and every 5 minutes while open, and posts local notifications.
 - Store each user's time zone; render each person's calendar in their own local day.
 
 ## 10. Project Structure
@@ -232,5 +232,5 @@ StillAlive/
 ## 13. Open Questions (ask me before Phase 3)
 
 1. Supabase vs CloudKit as the final backend?
-2. ~~Should a missed check-in alert partners immediately or only after both slots in a day are missed?~~ **Decided:** after 2 check-ins in a row are missed (see §9).
+2. ~~Should a missed check-in alert partners immediately or only after both slots in a day are missed?~~ **Decided:** notify partners of every missed check-in (see §9).
 3. Should partners be allowed to send a "ping/are you okay?" message back?

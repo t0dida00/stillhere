@@ -57,6 +57,8 @@ All partner data goes through the `SyncService` protocol, and `Sync.shared` (in 
 
 **Partners in the UI.** `Partnership` holds my side only: status, `isIncoming`, `nickname` (`displayName` prefers it) and `canSeeLocation`, which is what *I* share. My slots and partners' `RemoteSlot`s are both converted to `DisplaySlot` (in `MainView.swift`) so the calendar, day details and location cards treat them the same. Calendar rings and fills come from `DayProgressRing` in `CalendarView.swift`; avatars come from `AvatarView` (photo, or initial on a color derived from the ID). The Map tab (`Features/Map/GlobeMapView.swift`) loads every accepted partner through `Sync.shared` and keeps its own 3D state instead of using the system `MapPitchToggle`, which flickered while the camera flew.
 
+**Partner miss notifications.** `PartnerAlertService` pulls each accepted partner's slots and posts a local notification for every slot that `MissedAlertRule.newMisses` finds missed since `Partnership.lastMissCheckAt`; the first check only sets that marker. It runs after each foreground refresh and in the 5-minute loop. Notifications carry `partnerID` in `userInfo`; `AppDelegate` turns a tap into `AppRouter.requestedPartnerID`, which `MainView` selects. The Phase 3 server push replaces the local check.
+
 **Localization.** English (source) and Vietnamese, in `Resources/Localizable.xcstrings` and `Resources/InfoPlist.xcstrings`. SwiftUI literals are picked up automatically. Text built as a `String` (status labels, ternaries, helper parameters, notification bodies) must use `String(localized:)` or a `LocalizedStringKey` parameter, or it stays English. To add new strings to the catalog from the command line:
 
 ```sh
@@ -73,4 +75,4 @@ xcrun xcstringstool sync StillAlive/Resources/Localizable.xcstrings --stringsdat
 - Location is opt-in and off by default. Never request it before the user enables it.
 - Never block the main thread with sync or location work.
 - Backend secrets go in the git-ignored `Config/Secrets.xcconfig`.
-- Ask the open questions in SPEC §13 before starting Phase 3. Q2 is decided: alert partners after 2 check-ins in a row are missed.
+- Ask the open questions in SPEC §13 before starting Phase 3. Q2 is decided: partners are notified of every missed check-in.

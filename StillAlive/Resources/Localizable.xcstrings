@@ -21,6 +21,16 @@
         }
       }
     },
+    "%@ missed a check-in": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ đã bỏ lỡ một lần điểm danh"
+          }
+        }
+      }
+    },
     "%@ will see where you checked in and where you last used the app. You can turn this off anytime.": {
       "localizations": {
         "vi": {
@@ -1441,6 +1451,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Đây là mã của chính bạn."
+          }
+        }
+      }
+    },
+    "The %@ check-in on %@ wasn't done.": {
+      "localizations": {
+        "en": {
+          "stringUnit": {
+            "state": "new",
+            "value": "The %1$@ check-in on %2$@ wasn't done."
+          }
+        },
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lần điểm danh lúc %@ ngày %@ chưa được thực hiện."
           }
         }
       }

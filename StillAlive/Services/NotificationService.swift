@@ -34,6 +34,21 @@ final class NotificationService {
         }
     }
 
+    /// Tells me a partner missed a check-in. Tapping it opens their calendar.
+    func notifyPartnerMissed(partnerID: String, name: String, slot: RemoteSlot, timeZone: TimeZone) async {
+        var time = Date.FormatStyle(date: .omitted, time: .shortened)
+        time.timeZone = timeZone
+        let content = UNMutableNotificationContent()
+        content.title = String(localized: "\(name) missed a check-in")
+        content.body = String(localized: "The \(slot.scheduledAt.formatted(time)) check-in on \(DayKey.display(slot.dayKey)) wasn't done.")
+        content.sound = .default
+        content.interruptionLevel = .timeSensitive
+        content.threadIdentifier = "partner.\(partnerID)"
+        content.userInfo = ["partnerID": partnerID]
+        let identifier = "partner-miss.\(partnerID).\(slot.dayKey)#\(slot.slotIndex)"
+        try? await center.add(UNNotificationRequest(identifier: identifier, content: content, trigger: nil))
+    }
+
     /// Removes the remaining reminders (pending and delivered) for a resolved slot.
     func cancel(_ key: SlotKey) async {
         let prefix = PlannedReminder.identifierPrefix(for: key)
