@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// Shown over the app on a cold start: three "I'm okay" signs slide past, thumbs-up, check mark,
-/// then OK, each with a ripple; a heartbeat line draws across, and the name fades in. With
+/// Shown over the app on a cold start: three "I'm okay" signs take turns in place, thumbs-up,
+/// check mark, then OK, each zooming in as the previous zooms out, with a ripple; a heartbeat line draws across, and the name fades in. With
 /// Reduce Motion it's a still version showing OK.
 struct SplashView: View {
     @Environment(\.accessibilityReduceMotion) private var reduceMotion
@@ -23,17 +23,16 @@ struct SplashView: View {
                     }
                     SplashSign(step: step)
                         .id(step)
+                        // In place: the next sign zooms in as the previous one zooms out.
                         .transition(.asymmetric(
-                            insertion: .move(edge: .trailing).combined(with: .opacity),
-                            removal: .move(edge: .leading).combined(with: .opacity)
+                            insertion: .scale(scale: 0.2).combined(with: .opacity),
+                            removal: .scale(scale: 0.2).combined(with: .opacity)
                         ))
                         // The first sign is raised like a thumb: from small and tilted back to upright.
                         .scaleEffect(thumbUp ? 1 : 0.4)
                         .rotationEffect(.degrees(thumbUp ? 0 : -35))
                         .opacity(thumbUp ? 1 : 0)
                 }
-                .frame(width: 220)
-                .clipped()
                 .frame(height: 200)
 
                 HeartbeatLine()
@@ -63,7 +62,7 @@ struct SplashView: View {
         withAnimation(.spring(response: 0.45, dampingFraction: 0.55)) { thumbUp = true }
         withAnimation(.easeInOut(duration: 1.4).delay(0.15)) { lineProgress = 1 }
         withAnimation(.easeOut(duration: 0.5).delay(1.2)) { showName = true }
-        // Slide to the next sign while the previous one leaves to the left.
+        // Zoom to the next sign while the previous one zooms out.
         for next in 1..<SplashSign.count {
             try? await Task.sleep(for: .milliseconds(560))
             withAnimation(.spring(response: 0.42, dampingFraction: 0.8)) { step = next }
