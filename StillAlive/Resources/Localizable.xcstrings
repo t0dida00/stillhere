@@ -11,6 +11,16 @@
         }
       }
     },
+    "%@ hasn't added any emergency contacts yet.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ chưa thêm liên hệ khẩn cấp nào."
+          }
+        }
+      }
+    },
     "%@ hasn't checked in with a location yet.": {
       "localizations": {
         "vi": {
@@ -37,6 +47,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "%@ sẽ thấy nơi bạn điểm danh và nơi bạn dùng ứng dụng gần nhất. Bạn có thể tắt bất cứ lúc nào."
+          }
+        }
+      }
+    },
+    "%@'s emergency contacts": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Liên hệ khẩn cấp của %@"
           }
         }
       }
@@ -498,6 +518,26 @@
         }
       }
     },
+    "Copied": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đã sao chép"
+          }
+        }
+      }
+    },
+    "Copy": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sao chép"
+          }
+        }
+      }
+    },
     "Couldn't finish setup": {
       "localizations": {
         "vi": {
@@ -740,6 +780,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Khó"
+          }
+        }
+      }
+    },
+    "Hold a partner for 3 seconds to see their emergency contacts.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Giữ ảnh người thân 3 giây để xem liên hệ khẩn cấp của họ."
           }
         }
       }
@@ -1004,6 +1054,16 @@
         }
       }
     },
+    "No emergency contacts": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Không có liên hệ khẩn cấp"
+          }
+        }
+      }
+    },
     "No invitations right now.": {
       "localizations": {
         "vi": {
@@ -1100,6 +1160,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Mở điểm danh"
+          }
+        }
+      }
+    },
+    "Open in %@": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mở trong %@"
           }
         }
       }
@@ -1599,6 +1669,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Gửi đáp án"
+          }
+        }
+      }
+    },
+    "Tap Copy to put a number or username on the clipboard.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chạm Sao chép để sao chép số điện thoại hoặc tên người dùng."
           }
         }
       }

@@ -20,6 +20,8 @@ protocol SyncService {
     func respond(to partnerID: String, accept: Bool) async throws
     /// Whether the partner turned on location sharing for me.
     func partnerSharesLocation(_ partnerID: String) async throws -> Bool
+    /// The emergency contacts the partner added, for reaching them when they miss check-ins.
+    func emergencyContacts(of partnerID: String) async throws -> [EmergencyContact]
 }
 
 /// The app's sync service. Mock partners until the backend exists (Phase 3).
@@ -34,6 +36,7 @@ struct NoopSyncService: SyncService {
     func sendInvite(to partnerID: String) async throws {}
     func respond(to partnerID: String, accept: Bool) async throws {}
     func partnerSharesLocation(_ partnerID: String) async throws -> Bool { false }
+    func emergencyContacts(of partnerID: String) async throws -> [EmergencyContact] { [] }
 }
 
 /// A test partner's own schedule for `MockSyncService`, saved on this phone. Used by debug
@@ -75,6 +78,23 @@ struct MockSyncService: SyncService {
 
     func partnerSharesLocation(_ partnerID: String) async throws -> Bool {
         Self.sharesLocation(partnerID)
+    }
+
+    func emergencyContacts(of partnerID: String) async throws -> [EmergencyContact] {
+        Self.emergencyContacts(for: partnerID)
+    }
+
+    /// 0 to `PlanLimits.emergencyContacts` made-up contacts per partner, the same every time:
+    /// a Vietnamese mobile number as Phone, Zalo or WhatsApp, or a Telegram username.
+    static func emergencyContacts(for partnerID: String) -> [EmergencyContact] {
+        var rng = SplitMix64(seed: PuzzleGenerator.seed(dayKey: "\(partnerID)|contacts", slotIndex: 0))
+        let count = rng.int(in: 0...PlanLimits.emergencyContacts)
+        let kinds = EmergencyContact.Kind.allCases
+        return (0..<count).map { index in
+            let kind = index == 0 ? .phone : kinds[rng.int(in: 0...(kinds.count - 1))]
+            let number = "+84 9\(rng.int(in: 10...99)) \(rng.int(in: 100...999)) \(rng.int(in: 100...999))"
+            return EmergencyContact(kind: kind, value: kind == .telegram ? "@" + partnerID.lowercased() : number)
+        }
     }
 
     /// Mock rule that's easy to predict when testing: partners whose code ends in a digit share their location.

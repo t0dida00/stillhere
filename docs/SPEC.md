@@ -110,6 +110,7 @@ Tab bar (bottom): **Map | Check-In | Notifications | Users | Settings**. The app
    - Metrics row: `Checked In: n days`, current streak, missed count.
    - Calendar (month view). Each date has a ring with one segment per slot (green checked in, orange skipped, red missed, empty pending) and a filled background once decided (green all done, red any missed).
    - On my calendar, with **Show partners** on, partners appear below each date as small avatars inside their own ring; more than 2 collapse to one avatar plus a count.
+   - Holding a partner's avatar for 3 seconds opens their emergency contacts (from `SyncService.emergencyContacts(of:)`): copy each, or open the call or chat.
    - Tapping a day shows slot details (state, time, place name and coordinates); on my calendar it also lists partners.
    - Last location card below the calendar (mine, or the selected partner's; "doesn't want to share their location" when they don't).
 4. **Notifications**

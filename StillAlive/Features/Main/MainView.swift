@@ -18,6 +18,8 @@ struct MainView: View {
     @State private var calendarPartners: [CalendarPartner] = []
     /// True once the "Check-in" header has scrolled off the top; shows the slim title bar instead.
     @State private var headerScrolledAway = false
+    /// The partner whose emergency contacts are showing, after holding their avatar.
+    @State private var contactsPartner: Partnership?
     @AppStorage("showPartnersOnCalendar") private var showPartners = true
 
     /// Partners drawn on my calendar and listed in day details.
@@ -59,12 +61,18 @@ struct MainView: View {
                                                isSelected: selectedPartnerID == nil) { selectedPartnerID = nil }
                                     ForEach(partners) { partner in
                                         PersonChip(name: partner.displayName, avatarName: partner.displayName, id: partner.partnerID,
-                                                   isSelected: selectedPartnerID == partner.partnerID) { selectedPartnerID = partner.partnerID }
+                                                   isSelected: selectedPartnerID == partner.partnerID,
+                                                   onHold: { contactsPartner = partner }) { selectedPartnerID = partner.partnerID }
                                     }
                                 }
                                 .padding(.horizontal, 4)
                                 .padding(.vertical, 4)
                             }
+                            Text("Hold a partner for 3 seconds to see their emergency contacts.")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .padding(.top, -12)
                         }
                         MetricsView(metrics: MetricsCalculator.compute(
                             slots.map(\.snapshot),
@@ -89,6 +97,11 @@ struct MainView: View {
                     .padding()
                 }
                 .toolbar(.hidden, for: .navigationBar)
+                .sheet(item: $contactsPartner) { partner in
+                    PartnerContactsView(name: partner.displayName, partnerID: partner.partnerID)
+                        .presentationDetents([.medium, .large])
+                }
+                .sensoryFeedback(.impact(weight: .medium), trigger: contactsPartner?.partnerID) { _, new in new != nil }
                 // Like the collapsed large titles on other tabs, without their tall bar at the top.
                 .overlay(alignment: .top) {
                     if headerScrolledAway {
@@ -169,7 +182,11 @@ private struct PersonChip: View {
     let id: String
     var imageData: Data?
     let isSelected: Bool
+    /// Called after holding the avatar for `holdDuration`; nil for me.
+    var onHold: (() -> Void)?
     var action: () -> Void
+
+    static let holdDuration: Double = 3
 
     var body: some View {
         Button(action: action) {
@@ -185,8 +202,13 @@ private struct PersonChip: View {
             }
         }
         .buttonStyle(.plain)
+        .simultaneousGesture(
+            LongPressGesture(minimumDuration: Self.holdDuration).onEnded { _ in onHold?() },
+            including: onHold == nil ? .subviews : .all
+        )
         .accessibilityLabel(name)
         .accessibilityAddTraits(isSelected ? .isSelected : [])
+        .accessibilityAction(named: Text("Emergency contacts")) { onHold?() }
     }
 }
 

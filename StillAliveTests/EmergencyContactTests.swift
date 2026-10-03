@@ -18,3 +18,14 @@ final class EmergencyContactTests: XCTestCase {
         XCTAssertEqual(user.emergencyContacts.map(\.value), Array(["091", "092", "093", "094"].prefix(EmergencyContact.maxCount)))
     }
 }
+
+final class MockPartnerContactsTests: XCTestCase {
+    func testMockContactsAreStableAndWithinTheLimit() {
+        for code in ["DAD00001", "MOM00002", "NBA6EKJ3", "6TMMZ3KQ"] {
+            let first = MockSyncService.emergencyContacts(for: code)
+            XCTAssertLessThanOrEqual(first.count, PlanLimits.emergencyContacts)
+            XCTAssertEqual(first.map(\.value), MockSyncService.emergencyContacts(for: code).map(\.value))
+            XCTAssertTrue(first.allSatisfy { $0.url != nil })
+        }
+    }
+}
