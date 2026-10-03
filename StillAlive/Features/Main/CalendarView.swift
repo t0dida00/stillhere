@@ -1,9 +1,18 @@
 import SwiftUI
 
+/// A partner's day as shown under the date on my calendar.
+struct CalendarPartner: Identifiable {
+    var id: String
+    var name: String
+    var slotsByDay: [String: [DisplaySlot]]
+}
+
 struct CalendarView: View {
     @Binding var month: Date
     let timeZone: TimeZone
     let slotsByDay: [String: [DisplaySlot]]
+    /// Shown as small avatars with their own ring under each date.
+    var partners: [CalendarPartner] = []
     var onSelect: (String) -> Void
 
     private var calendar: Calendar { DayKey.calendar(in: timeZone) }
@@ -34,11 +43,15 @@ struct CalendarView: View {
                         DayCell(
                             day: calendar.component(.day, from: date),
                             states: (slotsByDay[key] ?? []).sorted { $0.scheduledAt < $1.scheduledAt }.map(\.state),
-                            isToday: key == todayKey
+                            isToday: key == todayKey,
+                            partners: partners.compactMap { partner in
+                                partner.slotsByDay[key].map { PartnerDay(id: partner.id, name: partner.name, states: $0.map(\.state)) }
+                            },
+                            reservesPartnerRow: !partners.isEmpty
                         )
                         .onTapGesture { onSelect(key) }
                     } else {
-                        Color.clear.frame(height: 44)
+                        Color.clear.frame(height: partners.isEmpty ? 44 : 64)
                     }
                 }
             }
@@ -78,25 +91,78 @@ struct CalendarView: View {
     }
 }
 
+private struct PartnerDay: Identifiable {
+    var id: String
+    var name: String
+    var states: [SlotState]
+}
+
 private struct DayCell: View {
     let day: Int
     let states: [SlotState]
     let isToday: Bool
+    var partners: [PartnerDay] = []
+    /// Keeps rows the same height when some days have no partner data.
+    var reservesPartnerRow = false
+
+    /// Up to this many partners show individually; more show the first plus a count.
+    private static let maxPartnerMarks = 2
 
     private var isComplete: Bool { !states.isEmpty && done == states.count }
     private var hasMissed: Bool { states.contains(.missed) }
     private var done: Int { states.filter { $0 == .checkedIn || $0 == .skipped }.count }
 
     var body: some View {
-        Text("\(day)")
-            .font(.callout.weight(isToday || isComplete || hasMissed ? .bold : .regular))
-            .foregroundStyle(isComplete || hasMissed ? Color.white : isToday ? Color.accentColor : Color.primary)
-            .frame(width: 36, height: 36)
-            .background { DayProgressRing(states: states) }
-            .frame(maxWidth: .infinity, minHeight: 44)
+        VStack(spacing: 4) {
+            Text("\(day)")
+                .font(.callout.weight(isToday || isComplete || hasMissed ? .bold : .regular))
+                .foregroundStyle(isComplete || hasMissed ? Color.white : isToday ? Color.accentColor : Color.primary)
+                .frame(width: 36, height: 36)
+                .background { DayProgressRing(states: states) }
+            if reservesPartnerRow {
+                HStack(spacing: 2) {
+                    if partners.count > Self.maxPartnerMarks, let first = partners.first {
+                        PartnerMark(partner: first)
+                        HStack(spacing: 1) {
+                            Image(systemName: "person.2.fill")
+                            Text("\(partners.count - 1)")
+                        }
+                        .font(.system(size: 8, weight: .semibold))
+                        .foregroundStyle(.secondary)
+                    } else {
+                        ForEach(partners) { partner in
+                            PartnerMark(partner: partner)
+                        }
+                    }
+                }
+                .frame(height: 18)
+            }
+        }
+        .frame(maxWidth: .infinity, minHeight: 44)
         .contentShape(Rectangle())
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel("Day \(day): " + (states.isEmpty ? "no check-ins" : "\(done) of \(states.count) done; " + states.map(\.label).joined(separator: ", ")))
+        .accessibilityLabel(accessibilityText)
+    }
+
+    private var accessibilityText: String {
+        var text = "Day \(day): " + (states.isEmpty ? "no check-ins" : "\(done) of \(states.count) done; " + states.map(\.label).joined(separator: ", "))
+        for partner in partners {
+            let partnerDone = partner.states.filter { $0 == .checkedIn || $0 == .skipped }.count
+            text += ". \(partner.name): \(partnerDone) of \(partner.states.count) done"
+        }
+        return text
+    }
+}
+
+/// A partner's small avatar inside their day ring.
+private struct PartnerMark: View {
+    let partner: PartnerDay
+
+    var body: some View {
+        AvatarView(name: partner.name, id: partner.id, size: 11)
+            .frame(width: 18, height: 18)
+            .background { DayProgressRing(states: partner.states, lineWidth: 1.5, gap: 1) }
+            .background(Circle().fill(Color(.secondarySystemBackground)))
     }
 }
 

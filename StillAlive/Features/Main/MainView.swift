@@ -13,6 +13,8 @@ struct MainView: View {
     @State private var selectedPartnerID: String?
     @State private var partnerSlots: [DisplaySlot] = []
     @State private var partnerSharesLocation = false
+    /// Every accepted partner's days, shown under the dates on my calendar.
+    @State private var calendarPartners: [CalendarPartner] = []
 
     private var partners: [Partnership] { partnerships.filter(\.isAccepted) }
 
@@ -43,7 +45,8 @@ struct MainView: View {
                             slots.map(\.snapshot),
                             todayKey: DayKey.string(for: .now, in: user.timeZone)
                         ))
-                        CalendarView(month: $month, timeZone: user.timeZone, slotsByDay: byDay) { dayKey in
+                        CalendarView(month: $month, timeZone: user.timeZone, slotsByDay: byDay,
+                                     partners: selectedPartnerID == nil ? calendarPartners : []) { dayKey in
                             selectedDay = SlotDay(dayKey: dayKey)
                         }
                         if let partner = selectedPartner {
@@ -56,11 +59,19 @@ struct MainView: View {
                 }
                 .navigationTitle(selectedPartner?.displayName ?? "StillAlive?")
                 .sheet(item: $selectedDay) { day in
-                    DayDetailView(dayKey: day.dayKey, slots: byDay[day.dayKey] ?? [], timeZone: user.timeZone)
-                        .presentationDetents([.medium])
+                    DayDetailView(dayKey: day.dayKey, slots: byDay[day.dayKey] ?? [], timeZone: user.timeZone,
+                                  partners: selectedPartnerID == nil
+                                      ? calendarPartners.compactMap { partner in
+                                          partner.slotsByDay[day.dayKey].map { (partner, $0) }
+                                      }.map { DayDetailView.PartnerSlots(id: $0.0.id, name: $0.0.name, slots: $0.1) }
+                                      : [])
+                        .presentationDetents([.medium, .large])
                 }
                 .task(id: selectedPartnerID) {
                     await loadPartnerSlots()
+                }
+                .task(id: partners.map { "\($0.partnerID)|\($0.displayName)" }) {
+                    await loadCalendarPartners()
                 }
                 .onChange(of: partners.map(\.partnerID)) { _, ids in
                     // The selected partner was removed.
@@ -74,6 +85,17 @@ struct MainView: View {
 
     private var selectedPartner: Partnership? {
         partners.first { $0.partnerID == selectedPartnerID }
+    }
+
+    private func loadCalendarPartners() async {
+        var loaded: [CalendarPartner] = []
+        for partner in partners {
+            let remote = (try? await Sync.shared.pull(partnerID: partner.partnerID)) ?? []
+            let byDay = Dictionary(grouping: remote.map(DisplaySlot.init), by: \.key.dayKey)
+                .mapValues { $0.sorted { $0.scheduledAt < $1.scheduledAt } }
+            loaded.append(CalendarPartner(id: partner.partnerID, name: partner.displayName, slotsByDay: byDay))
+        }
+        calendarPartners = loaded
     }
 
     private func loadPartnerSlots() async {
@@ -155,40 +177,69 @@ private struct SlotDay: Identifiable {
 }
 
 struct DayDetailView: View {
+    struct PartnerSlots: Identifiable {
+        var id: String
+        var name: String
+        var slots: [DisplaySlot]
+    }
+
     let dayKey: String
     let slots: [DisplaySlot]
     let timeZone: TimeZone
+    var partners: [PartnerSlots] = []
 
     var body: some View {
         NavigationStack {
             List {
-                if slots.isEmpty {
-                    Text("No check-ins scheduled this day.")
-                        .foregroundStyle(.secondary)
+                Section {
+                    if slots.isEmpty {
+                        Text("No check-ins scheduled this day.")
+                            .foregroundStyle(.secondary)
+                    }
+                    slotRows(slots)
+                } header: {
+                    if !partners.isEmpty { Text("Me") }
                 }
-                ForEach(slots.sorted { $0.scheduledAt < $1.scheduledAt }) { slot in
-                    VStack(alignment: .leading, spacing: 4) {
-                        HStack {
-                            SlotMarker(state: slot.state, size: 12)
-                            Text(slot.scheduledAt.formatted(time))
-                                .font(.headline)
-                            Spacer()
-                            Text(slot.state.label)
-                                .foregroundStyle(.secondary)
+                ForEach(partners) { partner in
+                    Section {
+                        slotRows(partner.slots)
+                    } header: {
+                        HStack(spacing: 8) {
+                            AvatarView(name: partner.name, id: partner.id, size: 20)
+                                .frame(width: 26, height: 26)
+                                .background { DayProgressRing(states: partner.slots.map(\.state), lineWidth: 2, gap: 1) }
+                            Text(partner.name)
                         }
-                        if let resolvedAt = slot.resolvedAt, slot.state != .missed {
-                            Text("At \(resolvedAt.formatted(time))")
-                                .font(.subheadline)
-                                .foregroundStyle(.secondary)
-                        }
-                        if slot.latitude != nil || slot.placeName != nil {
-                            SlotPlaceLabel(slot: slot)
-                        }
+                        .textCase(nil)
                     }
                 }
             }
-            .navigationTitle(dayKey)
+            .navigationTitle(DayKey.display(dayKey))
             .navigationBarTitleDisplayMode(.inline)
+        }
+    }
+
+    @ViewBuilder
+    private func slotRows(_ slots: [DisplaySlot]) -> some View {
+        ForEach(slots.sorted { $0.scheduledAt < $1.scheduledAt }) { slot in
+            VStack(alignment: .leading, spacing: 4) {
+                HStack {
+                    SlotMarker(state: slot.state, size: 12)
+                    Text(slot.scheduledAt.formatted(time))
+                        .font(.headline)
+                    Spacer()
+                    Text(slot.state.label)
+                        .foregroundStyle(.secondary)
+                }
+                if let resolvedAt = slot.resolvedAt, slot.state != .missed {
+                    Text("At \(resolvedAt.formatted(time))")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
+                if slot.latitude != nil || slot.placeName != nil {
+                    SlotPlaceLabel(slot: slot)
+                }
+            }
         }
     }
 

@@ -16,6 +16,11 @@ final class SlotScheduleTests: XCTestCase {
         XCTAssertEqual(DayKey.string(for: instant, in: newYork), "2026-09-30")
     }
 
+    func testDayKeyDisplay() {
+        XCTAssertEqual(DayKey.display("2026-10-02"), "02/10/2026")
+        XCTAssertEqual(DayKey.display("bad"), "bad")
+    }
+
     func testDayKeyArithmetic() {
         XCTAssertEqual(DayKey.adding(-1, to: "2026-03-01"), "2026-02-28")
         XCTAssertEqual(DayKey.adding(1, to: "2026-12-31"), "2027-01-01")

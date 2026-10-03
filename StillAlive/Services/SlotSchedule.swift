@@ -40,6 +40,13 @@ enum DayKey {
         return calendar(in: timeZone).date(from: DateComponents(year: parts[0], month: parts[1], day: parts[2]))
     }
 
+    /// "2026-10-02" → "02/10/2026" for display.
+    static func display(_ key: String) -> String {
+        let parts = key.split(separator: "-")
+        guard parts.count == 3 else { return key }
+        return "\(parts[2])/\(parts[1])/\(parts[0])"
+    }
+
     /// The key `days` days after `key` (negative goes back).
     static func adding(_ days: Int, to key: String) -> String? {
         let utc = TimeZone(identifier: "UTC")!
