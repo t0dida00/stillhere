@@ -61,7 +61,7 @@ All partner data goes through the `SyncService` protocol, and `Sync.shared` (in 
 
 **Debug test partners.** Debug builds accept `-mockPartner "Name@HH:MM/G"` launch arguments (repeatable), handled by `MockScenario` on each foreground: an accepted partner with that daily check-in time and a G-minute grace window who misses every check-in from the start of today (`MockSchedule`, saved in UserDefaults). With devicectl, put the app's arguments after `--`: `xcrun devicectl device process launch --device <udid> dev.khoa.stillalive -- -mockPartner "Dad@04:28/1"`.
 
-**Plan limits.** All free-plan limits live in `Models/PlanLimits.swift` (3 partners, 3 emergency contacts, 3 check-in times); `EmergencyContact.maxCount` and Settings' slot limit read from it. The partner limit counts accepted partners plus pending sent invites (`PlanLimits.partnerSlotsUsed`). Existing partners over the limit are kept; only new accepts and adds are blocked.
+**Plan limits.** All free-plan limits live in `Models/PlanLimits.swift` (1 partner, 3 emergency contacts, 3 check-in times); `EmergencyContact.maxCount` and Settings' slot limit read from it. The partner limit counts accepted partners plus pending sent invites (`PlanLimits.partnerSlotsUsed`). Existing partners over the limit are kept; only new accepts and adds are blocked.
 
 **Localization.** English (source) and Vietnamese, in `Resources/Localizable.xcstrings` and `Resources/InfoPlist.xcstrings`. SwiftUI literals are picked up automatically. Text built as a `String` (status labels, ternaries, helper parameters, notification bodies) must use `String(localized:)` or a `LocalizedStringKey` parameter, or it stays English. To add new strings to the catalog from the command line:
 

@@ -1639,16 +1639,6 @@
         }
       }
     },
-    "The free plan has up to %lld partners, counting invites you've sent. Premium will let you add more. For now, remove a partner or cancel a sent invite to make room.": {
-      "localizations": {
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Gói miễn phí có tối đa %lld người thân, tính cả lời mời bạn đã gửi. Premium sẽ cho phép thêm nhiều hơn. Hiện tại, hãy xoá một người thân hoặc huỷ một lời mời đã gửi để có chỗ trống."
-          }
-        }
-      }
-    },
     "The phone number registered with WhatsApp, with country code.": {
       "localizations": {
         "vi": {
@@ -1839,22 +1829,32 @@
         }
       }
     },
-    "You have %lld partners, the most on the free plan.": {
-      "localizations": {
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Bạn đã có %lld người thân, mức tối đa của gói miễn phí."
-          }
-        }
-      }
-    },
     "You've already added this partner.": {
       "localizations": {
         "vi": {
           "stringUnit": {
             "state": "translated",
             "value": "Bạn đã thêm người thân này rồi."
+          }
+        }
+      }
+    },
+    "You've reached the free plan's partner limit, which counts invites you've sent. Premium will let you add more. For now, remove a partner or cancel a sent invite to make room.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bạn đã đạt giới hạn người thân của gói miễn phí, tính cả lời mời đã gửi. Premium sẽ cho phép thêm nhiều hơn. Hiện tại, hãy xoá một người thân hoặc huỷ một lời mời đã gửi để có chỗ trống."
+          }
+        }
+      }
+    },
+    "You've reached the free plan's partner limit.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bạn đã đạt giới hạn người thân của gói miễn phí."
           }
         }
       }

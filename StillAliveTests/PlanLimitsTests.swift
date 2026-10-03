@@ -6,24 +6,22 @@ final class PlanLimitsTests: XCTestCase {
         Partnership(partnerID: UUID().uuidString, partnerName: "P", status: status, isIncoming: incoming)
     }
 
-    func testAcceptedAndSentInvitesCountTowardThePartnerLimit() {
-        let two = [partner("accepted"), partner("pending")]
-        XCTAssertEqual(PlanLimits.partnerSlotsUsed(two), 2)
-        XCTAssertTrue(PlanLimits.canAddPartner(two))
+    func testFreePlanLimits() {
+        XCTAssertEqual(PlanLimits.partners, 1)
+        XCTAssertEqual(EmergencyContact.maxCount, 3)
+        XCTAssertEqual(PlanLimits.checkInTimes, 3)
+    }
 
-        let full = two + [partner("accepted")]
-        XCTAssertFalse(PlanLimits.canAddPartner(full))
+    func testAcceptedPartnersAndSentInvitesFillTheLimit() {
+        XCTAssertTrue(PlanLimits.canAddPartner([]))
+        XCTAssertFalse(PlanLimits.canAddPartner([partner("accepted")]))
+        // A sent invite takes the place of the partner it may become.
+        XCTAssertFalse(PlanLimits.canAddPartner([partner("pending")]))
     }
 
     func testIncomingRequestsAndDeclinedDoNotCount() {
-        let list = [partner("accepted"), partner("accepted"), partner("pending", incoming: true), partner("declined")]
-        XCTAssertEqual(PlanLimits.partnerSlotsUsed(list), 2)
+        let list = [partner("pending", incoming: true), partner("declined")]
+        XCTAssertEqual(PlanLimits.partnerSlotsUsed(list), 0)
         XCTAssertTrue(PlanLimits.canAddPartner(list))
-    }
-
-    func testSharedLimitsAreThree() {
-        XCTAssertEqual(PlanLimits.partners, 3)
-        XCTAssertEqual(EmergencyContact.maxCount, 3)
-        XCTAssertEqual(PlanLimits.checkInTimes, 3)
     }
 }

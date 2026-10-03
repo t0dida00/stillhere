@@ -2,7 +2,7 @@ import Foundation
 
 /// Free-plan limits, in one place so a future Premium plan only changes them here.
 enum PlanLimits {
-    static let partners = 3
+    static let partners = 1
     static let emergencyContacts = 3
     static let checkInTimes = 3
 

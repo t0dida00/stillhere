@@ -113,7 +113,7 @@ struct UsersView: View {
             .alert("Premium is coming soon", isPresented: $showingPremium) {
                 Button("OK", role: .cancel) {}
             } message: {
-                Text("The free plan has up to \(PlanLimits.partners) partners, counting invites you've sent. Premium will let you add more. For now, remove a partner or cancel a sent invite to make room.")
+                Text("You've reached the free plan's partner limit, which counts invites you've sent. Premium will let you add more. For now, remove a partner or cancel a sent invite to make room.")
             }
         }
     }
@@ -504,7 +504,7 @@ private struct RequestRow: View {
                 }
             }
             if !canAccept {
-                Text("You have \(PlanLimits.partners) partners, the most on the free plan.")
+                Text("You've reached the free plan's partner limit.")
                     .font(.caption)
                     .foregroundStyle(.secondary)
             }

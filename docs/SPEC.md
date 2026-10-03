@@ -120,7 +120,7 @@ Tab bar (bottom): **Map | Check-In | Notifications | Users | Settings**. The app
    - Emergency contacts (own section under Me): up to 3 in any mix of Phone, Zalo, WhatsApp and Telegram (e.g. 3 phones, or 2 phones and a Zalo), edited together in one form; each row has its app (tap the badge to change it), its own field and hint. Partners will use them to reach you when you miss check-ins (shared once sync exists); each has a link that opens the call or chat (`tel:`, `zalo.me`, `wa.me`, `t.me`).
    - Requests: incoming invitations with Accept/Decline; Sent invites waiting for an answer.
    - Partners: avatar, nickname (only I see it), status, per-partner "Share my location" toggle with an explanation popup.
-   - **Free-plan limits** (`PlanLimits`): 3 partners (accepted plus sent invites still waiting), 3 emergency contacts, 3 check-in times. At the partner limit, incoming requests still arrive, but Accept and "Add partner by code" become "Upgrade to Premium" (a placeholder message until Premium exists); Decline still works.
+   - **Free-plan limits** (`PlanLimits`): 1 partner (accepted plus sent invites still waiting), 3 emergency contacts, 3 check-in times. At the partner limit, incoming requests still arrive, but Accept and "Add partner by code" become "Upgrade to Premium" (a placeholder message until Premium exists); Decline still works.
 6. **Settings**
    - Slot times (add/remove/edit, default 9:00 and 21:00, at most 3), grace window, reminder interval.
    - Puzzle difficulty.
