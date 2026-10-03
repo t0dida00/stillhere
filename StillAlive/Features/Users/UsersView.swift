@@ -497,7 +497,7 @@ private struct RequestRow: View {
                         .buttonStyle(.borderedProminent)
                 } else {
                     Button(action: onUpgrade) {
-                        Label("Upgrade to Premium", systemImage: "crown.fill")
+                        Text("Upgrade to Premium")
                     }
                     .buttonStyle(.borderedProminent)
                     .tint(.orange)
@@ -520,7 +520,7 @@ private struct UpgradeButton: View {
     var body: some View {
         Button(action: action) {
             HStack {
-                Label("Upgrade to Premium", systemImage: "crown.fill")
+                Text("Upgrade to Premium")
                     .foregroundStyle(.orange)
                 Spacer()
                 Text("for more partners")
