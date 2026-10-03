@@ -59,6 +59,9 @@ struct CheckInService {
         await notifications.reschedule(plan, now: now)
     }
 
+    /// How often the last location is refreshed while the app is open.
+    static let locationRefreshInterval: Duration = .seconds(5 * 60)
+
     /// Saves where the app is being used, when location sharing is on and allowed.
     func recordLastLocation(now: Date = .now) async {
         guard let user = context.fetchUser(), context.fetchOrCreateSettings().shareLocation,

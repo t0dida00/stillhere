@@ -15,6 +15,12 @@ struct MainView: View {
     @State private var partnerSharesLocation = false
     /// Every accepted partner's days, shown under the dates on my calendar.
     @State private var calendarPartners: [CalendarPartner] = []
+    @AppStorage("showPartnersOnCalendar") private var showPartners = true
+
+    /// Partners drawn on my calendar and listed in day details.
+    private var visibleCalendarPartners: [CalendarPartner] {
+        selectedPartnerID == nil && showPartners ? calendarPartners : []
+    }
 
     private var partners: [Partnership] { partnerships.filter(\.isAccepted) }
 
@@ -45,8 +51,14 @@ struct MainView: View {
                             slots.map(\.snapshot),
                             todayKey: DayKey.string(for: .now, in: user.timeZone)
                         ))
+                        if selectedPartnerID == nil, !partners.isEmpty {
+                            Toggle(isOn: $showPartners) {
+                                Label("Show partners", systemImage: "person.2")
+                            }
+                            .padding(.horizontal, 4)
+                        }
                         CalendarView(month: $month, timeZone: user.timeZone, slotsByDay: byDay,
-                                     partners: selectedPartnerID == nil ? calendarPartners : []) { dayKey in
+                                     partners: visibleCalendarPartners) { dayKey in
                             selectedDay = SlotDay(dayKey: dayKey)
                         }
                         if let partner = selectedPartner {
@@ -60,11 +72,9 @@ struct MainView: View {
                 .navigationTitle(selectedPartner?.displayName ?? "StillAlive?")
                 .sheet(item: $selectedDay) { day in
                     DayDetailView(dayKey: day.dayKey, slots: byDay[day.dayKey] ?? [], timeZone: user.timeZone,
-                                  partners: selectedPartnerID == nil
-                                      ? calendarPartners.compactMap { partner in
-                                          partner.slotsByDay[day.dayKey].map { (partner, $0) }
-                                      }.map { DayDetailView.PartnerSlots(id: $0.0.id, name: $0.0.name, slots: $0.1) }
-                                      : [])
+                                  partners: visibleCalendarPartners.compactMap { partner in
+                                      partner.slotsByDay[day.dayKey].map { DayDetailView.PartnerSlots(id: partner.id, name: partner.name, slots: $0) }
+                                  })
                         .presentationDetents([.medium, .large])
                 }
                 .task(id: selectedPartnerID) {
@@ -257,7 +267,19 @@ private struct SlotPlaceLabel: View {
     @State private var lookupFailed = false
 
     var body: some View {
-        Label(slot.placeName ?? lookedUp ?? (lookupFailed ? "Unknown place" : "Finding address…"), systemImage: "location")
+        Label {
+            VStack(alignment: .leading, spacing: 2) {
+                Text(slot.placeName ?? lookedUp ?? (lookupFailed ? "Unknown place" : "Finding address…"))
+                if let lat = slot.latitude, let lon = slot.longitude {
+                    Text(String(format: "%.5f, %.5f", lat, lon))
+                        .font(.caption.monospacedDigit())
+                        .foregroundStyle(.tertiary)
+                        .textSelection(.enabled)
+                }
+            }
+        } icon: {
+            Image(systemName: "location")
+        }
             .font(.subheadline)
             .foregroundStyle(.secondary)
             .task(id: slot.id) {

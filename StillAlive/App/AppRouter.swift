@@ -8,7 +8,7 @@ final class AppRouter {
     static let shared = AppRouter()
 
     enum Tab: Hashable {
-        case settings, main, users
+        case map, main, users, settings
     }
 
     var selectedTab: Tab = .main

@@ -27,15 +27,18 @@ struct RootView: View {
                 OnboardingView()
             } else {
                 TabView(selection: $router.selectedTab) {
-                    SettingsView()
-                        .tabItem { Label("Settings", systemImage: "gearshape") }
-                        .tag(AppRouter.Tab.settings)
+                    GlobeMapView()
+                        .tabItem { Label("Map", systemImage: "globe") }
+                        .tag(AppRouter.Tab.map)
                     MainView()
-                        .tabItem { Label("Main", systemImage: "calendar") }
+                        .tabItem { Label("Check-In", systemImage: "calendar.badge.checkmark") }
                         .tag(AppRouter.Tab.main)
                     UsersView()
                         .tabItem { Label("Users", systemImage: "person.2") }
                         .tag(AppRouter.Tab.users)
+                    SettingsView()
+                        .tabItem { Label("Settings", systemImage: "gearshape") }
+                        .tag(AppRouter.Tab.settings)
                 }
                 .fullScreenCover(item: $router.presentedCheckIn) { key in
                     CheckInView(slotKey: key)
@@ -50,6 +53,15 @@ struct RootView: View {
             await service.reschedule()
             await service.recordLastLocation()
             await service.backfillPlaceNames()
+        }
+        // Keeps the last location fresh while the app is open; stops when it leaves the foreground.
+        .task(id: scenePhase) {
+            guard scenePhase == .active, !users.isEmpty else { return }
+            while !Task.isCancelled {
+                try? await Task.sleep(for: CheckInService.locationRefreshInterval)
+                guard !Task.isCancelled else { return }
+                await CheckInService(context: context).recordLastLocation()
+            }
         }
         // Notification or alarm tap while already active.
         .onChange(of: router.requestedSlot) {
