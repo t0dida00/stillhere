@@ -8,8 +8,12 @@ final class PlanLimitsTests: XCTestCase {
 
     func testFreePlanLimits() {
         XCTAssertEqual(PlanLimits.partners, 1)
-        XCTAssertEqual(EmergencyContact.maxCount, 3)
-        XCTAssertEqual(PlanLimits.checkInTimes, 3)
+        XCTAssertEqual(EmergencyContact.maxCount, 2)
+        XCTAssertEqual(PlanLimits.checkInTimes, 1)
+    }
+
+    func testNewUsersStartWithinTheCheckInTimeLimit() {
+        XCTAssertLessThanOrEqual(AppSettings().slotTimes.count, PlanLimits.checkInTimes)
     }
 
     func testAcceptedPartnersAndSentInvitesFillTheLimit() {

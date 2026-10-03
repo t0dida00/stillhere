@@ -44,7 +44,7 @@ enum SlotState: String, Codable { case pending, checkedIn, skipped, missed }
     var lastPlaceName: String?
     var lastLocationAt: Date?
     @Attribute(.externalStorage) var avatarData: Data? // 256 px JPEG; nil shows the initial
-    var emergencyContactsData: Data? // JSON [EmergencyContact]: up to 3 of {kind: phone|zalo|whatsApp|telegram, value}
+    var emergencyContactsData: Data? // JSON [EmergencyContact]: up to 2 of {kind: phone|zalo|whatsApp|telegram, value}
 }
 
 @Model final class CheckInSlot {
@@ -71,7 +71,7 @@ enum SlotState: String, Codable { case pending, checkedIn, skipped, missed }
 }
 
 @Model final class AppSettings {
-    var slotTimes: [Int]      // minutes from midnight, default [540, 1260], at most 3
+    var slotTimes: [Int]      // minutes from midnight, default [540], at most 1 on the free plan
     var graceMinutes: Int     // default 60
     var difficulty: Int       // 1...3
     var shareLocation: Bool   // default false
@@ -117,12 +117,12 @@ Tab bar (bottom): **Map | Check-In | Notifications | Users | Settings**. The app
    - Tap to mark read and open that partner's calendar; swipe to delete; "Mark all as read".
 5. **Users**
    - Me: avatar (photo or initial), editable name, invite code, QR code and share link (`stillalive://invite/<code>`).
-   - Emergency contacts (own section under Me): up to 3 in any mix of Phone, Zalo, WhatsApp and Telegram (e.g. 3 phones, or 2 phones and a Zalo), edited together in one form; each row has its app (tap the badge to change it), its own field and hint. Partners will use them to reach you when you miss check-ins (shared once sync exists); each has a link that opens the call or chat (`tel:`, `zalo.me`, `wa.me`, `t.me`).
+   - Emergency contacts (own section under Me): up to 2 in any mix of Phone, Zalo, WhatsApp and Telegram (e.g. 2 phones, or a phone and a Zalo), edited together in one form; each row has its app (tap the badge to change it), its own field and hint. Partners will use them to reach you when you miss check-ins (shared once sync exists); each has a link that opens the call or chat (`tel:`, `zalo.me`, `wa.me`, `t.me`).
    - Requests: incoming invitations with Accept/Decline; Sent invites waiting for an answer.
    - Partners: avatar, nickname (only I see it), status, per-partner "Share my location" toggle with an explanation popup.
-   - **Free-plan limits** (`PlanLimits`): 1 partner (accepted plus sent invites still waiting), 3 emergency contacts, 3 check-in times. At the partner limit, incoming requests still arrive, but Accept and "Add partner by code" become "Upgrade to Premium" (a placeholder message until Premium exists); Decline still works.
+   - **Free-plan limits** (`PlanLimits`): 1 partner (accepted plus sent invites still waiting), 2 emergency contacts, 1 check-in time. At each limit the add button becomes "Upgrade to Premium"; at the partner limit, incoming requests still arrive, but Accept becomes "Upgrade to Premium" too (a placeholder message until Premium exists); Decline still works.
 6. **Settings**
-   - Slot times (add/remove/edit, default 9:00 and 21:00, at most 3), grace window, reminder interval.
+   - Slot times (add/remove/edit, default 9:00, at most 1 on the free plan), grace window, reminder interval.
    - Puzzle difficulty.
    - Location toggle.
    - Time zone (default: device).

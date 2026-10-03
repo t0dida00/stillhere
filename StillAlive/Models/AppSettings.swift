@@ -11,7 +11,7 @@ final class AppSettings {
     var shareLocation: Bool
     var remindEveryMinutes: Int
 
-    init(slotTimes: [Int] = [540, 1260], graceMinutes: Int = 60, difficulty: Int = 1, shareLocation: Bool = false, remindEveryMinutes: Int = 10) {
+    init(slotTimes: [Int] = [540], graceMinutes: Int = 60, difficulty: Int = 1, shareLocation: Bool = false, remindEveryMinutes: Int = 10) {
         self.slotTimes = slotTimes
         self.graceMinutes = graceMinutes
         self.difficulty = difficulty

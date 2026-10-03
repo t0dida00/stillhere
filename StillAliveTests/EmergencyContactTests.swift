@@ -11,10 +11,10 @@ final class EmergencyContactTests: XCTestCase {
         XCTAssertNil(EmergencyContact(kind: .phone, value: "  ").url)
     }
 
-    func testUserKeepsAtMostThreeContacts() {
+    func testUserKeepsAtMostTheContactLimit() {
         let user = LocalUser(id: "ME000001", displayName: "Me")
         XCTAssertEqual(user.emergencyContacts, [])
         user.emergencyContacts = (1...4).map { EmergencyContact(kind: .phone, value: "09\($0)") }
-        XCTAssertEqual(user.emergencyContacts.map(\.value), ["091", "092", "093"])
+        XCTAssertEqual(user.emergencyContacts.map(\.value), Array(["091", "092", "093", "094"].prefix(EmergencyContact.maxCount)))
     }
 }

@@ -378,6 +378,16 @@
         }
       }
     },
+    "Changes apply today, except times earlier than a check-in you've already finished today; those start tomorrow.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Thay đổi có hiệu lực ngay hôm nay, trừ những giờ sớm hơn lần điểm danh bạn đã hoàn tất hôm nay; các giờ đó bắt đầu từ ngày mai."
+          }
+        }
+      }
+    },
     "Check In": {
       "localizations": {
         "vi": {
@@ -1739,16 +1749,6 @@
         }
       }
     },
-    "Up to %lld times a day. Changes apply today, except times earlier than a check-in you've already finished today; those start tomorrow.": {
-      "localizations": {
-        "vi": {
-          "stringUnit": {
-            "state": "translated",
-            "value": "Tối đa %lld lần mỗi ngày. Thay đổi có hiệu lực ngay hôm nay, trừ những giờ sớm hơn lần điểm danh bạn đã hoàn tất hôm nay; các giờ đó bắt đầu từ ngày mai."
-          }
-        }
-      }
-    },
     "Up to %lld ways for partners to reach you if you miss check-ins.": {
       "localizations": {
         "vi": {
@@ -1835,6 +1835,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "Bạn đã thêm người thân này rồi."
+          }
+        }
+      }
+    },
+    "You've reached the free plan's check-in time limit. Premium will let you add more. You can still change the time you have.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bạn đã đạt giới hạn giờ điểm danh của gói miễn phí. Premium sẽ cho phép thêm nhiều hơn. Bạn vẫn có thể đổi giờ hiện có."
+          }
+        }
+      }
+    },
+    "You've reached the free plan's emergency contact limit. Premium will let you add more.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bạn đã đạt giới hạn liên hệ khẩn cấp của gói miễn phí. Premium sẽ cho phép thêm nhiều hơn."
           }
         }
       }
@@ -1935,6 +1955,26 @@
           "stringUnit": {
             "state": "translated",
             "value": "vd: Mẹ"
+          }
+        }
+      }
+    },
+    "for more check-in times": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "để có thêm giờ điểm danh"
+          }
+        }
+      }
+    },
+    "for more contacts": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "để có thêm liên hệ"
           }
         }
       }

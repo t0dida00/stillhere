@@ -74,7 +74,7 @@ struct UsersView: View {
                             Label("Add partner by code", systemImage: "person.badge.plus")
                         }
                     } else {
-                        UpgradeButton { showingPremium = true }
+                        UpgradeRow(detail: "for more partners") { showingPremium = true }
                     }
                 } header: {
                     Text("Partners \(PlanLimits.partnerSlotsUsed(partnerships))/\(PlanLimits.partners)")
@@ -110,11 +110,8 @@ struct UsersView: View {
                 linkedCode = code
                 addingPartner = true
             }
-            .alert("Premium is coming soon", isPresented: $showingPremium) {
-                Button("OK", role: .cancel) {}
-            } message: {
-                Text("You've reached the free plan's partner limit, which counts invites you've sent. Premium will let you add more. For now, remove a partner or cancel a sent invite to make room.")
-            }
+            .premiumComingSoon(isPresented: $showingPremium,
+                               message: "You've reached the free plan's partner limit, which counts invites you've sent. Premium will let you add more. For now, remove a partner or cancel a sent invite to make room.")
         }
     }
 
@@ -270,6 +267,7 @@ private struct EmergencyContactsEditor: View {
     @Environment(\.dismiss) private var dismiss
     @State private var rows: [EmergencyContact] = []
     @FocusState private var focused: UUID?
+    @State private var showingPremium = false
 
     private var canSave: Bool {
         rows.allSatisfy { !$0.value.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty }
@@ -286,7 +284,9 @@ private struct EmergencyContactsEditor: View {
                     }
                     .onDelete { rows.remove(atOffsets: $0) }
 
-                    if rows.count < EmergencyContact.maxCount {
+                    if rows.count >= EmergencyContact.maxCount {
+                        UpgradeRow(detail: "for more contacts") { showingPremium = true }
+                    } else {
                         Menu {
                             ForEach(EmergencyContact.Kind.allCases) { kind in
                                 Button {
@@ -307,6 +307,8 @@ private struct EmergencyContactsEditor: View {
             }
             .navigationTitle("Emergency contacts")
             .navigationBarTitleDisplayMode(.inline)
+            .premiumComingSoon(isPresented: $showingPremium,
+                               message: "You've reached the free plan's emergency contact limit. Premium will let you add more.")
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
                     Button("Cancel") { dismiss() }
@@ -513,22 +515,6 @@ private struct RequestRow: View {
     }
 }
 
-/// Shown where adding a partner would go over the free plan's limit.
-private struct UpgradeButton: View {
-    var action: () -> Void
-
-    var body: some View {
-        Button(action: action) {
-            HStack {
-                Text("Upgrade to Premium")
-                Spacer()
-                Text("for more partners")
-                    .font(.caption)
-            }
-            .foregroundStyle(.orange)
-        }
-    }
-}
 
 private struct SentRow: View {
     let partnership: Partnership

@@ -20,6 +20,7 @@ private struct SettingsForm: View {
     @Bindable var user: LocalUser
     @Environment(\.modelContext) private var context
     @State private var locationDenied = false
+    @State private var showingPremium = false
     @Environment(\.openURL) private var openURL
 
     /// The language the app is showing, named in that language (e.g. "Tiếng Việt").
@@ -43,11 +44,13 @@ private struct SettingsForm: View {
                     Button("Add check-in time", systemImage: "plus") {
                         settings.slotTimes.append(min((settings.slotTimes.max() ?? 540) + 60, SlotPlanner.minutesPerDay - 1))
                     }
+                } else {
+                    UpgradeRow(detail: "for more check-in times") { showingPremium = true }
                 }
             } header: {
                 Text("Check-in times")
             } footer: {
-                Text("Up to \(Self.maxSlots) times a day. Changes apply today, except times earlier than a check-in you've already finished today; those start tomorrow.")
+                Text("Changes apply today, except times earlier than a check-in you've already finished today; those start tomorrow.")
             }
 
             Section("Grace & reminders") {
@@ -108,6 +111,8 @@ private struct SettingsForm: View {
                 NavigationLink("Auto-open with Shortcuts") { ShortcutsGuideView() }
             }
         }
+        .premiumComingSoon(isPresented: $showingPremium,
+                           message: "You've reached the free plan's check-in time limit. Premium will let you add more. You can still change the time you have.")
         .onChange(of: scheduleSignature) {
             Task { await CheckInService(context: context).refresh() }
         }

@@ -20,7 +20,8 @@ final class SlotResolverTests: XCTestCase {
         )
         context = container.mainContext
         user = LocalUser(id: "TEST0001", displayName: "Test", timeZoneID: "UTC", createdAt: date("2026-09-29T08:00:00Z"))
-        settings = AppSettings()
+        // Two times a day, independent of the free-plan default.
+        settings = AppSettings(slotTimes: [540, 1260])
         context.insert(user)
         context.insert(settings)
     }
