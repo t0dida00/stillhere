@@ -952,6 +952,16 @@
         }
       }
     },
+    "Open in Maps": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mở trong Bản đồ"
+          }
+        }
+      }
+    },
     "Open the Shortcuts app and go to Automation.": {
       "localizations": {
         "vi": {

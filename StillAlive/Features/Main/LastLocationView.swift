@@ -95,16 +95,28 @@ private struct LocationCard: View {
                 .id("\(coordinate.latitude),\(coordinate.longitude)")
                 .frame(height: 150)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
+                .contentShape(RoundedRectangle(cornerRadius: 12))
+                .onTapGesture { openInMaps(coordinate) }
                 .accessibilityHidden(true)
 
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(placeName ?? String(format: "%.4f, %.4f", coordinate.latitude, coordinate.longitude))
-                        .font(.subheadline.weight(.semibold))
-                    if let updatedAt {
-                        Text("Updated \(updatedAt.formatted(.relative(presentation: .named)))")
-                            .font(.caption)
-                            .foregroundStyle(.secondary)
+                HStack(alignment: .top) {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(placeName ?? String(format: "%.4f, %.4f", coordinate.latitude, coordinate.longitude))
+                            .font(.subheadline.weight(.semibold))
+                        if let updatedAt {
+                            Text("Updated \(updatedAt.formatted(.relative(presentation: .named)))")
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                        }
                     }
+                    Spacer()
+                    Button {
+                        openInMaps(coordinate)
+                    } label: {
+                        Label("Open in Maps", systemImage: "arrow.up.forward.app")
+                            .font(.subheadline)
+                    }
+                    .buttonStyle(.borderless)
                 }
             } else if showsPlaceholder {
                 RoundedRectangle(cornerRadius: 12)
@@ -128,5 +140,15 @@ private struct LocationCard: View {
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
         .background(Color(.secondarySystemBackground), in: RoundedRectangle(cornerRadius: 16))
+    }
+
+    /// Opens Apple Maps with a pin at `coordinate`, labelled with the place name.
+    private func openInMaps(_ coordinate: CLLocationCoordinate2D) {
+        let item = MKMapItem(placemark: MKPlacemark(coordinate: coordinate))
+        item.name = placeName ?? String(localized: "Last location")
+        item.openInMaps(launchOptions: [
+            MKLaunchOptionsMapCenterKey: NSValue(mkCoordinate: coordinate),
+            MKLaunchOptionsMapSpanKey: NSValue(mkCoordinateSpan: MKCoordinateSpan(latitudeDelta: 0.01, longitudeDelta: 0.01)),
+        ])
     }
 }
