@@ -27,14 +27,21 @@ To run on a device, set your team in Xcode (Signing & Capabilities). The app use
 
 ## Status
 
-Phase 1 (local-only prototype) is implemented. Partners (Phase 2), backend sync (Phase 3) and polish (Phase 4) are not.
+Phase 1 (local-only prototype) is implemented. Phase 2 (partners) is implemented on mock data, except QR codes. Backend sync (Phase 3) and polish (Phase 4) are not. See the roadmap in [docs/SPEC.md](docs/SPEC.md) §11.
 
-## Phase 1 behaviour
+Tabs: **Map – Check-In – Users – Settings**.
 
-- **Slots** are created lazily, from the day the user was created through today, whenever the app comes to the foreground. A pending slot whose grace window has elapsed becomes `missed`.
+## Behaviour
+
+- **Slots** (at most 3 a day) are created lazily, from the day the user was created through today, whenever the app comes to the foreground. A pending slot whose grace window has elapsed becomes `missed`.
 - **Changing check-in times** updates all of today's slots if nothing today has been resolved yet. Otherwise slots up to the last resolved one stay as they are, and new times after it apply today with fresh slot indexes, so indexes never collide. Earlier new times start tomorrow.
 - **Alarms** (iOS 26+): an AlarmKit alarm rings at each slot time for the next 7 days and replaces the slot-time notification. Its *Check in* button opens the puzzle.
 - **Notifications**: one at slot time plus reminders every N minutes until the grace window ends, for the next 7 days. The total is capped at 60 (iOS allows 64), soonest first, and everything is rescheduled on each foreground and settings change.
 - **Metrics**: a *checked-in day* is a day on which every slot was checked in or skipped, with none missed. The *streak* counts consecutive checked-in days ending today, or yesterday while today is still in progress. A miss today resets it; a skip doesn't.
 - **Calendar**: each date has an outer ring with one segment per slot, in order: green = checked in, orange = skipped, red = missed, empty = still pending. Once the day is decided, the date also gets a filled background: green when every slot was checked in or skipped, red when any was missed. The day detail list shows each slot's state: filled green = checked in, filled red = missed, hollow orange = skipped, hollow grey = pending.
-- **Last location**: while location sharing is on, the app saves your location and place name each time it comes to the foreground, and shows it on a map below the calendar. Nothing is requested or saved while it's off.
+- **Last location**: while location sharing is on, the app saves your location and place name when it comes to the foreground and every 5 minutes while it stays open, and shows it on a map below the calendar. Check-ins also save their place name. Nothing is requested or saved while it's off, and nothing runs in the background.
+- **Partners (mock)**: `MockSyncService` simulates partners until the backend exists. Invites sent by code are accepted after about 5 seconds; "Simulate an invitation" creates an incoming request. Each partner gets ~60 days of made-up check-ins in a home city that stays the same per code. Partners whose code ends in a digit share their location.
+- **Users**: your avatar (photo or initial) and name are editable on Users → Me. Partners have avatars, nicknames (only you see them) and a per-partner "Share my location" toggle.
+- **Partners on my calendar**: with *Show partners* on, each date shows partners below it as small avatars inside their own ring; more than 2 collapse to one avatar plus a count. Tapping a day lists my check-ins, then each partner's.
+- **Map**: a 3D globe with me and every partner who shares their location as avatar pins. Tap a person to fly to them; 3D, globe and map-type (Standard / Satellite) buttons sit in one row at the top.
+- **Missed-check-in alerts** (planned, Phase 3): partners are alerted when 2 check-ins in a row are missed. See [docs/SPEC.md](docs/SPEC.md) §9.

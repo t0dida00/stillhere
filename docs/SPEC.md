@@ -36,9 +36,14 @@ enum SlotState: String, Codable { case pending, checkedIn, skipped, missed }
 
 @Model final class LocalUser {
     var id: String            // public shareable ID (short, e.g. 8 chars base32)
-    var displayName: String
+    var displayName: String   // editable on Users → Me
     var timeZoneID: String
     var createdAt: Date
+    var lastLatitude: Double? // last location, saved only while location is on
+    var lastLongitude: Double?
+    var lastPlaceName: String?
+    var lastLocationAt: Date?
+    @Attribute(.externalStorage) var avatarData: Data? // 256 px JPEG; nil shows the initial
 }
 
 @Model final class CheckInSlot {
@@ -49,6 +54,7 @@ enum SlotState: String, Codable { case pending, checkedIn, skipped, missed }
     var resolvedAt: Date?
     var latitude: Double?     // only if user enabled location
     var longitude: Double?
+    var placeName: String?    // short address for the location
     var synced: Bool          // false until pushed
     var ownerID: String       // LocalUser.id or partner id
 }
@@ -59,10 +65,12 @@ enum SlotState: String, Codable { case pending, checkedIn, skipped, missed }
     var status: String        // pending, accepted, declined
     var canSeeLocation: Bool  // what *I* share with them
     var createdAt: Date
+    var isIncoming: Bool      // they invited me (true) or I invited them (false)
+    var nickname: String?     // what I call them; shown instead of partnerName
 }
 
 @Model final class AppSettings {
-    var slotTimes: [Int]      // minutes from midnight, default [540, 1260]
+    var slotTimes: [Int]      // minutes from midnight, default [540, 1260], at most 3
     var graceMinutes: Int     // default 60
     var difficulty: Int       // 1...3
     var shareLocation: Bool   // default false
@@ -76,6 +84,8 @@ enum SlotState: String, Codable { case pending, checkedIn, skipped, missed }
 - `skipped` → user explicitly tapped "Skip" (or swiped the check-in screen down).
 - `missed` → grace window elapsed with no action. Resolve lazily on app launch/foreground and in the background task if available.
 - Partners must see `skipped` and `missed` as visually different. `missed` is the high-signal state.
+- A day is **checked in** when every slot is `checkedIn` or `skipped` and none is `missed`. Only a miss breaks the streak.
+- Changing slot times after something today is resolved: slots up to the last resolved one keep their time and index; later times apply today with fresh indexes; earlier times start tomorrow.
 
 ## 5. Identity (no login)
 
@@ -85,28 +95,33 @@ enum SlotState: String, Codable { case pending, checkedIn, skipped, missed }
 
 ## 6. Screens and Navigation
 
-Tab bar (bottom): **Settings | Main | Users**
+Tab bar (bottom): **Map | Check-In | Users | Settings**. The app opens on Check-In.
 
 1. **Onboarding / Setup** (first launch only)
    - Generates the ID, asks for display name.
-   - Permission explainer screens: Notifications (required), Location While-In-Use (optional, off by default).
-2. **Main**
+   - Permission explainer screens: Alarms + Notifications (required), Location While-In-Use (optional, off by default).
+2. **Map**
+   - 3D globe (MapKit, realistic elevation). Me and each accepted partner who shares location appear as avatar pins at their last location.
+   - People strip: tap a person to fly to them; partners who don't share show "Not sharing".
+   - Buttons in one row: 3D on/off, back to globe, map type (Standard / Satellite, default Satellite).
+3. **Check-In**
+   - Avatar selector: **Me** + each accepted partner.
    - Metrics row: `Checked In: n days`, current streak, missed count.
-   - Calendar (month view). Each day shows two small markers (one per slot) colored by state.
-   - Segmented selector at the top: **Me** | each accepted partner. Partner calendars are read-only and update live when synced.
-   - Tapping a day shows the slot details (state, time, optional location if shared).
-3. **Users**
-   - My invite code + QR.
-   - Add partner by entering a code or scanning a QR.
-   - List of partnerships with status; accept/decline incoming requests.
-   - Per-partner toggle: share my location with this partner.
-4. **Settings**
-   - Slot times (add/remove/edit, default 9:00 and 21:00), grace window, reminder interval.
+   - Calendar (month view). Each date has a ring with one segment per slot (green checked in, orange skipped, red missed, empty pending) and a filled background once decided (green all done, red any missed).
+   - On my calendar, with **Show partners** on, partners appear below each date as small avatars inside their own ring; more than 2 collapse to one avatar plus a count.
+   - Tapping a day shows slot details (state, time, place name and coordinates); on my calendar it also lists partners.
+   - Last location card below the calendar (mine, or the selected partner's; "doesn't want to share their location" when they don't).
+4. **Users**
+   - Me: avatar (photo or initial), editable name, invite code + share (QR still to do).
+   - Requests: incoming invitations with Accept/Decline; Sent invites waiting for an answer.
+   - Partners: avatar, nickname (only I see it), status, per-partner "Share my location" toggle with an explanation popup.
+5. **Settings**
+   - Slot times (add/remove/edit, default 9:00 and 21:00, at most 3), grace window, reminder interval.
    - Puzzle difficulty.
    - Location toggle.
    - Time zone (default: device).
    - "Auto-open with Shortcuts" guide.
-5. **Check-in screen** (full-screen cover)
+6. **Check-in screen** (full-screen cover)
    - Shows a random grade-3 puzzle and a numeric keypad.
    - Wrong answer: shake, let them retry (unlimited).
    - Correct answer: mark `checkedIn`, success haptic, dismiss.
@@ -146,6 +161,10 @@ protocol SyncService {
 - Server (Supabase): tables `users`, `partnerships`, `slots`. Row-level security so a user can only read slots of accepted partners and only write their own.
 - Realtime subscription so a partner's check-in appears immediately; APNs push as fallback.
 - **Missed-check-in alert**: an Edge Function (cron every few minutes) marks slots `missed` after the grace window and pushes a notification to accepted partners. This must run server-side because the phone may be off.
+  - **Rule:** alert when **2 check-ins in a row** are missed, counted by scheduled time across midnight (21:00 missed, then 09:00 next day missed, alerts).
+  - A check-in or a skip ends the run.
+  - One alert when the run reaches 2. Each further miss in the same run sends one follow-up. The check-in that ends a run sends an "all good" push.
+  - Store the last alerted run length per user so the same run never alerts twice. The app shares the rule as a pure, unit-tested function (`MissedAlertRule`).
 - Store each user's time zone; render each person's calendar in their own local day.
 
 ## 10. Project Structure
@@ -171,22 +190,23 @@ StillAlive/
 ## 11. Build Phases
 
 ### Phase 1 — Local-only prototype
-- [ ] Create `project.yml`, generate the Xcode project, confirm `xcodebuild` builds for the iOS Simulator.
-- [ ] Models + SwiftData container.
-- [ ] Identity generation + Keychain.
-- [ ] Settings screen (slot times, grace, difficulty).
-- [ ] Puzzle generator + unit tests.
-- [ ] Check-in screen with three outcomes (checked in / skipped / missed).
-- [ ] Notification scheduling and deep link to check-in.
-- [ ] Main screen: metrics + calendar for "Me".
-- [ ] `SlotResolver`: lazily marks expired slots as `missed`.
+- [x] Create `project.yml`, generate the Xcode project, confirm `xcodebuild` builds for the iOS Simulator.
+- [x] Models + SwiftData container.
+- [x] Identity generation + Keychain.
+- [x] Settings screen (slot times, grace, difficulty).
+- [x] Puzzle generator + unit tests.
+- [x] Check-in screen with three outcomes (checked in / skipped / missed).
+- [x] Notification scheduling and deep link to check-in.
+- [x] Main screen: metrics + calendar for "Me".
+- [x] `SlotResolver`: lazily marks expired slots as `missed`.
 
 **Done when:** on the simulator, a slot notification opens the puzzle, solving it marks the day, and the calendar and metrics update.
 
 ### Phase 2 — Partners (local mock)
-- [ ] Users tab: invite code, QR, add partner by code, list, accept/decline.
-- [ ] Main screen segmented selector for partner calendars using mock data behind `SyncService`.
-- [ ] Per-partner location sharing toggle.
+- [x] Users tab: invite code, add partner by code, list, accept/decline.
+- [ ] Users tab: QR code and scanner.
+- [x] Partner calendars using mock data behind `SyncService` (avatar selector; partners on my calendar).
+- [x] Per-partner location sharing toggle.
 
 ### Phase 3 — Backend sync
 - [ ] Supabase schema + RLS policies (SQL in `/backend/`).
@@ -211,5 +231,5 @@ StillAlive/
 ## 13. Open Questions (ask me before Phase 3)
 
 1. Supabase vs CloudKit as the final backend?
-2. Should a missed check-in alert partners immediately or only after both slots in a day are missed?
+2. ~~Should a missed check-in alert partners immediately or only after both slots in a day are missed?~~ **Decided:** after 2 check-ins in a row are missed (see §9).
 3. Should partners be allowed to send a "ping/are you okay?" message back?

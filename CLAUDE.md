@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-StillAlive? is an offline-first iOS 17+ app (SwiftUI + SwiftData) for daily "I'm alive" check-ins. [docs/SPEC.md](docs/SPEC.md) is the source of truth for product behaviour, phases and rules. Phase 1 (local-only) is done. Phases 2–4 (partners, Supabase sync, polish) are not.
+StillAlive? is an offline-first iOS 17+ app (SwiftUI + SwiftData) for daily "I'm alive" check-ins. [docs/SPEC.md](docs/SPEC.md) is the source of truth for product behaviour, phases and rules. Phase 1 (local-only) is done. Phase 2 (partners) runs on mock data, except QR codes. Phases 3–4 (backend sync, polish) are not.
 
 ## Commands
 
@@ -17,22 +17,33 @@ xcodebuild -scheme StillAlive -destination 'platform=iOS Simulator,name=iPhone 1
 xcodebuild -scheme StillAlive -destination 'platform=iOS Simulator,name=iPhone 15' test -only-testing:StillAliveTests/SlotResolverTests/testCreatesSlotsSinceCreationAndMarksMissed
 ```
 
-You need full Xcode (not just the Command Line Tools). No linter is configured. To run on a device, set a signing team. The app uses the Time Sensitive Notifications entitlement, which a free personal team can't sign.
+You need full Xcode (not just the Command Line Tools). No linter is configured.
+
+**Running on a device with a free Personal Team.** That team can't sign the Time Sensitive Notifications entitlement, so pass the team and an empty entitlements file on the command line instead of editing the repo:
+
+```sh
+xcodebuild -scheme StillAlive -destination 'id=<device-udid>' -allowProvisioningUpdates \
+  DEVELOPMENT_TEAM=<team-id> CODE_SIGN_ENTITLEMENTS=<path-to-empty.entitlements> build
+xcrun devicectl device install app --device <device-udid> <DerivedData>/Build/Products/Debug-iphoneos/StillAlive.app
+xcrun devicectl device process launch --device <device-udid> --terminate-existing dev.khoa.stillalive
+```
+
+An empty `CODE_SIGN_ENTITLEMENTS=` is ignored; it must point at a file whose plist is `<dict/>`. Personal Team builds expire after 7 days.
 
 ## Architecture
 
 **Pure logic vs. SwiftData layer.** The scheduling rules are pure value-type code, unit-tested with fixed dates and explicit time zones:
 - `Services/SlotSchedule.swift`: `SlotKey` (`dayKey` + `slotIndex`), `DayKey` (the `yyyy-MM-dd` string in the *user's* time zone), `SlotPlanner` (settings → `SlotSpec`s, DST-safe via `bySettingHour`) and `SlotRules` (open window, deadline, lazy `missed` resolution).
-- `NotificationPlanner`, `MetricsCalculator` and `PuzzleGenerator` are also pure. Puzzles are seeded from `dayKey + slotIndex`, so a slot always shows the same puzzle.
+- `NotificationPlanner`, `MetricsCalculator` (a checked-in day is all slots checked in *or skipped*, none missed) and `PuzzleGenerator` are also pure. Puzzles are seeded from `dayKey + slotIndex`, so a slot always shows the same puzzle.
 - `SlotResolver` and `CheckInService` are `@MainActor` structs over a `ModelContext`. They apply the pure rules to the stored `CheckInSlot`s. Tests use an in-memory `ModelContainer` (see `SlotResolverTests`).
 
 **The refresh loop.** Nothing runs in the background. `RootView` in `App/StillAliveApp.swift` runs a `.task` keyed on scene phase and user count, and an `.onChange` on `AppRouter.requestedSlot` for taps while the app is active. Both consume `requestedSlot` themselves. `CheckInService` splits the work so the puzzle appears without waiting for scheduling:
 1. `openSlot` (quick, synchronous): `SlotResolver.reconcile` lazily creates slots from the user's creation day through today, applies settings changes to today's slots, and marks expired pending slots `missed`. It then returns the open slot, which is presented as a full-screen `CheckInView`.
 2. `reschedule` (slow, one system call per alarm and per reminder): on iOS 26+, replaces all AlarmKit alarms with one per upcoming slot. Each alarm's ID is derived from its `SlotKey`, and its `OpenCheckInIntent` button sets `requestedSlot`. `AlarmService.reschedule` calls run one at a time. Slots that got an alarm drop their sequence-0 notification. Then it rebuilds the whole notification plan (next 7 days, capped at 60 of iOS's 64) and replaces all pending `slot.*` notifications.
 
-`refresh` runs both.
+`refresh` runs both. Call `refresh` again after any change that affects slots or settings.
 
-Call `refresh` again after any change that affects slots or settings.
+After rescheduling, the same task saves the last location (`recordLastLocation`, only while `AppSettings.shareLocation` is on) and backfills place names for up to 5 older check-ins. A second `.task` keyed on scene phase refreshes the last location every `CheckInService.locationRefreshInterval` (5 minutes) while the app is active.
 
 **Invariants to preserve:**
 - Once a slot today is resolved, slots up to the last resolved one keep their time and index. Later times from settings apply today with fresh indexes (`SlotPlanner.todaySpecs`). Indexes can have gaps and needn't match the position in settings, so planners take today's slots from the store (the `today:` parameter), not from settings. A past day that already has slots is never refilled.
@@ -40,7 +51,11 @@ Call `refresh` again after any change that affects slots or settings.
 - Notification identifiers are `slot.<dayKey>#<index>.<sequence>`. `userInfo` carries `dayKey` and `slotIndex`. `AppDelegate` turns a notification tap or a foreground delivery into `AppRouter.requestedSlot`.
 - Day boundaries always use `user.timeZone` through `DayKey.calendar(in:)`, never `Calendar.current`.
 
-**Identity and sync.** `IdentityService` stores an 8-character Crockford base32 public ID and a 32-byte secret in the iCloud-synced Keychain. There is no login. Sync goes through the `SyncService` protocol. `NoopSyncService` is used until Phase 3.
+**Identity and sync.** `IdentityService` stores an 8-character Crockford base32 public ID and a 32-byte secret in the iCloud-synced Keychain. There is no login. Invite codes typed by users go through `IdentityService.normalizeCode`.
+
+All partner data goes through the `SyncService` protocol, and `Sync.shared` (in `SyncService.swift`) is currently `MockSyncService`. It invents a stable history per partner code (`MockSyncService.history`) and is the one place to swap for the Phase 3 backend; views don't call anything else. Mock rules worth knowing: invites by code are accepted after ~5 s (in `AddPartnerView`), and partners whose code ends in a digit share their location (`MockSyncService.sharesLocation`).
+
+**Partners in the UI.** `Partnership` holds my side only: status, `isIncoming`, `nickname` (`displayName` prefers it) and `canSeeLocation`, which is what *I* share. My slots and partners' `RemoteSlot`s are both converted to `DisplaySlot` (in `MainView.swift`) so the calendar, day details and location cards treat them the same. Calendar rings and fills come from `DayProgressRing` in `CalendarView.swift`; avatars come from `AvatarView` (photo, or initial on a color derived from the ID). The Map tab (`Features/Map/GlobeMapView.swift`) loads every accepted partner through `Sync.shared` and keeps its own 3D state instead of using the system `MapPitchToggle`, which flickered while the camera flew.
 
 ## Rules from the spec
 
@@ -51,4 +66,4 @@ Call `refresh` again after any change that affects slots or settings.
 - Location is opt-in and off by default. Never request it before the user enables it.
 - Never block the main thread with sync or location work.
 - Backend secrets go in the git-ignored `Config/Secrets.xcconfig`.
-- Ask the open questions in SPEC §13 before starting Phase 3.
+- Ask the open questions in SPEC §13 before starting Phase 3. Q2 is decided: alert partners after 2 check-ins in a row are missed.
