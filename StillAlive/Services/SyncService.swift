@@ -36,6 +36,27 @@ struct NoopSyncService: SyncService {
     func partnerSharesLocation(_ partnerID: String) async throws -> Bool { false }
 }
 
+/// A test partner's own schedule for `MockSyncService`, saved on this phone. Used by debug
+/// builds' `-mockPartner` launch option (see `MockScenario`).
+struct MockSchedule: Codable {
+    var slotTimes: [Int]
+    var graceMinutes: Int
+    /// Every check-in scheduled from here on is missed.
+    var missesFrom: Date?
+
+    private static let key = "mockSchedules"
+
+    static var saved: [String: MockSchedule] {
+        get {
+            guard let data = UserDefaults.standard.data(forKey: key) else { return [:] }
+            return (try? JSONDecoder().decode([String: MockSchedule].self, from: data)) ?? [:]
+        }
+        set {
+            UserDefaults.standard.set(try? JSONEncoder().encode(newValue), forKey: key)
+        }
+    }
+}
+
 /// Phase 2 stand-in: every partner has a made-up history that stays the same across launches,
 /// and invites are accepted at once.
 struct MockSyncService: SyncService {
@@ -44,7 +65,12 @@ struct MockSyncService: SyncService {
     func push(_ slots: [CheckInSlot]) async throws {}
 
     func pull(partnerID: String) async throws -> [RemoteSlot] {
-        Self.history(for: partnerID, now: .now, timeZone: timeZone, sharesLocation: Self.sharesLocation(partnerID))
+        if let schedule = MockSchedule.saved[partnerID] {
+            return Self.history(for: partnerID, now: .now, timeZone: timeZone, slotTimes: schedule.slotTimes,
+                                graceMinutes: schedule.graceMinutes, sharesLocation: Self.sharesLocation(partnerID),
+                                missesFrom: schedule.missesFrom)
+        }
+        return Self.history(for: partnerID, now: .now, timeZone: timeZone, sharesLocation: Self.sharesLocation(partnerID))
     }
 
     func partnerSharesLocation(_ partnerID: String) async throws -> Bool {
@@ -73,7 +99,8 @@ struct MockSyncService: SyncService {
     /// with some skips and misses; a slot inside its grace window may still be pending.
     /// Check-ins carry a location within a few kilometres of the partner's home city.
     static func history(for partnerID: String, now: Date, timeZone: TimeZone, days: Int = 60,
-                        slotTimes: [Int] = [540, 1260], graceMinutes: Int = 60, sharesLocation: Bool = true) -> [RemoteSlot] {
+                        slotTimes: [Int] = [540, 1260], graceMinutes: Int = 60, sharesLocation: Bool = true,
+                        missesFrom: Date? = nil) -> [RemoteSlot] {
         let calendar = DayKey.calendar(in: timeZone)
         guard let start = calendar.date(byAdding: .day, value: -(days - 1), to: now) else { return [] }
         let home = homes[Int(PuzzleGenerator.seed(dayKey: partnerID, slotIndex: 0) % UInt64(homes.count))]
@@ -84,6 +111,9 @@ struct MockSyncService: SyncService {
             let state: SlotState
             if spec.scheduledAt > now {
                 state = .pending
+            } else if let missesFrom, spec.scheduledAt >= missesFrom {
+                // A test partner who misses every check-in from this point on.
+                state = now < deadline ? .pending : .missed
             } else if now < deadline {
                 state = roll < 60 ? .checkedIn : .pending
             } else {

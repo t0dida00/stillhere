@@ -54,6 +54,9 @@ struct RootView: View {
         // Re-runs on foreground and after onboarding. The puzzle shows first; rescheduling follows.
         .task(id: "\(scenePhase)|\(users.count)") {
             guard scenePhase == .active, !users.isEmpty else { return }
+            #if DEBUG
+            MockScenario.apply(context: context)
+            #endif
             let service = CheckInService(context: context)
             present(service.openSlot(preferring: takeRequestedSlot()))
             await service.reschedule()

@@ -59,6 +59,8 @@ All partner data goes through the `SyncService` protocol, and `Sync.shared` (in 
 
 **Partner miss notifications.** `PartnerAlertService` pulls each accepted partner's slots and posts a local notification for every slot that `MissedAlertRule.newMisses` finds missed since `Partnership.lastMissCheckAt`; the first check only sets that marker. It runs after each foreground refresh and in the 5-minute loop. Notifications carry `partnerID` in `userInfo`; `AppDelegate` turns a tap into `AppRouter.requestedPartnerID`, which `MainView` selects. The Phase 3 server push replaces the local check.
 
+**Debug test partners.** Debug builds accept `-mockPartner "Name@HH:MM/G"` launch arguments (repeatable), handled by `MockScenario` on each foreground: an accepted partner with that daily check-in time and a G-minute grace window who misses every check-in from the start of today (`MockSchedule`, saved in UserDefaults). With devicectl, put the app's arguments after `--`: `xcrun devicectl device process launch --device <udid> dev.khoa.stillalive -- -mockPartner "Dad@04:28/1"`.
+
 **Localization.** English (source) and Vietnamese, in `Resources/Localizable.xcstrings` and `Resources/InfoPlist.xcstrings`. SwiftUI literals are picked up automatically. Text built as a `String` (status labels, ternaries, helper parameters, notification bodies) must use `String(localized:)` or a `LocalizedStringKey` parameter, or it stays English. To add new strings to the catalog from the command line:
 
 ```sh
