@@ -22,15 +22,17 @@ enum IdentityService {
     /// Crockford base32 (no I, L, O, U) so codes are easy to read aloud.
     static let alphabet = Array("0123456789ABCDEFGHJKMNPQRSTVWXYZ")
 
-    static func loadOrCreate() throws -> Identity {
-        if let idData = read(account: publicIDAccount),
+    /// `accountKey` picks the account's Keychain entries; the default account keeps the original names.
+    static func loadOrCreate(accountKey: String = AccountStore.defaultKey) throws -> Identity {
+        let suffix = accountKey == AccountStore.defaultKey ? "" : ".\(accountKey)"
+        if let idData = read(account: publicIDAccount + suffix),
            let publicID = String(data: idData, encoding: .utf8),
-           let secret = read(account: secretAccount) {
+           let secret = read(account: secretAccount + suffix) {
             return Identity(publicID: publicID, secret: secret)
         }
         let identity = Identity(publicID: try generatePublicID(), secret: try randomBytes(32))
-        try write(Data(identity.publicID.utf8), account: publicIDAccount)
-        try write(identity.secret, account: secretAccount)
+        try write(Data(identity.publicID.utf8), account: publicIDAccount + suffix)
+        try write(identity.secret, account: secretAccount + suffix)
         return identity
     }
 

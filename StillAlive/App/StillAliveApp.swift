@@ -6,12 +6,23 @@ struct StillAliveApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) private var appDelegate
     /// The animated opening screen, on cold start only. The app loads underneath it.
     @State private var showSplash = true
+    @State private var accounts = AccountStore.shared
 
     var body: some Scene {
         WindowGroup {
             ZStack {
-                RootView()
-                    .environment(AppRouter.shared)
+                Group {
+                    if accounts.isLoggedOut {
+                        LoggedOutView()
+                    } else {
+                        // A new identity per account, so switching accounts starts fresh queries and tasks.
+                        RootView()
+                            .id(accounts.current)
+                            .modelContainer(accounts.container)
+                    }
+                }
+                .environment(AppRouter.shared)
+                .environment(accounts)
                 if showSplash {
                     SplashView()
                         .transition(.opacity)
@@ -23,7 +34,6 @@ struct StillAliveApp: App {
                 withAnimation(.easeOut(duration: 0.35)) { showSplash = false }
             }
         }
-        .modelContainer(for: [LocalUser.self, CheckInSlot.self, Partnership.self, AppSettings.self, AlertRecord.self, CheckInRequest.self])
     }
 }
 
@@ -31,6 +41,7 @@ struct RootView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.scenePhase) private var scenePhase
     @Environment(AppRouter.self) private var router
+    @Environment(AccountStore.self) private var accounts
     @Query private var users: [LocalUser]
     @Query(filter: #Predicate<AlertRecord> { !$0.isRead }) private var unreadAlerts: [AlertRecord]
 
@@ -38,7 +49,7 @@ struct RootView: View {
         @Bindable var router = router
         Group {
             if users.isEmpty {
-                OnboardingView()
+                OnboardingView(onCancel: cancelOnboarding)
             } else {
                 TabView(selection: $router.selectedTab) {
                     GlobeMapView()
@@ -63,6 +74,8 @@ struct RootView: View {
                 }
             }
         }
+        // Keeps the log-in list's name and ID current.
+        .onChange(of: userSignature, initial: true) { recordAccount() }
         // Opening an alert's system notification marks it read in the Notifications tab.
         .onChange(of: router.openedAlertID) { _, id in
             guard let id else { return }
@@ -115,6 +128,20 @@ struct RootView: View {
             guard scenePhase == .active, !users.isEmpty, let requested = takeRequestedSlot() else { return }
             present(CheckInService(context: context).openSlot(preferring: requested))
         }
+    }
+
+    private var cancelOnboarding: (() -> Void)? {
+        guard accounts.canCancelNewAccount else { return nil }
+        return { accounts.cancelNewAccount() }
+    }
+
+    private var userSignature: String {
+        users.first.map { "\($0.id)|\($0.displayName)" } ?? ""
+    }
+
+    private func recordAccount() {
+        guard let user = users.first else { return }
+        accounts.record(publicID: user.id, displayName: user.displayName)
     }
 
     private func takeRequestedSlot() -> SlotKey? {

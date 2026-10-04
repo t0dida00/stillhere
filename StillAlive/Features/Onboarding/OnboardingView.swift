@@ -4,7 +4,11 @@ import SwiftUI
 struct OnboardingView: View {
     private enum Step { case name, notifications, location }
 
+    /// Set when another account exists to go back to.
+    var onCancel: (() -> Void)?
+
     @Environment(\.modelContext) private var context
+    @Environment(AccountStore.self) private var accounts
     @State private var step = Step.name
     @State private var name = ""
     @State private var shareLocation = false
@@ -22,6 +26,11 @@ struct OnboardingView: View {
             Spacer()
         }
         .padding(24)
+        .overlay(alignment: .topLeading) {
+            if let onCancel, step == .name {
+                Button("Cancel", action: onCancel).padding()
+            }
+        }
         .animation(.default, value: step)
         .alert("Couldn't finish setup", isPresented: .constant(errorMessage != nil)) {
             Button("OK") { errorMessage = nil }
@@ -101,7 +110,7 @@ struct OnboardingView: View {
 
     private func finish() {
         do {
-            let identity = try IdentityService.loadOrCreate()
+            let identity = try IdentityService.loadOrCreate(accountKey: accounts.current)
             let settings = context.fetchOrCreateSettings()
             settings.shareLocation = shareLocation
             context.insert(LocalUser(id: identity.publicID, displayName: name.trimmingCharacters(in: .whitespaces)))

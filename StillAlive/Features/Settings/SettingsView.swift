@@ -21,6 +21,8 @@ private struct SettingsForm: View {
     @Environment(\.modelContext) private var context
     @State private var locationDenied = false
     @State private var showingPremium = false
+    @State private var confirmingLogOut = false
+    @Environment(AccountStore.self) private var accounts
     @Environment(\.openURL) private var openURL
 
     /// The language the app is showing, named in that language (e.g. "Tiếng Việt").
@@ -116,6 +118,23 @@ private struct SettingsForm: View {
                     FAQView()
                 } label: {
                     Label("FAQ", systemImage: "questionmark.circle")
+                }
+            }
+
+            Section {
+                Button("Log out", systemImage: "rectangle.portrait.and.arrow.right", role: .destructive) {
+                    confirmingLogOut = true
+                }
+                .foregroundStyle(.red)
+                .confirmationDialog("Log out of Still Here?", isPresented: $confirmingLogOut, titleVisibility: .visible) {
+                    Button("Log out", role: .destructive) {
+                        Task {
+                            await CheckInService(context: context).cancelAlerts()
+                            accounts.logOut()
+                        }
+                    }
+                } message: {
+                    Text("Your data stays on this iPhone. Check-in alarms and reminders stop until you log in again. You can then log in to this or another account.")
                 }
             }
         }

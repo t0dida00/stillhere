@@ -59,6 +59,14 @@ struct CheckInService {
         await notifications.reschedule(plan, now: now)
     }
 
+    /// Removes every check-in alarm and reminder, e.g. on log out. `refresh` brings them back.
+    func cancelAlerts() async {
+        if #available(iOS 26.0, *) {
+            await AlarmService.shared.reschedule([])
+        }
+        await notifications.reschedule([])
+    }
+
     /// How often the last location is refreshed while the app is open.
     static let locationRefreshInterval: Duration = .seconds(5 * 60)
 

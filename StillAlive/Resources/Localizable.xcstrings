@@ -584,6 +584,16 @@
         }
       }
     },
+    "Choose an account on this iPhone. Check-in alarms and reminders are off until you log in.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Chọn một tài khoản trên iPhone này. Báo thức và lời nhắc điểm danh sẽ tắt cho đến khi bạn đăng nhập."
+          }
+        }
+      }
+    },
     "Codes have %lld characters.": {
       "localizations": {
         "vi": {
@@ -650,6 +660,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Không lấy được vị trí của bạn."
+          }
+        }
+      }
+    },
+    "Create new account": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tạo tài khoản mới"
           }
         }
       }
@@ -940,6 +960,16 @@
         }
       }
     },
+    "ID: %@": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "ID: %@"
+          }
+        }
+      }
+    },
     "If you don't check in before the grace window ends (1 hour by default), it counts as missed and shows red on your calendar. Your partners are notified of every missed check-in, and they can ask you to check in.": {
       "localizations": {
         "vi": {
@@ -1096,6 +1126,36 @@
           "stringUnit": {
             "state": "translated",
             "value": "Chưa tìm thấy vị trí"
+          }
+        }
+      }
+    },
+    "Log in": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đăng nhập"
+          }
+        }
+      }
+    },
+    "Log out": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đăng xuất"
+          }
+        }
+      }
+    },
+    "Log out of Still Here?": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Đăng xuất khỏi Still Here?"
           }
         }
       }
@@ -2411,6 +2471,16 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ảnh đại diện sẽ trở lại chữ cái đầu tên bạn."
+          }
+        }
+      }
+    },
+    "Your data stays on this iPhone. Check-in alarms and reminders stop until you log in again. You can then log in to this or another account.": {
+      "localizations": {
+        "vi": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Dữ liệu của bạn vẫn được giữ trên iPhone này. Báo thức và lời nhắc điểm danh sẽ dừng cho đến khi bạn đăng nhập lại. Sau đó bạn có thể đăng nhập vào tài khoản này hoặc một tài khoản khác."
           }
         }
       }

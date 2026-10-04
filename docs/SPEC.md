@@ -95,6 +95,8 @@ enum SlotState: String, Codable { case pending, checkedIn, skipped, missed }
 - On first launch generate: a short public ID (invite code) and a random private secret (32 bytes). Store both in Keychain with `kSecAttrSynchronizable = true`.
 - The public ID is shared via code/QR. The secret is only used to authenticate sync requests and never leaves the Keychain except as a signature/auth token.
 - Show the invite code and a QR (CoreImage `CIQRCodeGenerator`) in the Users tab.
+- **Accounts on one device.** Settings has "Log out". It keeps all data, stops the account's alarms and reminders, and shows a log-in screen listing this iPhone's accounts plus "Create new account" (runs onboarding). Each account has its own local store and its own Keychain ID and secret.
+- Logging in to an existing account on another device (ID + recovery code) waits for Phase 3, since history only moves with the backend.
 
 ## 6. Screens and Navigation
 
@@ -227,6 +229,7 @@ StillAlive/
 - [ ] Supabase schema + RLS policies (SQL in `/backend/`).
 - [ ] `SupabaseSyncService`, offline queue, realtime subscription.
 - [ ] APNs push, missed-check-in Edge Function.
+- [ ] Log in to an existing account by ID + recovery code on the log-in screen, restoring its history from the backend.
 
 ### Phase 4 — Polish
 - [x] Shortcuts App Intent + in-app setup guide.

@@ -51,7 +51,9 @@ After rescheduling, the same task saves the last location (`recordLastLocation`,
 - Notification identifiers are `slot.<dayKey>#<index>.<sequence>`. `userInfo` carries `dayKey` and `slotIndex`. `AppDelegate` turns a notification tap or a foreground delivery into `AppRouter.requestedSlot`.
 - Day boundaries always use `user.timeZone` through `DayKey.calendar(in:)`, never `Calendar.current`.
 
-**Identity and sync.** `IdentityService` stores an 8-character Crockford base32 public ID and a 32-byte secret in the iCloud-synced Keychain. There is no login. Invite codes typed by users go through `IdentityService.normalizeCode`.
+**Identity and sync.** `IdentityService` stores an 8-character Crockford base32 public ID and a 32-byte secret in the iCloud-synced Keychain. There is no password login; see Accounts below. Invite codes typed by users go through `IdentityService.normalizeCode`.
+
+**Accounts.** `AccountStore` (UserDefaults) lists this device's accounts, the current one and the logged-out flag. Each account has its own SwiftData store (`AccountStore.container(for:)`) and Keychain entries (`IdentityService.loadOrCreate(accountKey:)`). The `default` account keeps the original store and Keychain names. `StillAliveApp` shows `LoggedOutView` while logged out, otherwise `RootView` with the current account's container, `.id`'d by account so switching resets queries and tasks. Settings' Log out calls `CheckInService.cancelAlerts()` first. Logging in by ID + recovery code is a Phase 3 item.
 
 All partner data goes through the `SyncService` protocol, and `Sync.shared` (in `SyncService.swift`) is currently `MockSyncService`. It invents a stable history per partner code (`MockSyncService.history`) and is the one place to swap for the Phase 3 backend; views don't call anything else. Partners' emergency contacts come from `SyncService.emergencyContacts(of:)` (mock: `MockSyncService.emergencyContacts(for:)`, 0–2 stable fake contacts). Mock rules worth knowing: invites by code are accepted after ~5 s (in `AddPartnerView`), and partners whose code ends in a digit share their location (`MockSyncService.sharesLocation`).
 
